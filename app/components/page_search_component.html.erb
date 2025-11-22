@@ -1,80 +1,33 @@
-<% if @term.present? && @term != "*:*" && @legacy_ocr_search_results %>
-  <div class="page-search-res-wrap">
-    <% if @legacy_ocr_search_results.any? %>
-      <div class="page-search-header d-flex align-items-center gap-2 mb-1">
-        <span class="matching-image-label" term="<%= @term %>">
-          <%= t('blacklight.page_search.matching_pages_for_html', term: @term) %>
-        </span>
-        <span class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis">
-          <%= @legacy_ocr_search_results.size %>
-        </span>
-      </div>
-
-      <%= content %>
-
-      <% visible_count = 24 %>
-      <% first = @legacy_ocr_search_results.first(visible_count) %>
-      <% rest  = @legacy_ocr_search_results.drop(visible_count) %>
-      <% current_page = (params[:pageNum] || 0).to_i rescue 0 %>
-
-      <div class="page-search-toolbar d-flex align-items-center gap-2 mb-2">
-        <% if current_page > 0 %>
-          <% prev_hit = @legacy_ocr_search_results.select { |n| n < current_page }.last %>
-          <% next_hit = @legacy_ocr_search_results.find { |n| n > current_page } %>
-          <% if prev_hit %>
-            <a class="btn btn-outline-secondary btn-sm chip-nav" href="/catalog/<%= @documentId %>?pageNum=<%= prev_hit %>&query=<%= ERB::Util.url_encode(@term) %>" aria-label="<%= t('blacklight.page_search.prev_hit_aria') %>">
-              <i class="bi bi-arrow-left" aria-hidden="true"></i>
-              <span class="d-none d-sm-inline"><%= t('blacklight.page_search.prev_hit') %></span>
-            </a>
-          <% end %>
-          <% if next_hit %>
-            <a class="btn btn-outline-secondary btn-sm chip-nav" href="/catalog/<%= @documentId %>?pageNum=<%= next_hit %>&query=<%= ERB::Util.url_encode(@term) %>" aria-label="<%= t('blacklight.page_search.next_hit_aria') %>">
-              <span class="d-none d-sm-inline"><%= t('blacklight.page_search.next_hit') %></span>
-              <i class="bi bi-arrow-right ms-sm-1" aria-hidden="true"></i>
-            </a>
-          <% end %>
-        <% end %>
-      </div>
-
-      <div class="page-chip-list" role="list">
-        <% first.each do |page_number| %>
-          <a role="listitem"
-             class="chip page-chip <%= 'is-current' if current_page == page_number %>"
-             <%= 'aria-current="page"' if current_page == page_number %>
-             aria-label="<%= t('blacklight.page_search.go_to_page_aria', page: page_number) %>"
-             href="/catalog/<%= @documentId %>?pageNum=<%= page_number %>&q=<%= ERB::Util.url_encode(@term) %>">
-            <%= page_number %>
-          </a>
-        <% end %>
-
-        <% if rest.any? %>
-          <span class="page-search-more" hidden>
-            <% rest.each do |page_number| %>
-              <a role="listitem"
-                 class="chip page-chip <%= 'is-current' if current_page == page_number %>"
-                 <%= 'aria-current="page"' if current_page == page_number %>
-                 aria-label="<%= t('blacklight.page_search.go_to_page_aria', page: page_number) %>"
-                 href="/catalog/<%= @documentId %>?pageNum=<%= page_number %>&query=<%= ERB::Util.url_encode(@term) %>">
-                <%= page_number %>
-              </a>
-            <% end %>
-          </span>
-        <% end %>
-      </div>
-      <% if rest.any? %>
-        <div class="page-search-togglebar mt-2">
-          <button type="button" class="btn btn-link btn-sm page-search-toggle p-0">
-            <i class="bi bi-chevron-down" aria-hidden="true"></i>
-            <span><%= t('blacklight.page_search.show_more') %></span>
-          </button>
-        </div>
-      <% end %>
-    <% else %>
-      <div class="page-search-header">
-        <span>
-          <%= t('blacklight.page_search.no_results_html', term: @term) %>
-        </span>
-      </div>
-    <% end %>
+<div class="page-search-res-wrap"
+     data-page-search="true"
+     data-doc-id="<%= @document_id %>"
+     data-ark-url="<%= @ark_url %>"
+     data-term="<%= @term %>"
+     data-go-to-page-aria-template="<%= go_to_page_aria_template %>"
+     data-prev-hit-label="<%= t('blacklight.page_search.prev_hit') %>"
+     data-prev-hit-aria="<%= t('blacklight.page_search.prev_hit_aria') %>"
+     data-next-hit-label="<%= t('blacklight.page_search.next_hit') %>"
+     data-next-hit-aria="<%= t('blacklight.page_search.next_hit_aria') %>"
+     data-show-more-label="<%= t('blacklight.page_search.show_more') %>"
+     data-show-less-label="<%= t('blacklight.page_search.show_less', default: '') %>"
+     data-no-results-html="<%= j t('blacklight.page_search.no_results_html', term: @term) %>"
+     data-matching-html="<%= j t('blacklight.page_search.matching_pages_for_html', term: @term) %>"
+     data-ark-path="<%= ark_path %>">
+  <div class="page-search-header d-flex align-items-center gap-2 mb-1">
+    <span class="matching-image-label" term="<%= @term %>">
+      <%= t('blacklight.page_search.matching_pages_for_html', term: @term) %>
+    </span>
+    <span class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis page-search-count"
+          aria-live="polite"
+          aria-atomic="true"></span>
+    <span class="text-muted small page-search-status">
+      <%= t('blacklight.page_search.loading', default: 'Loading...') %>
+    </span>
   </div>
-<% end %>
+
+  <div class="page-search-body" data-page-search-body>
+    <div class="text-muted small">
+      <%= t('blacklight.page_search.loading', default: 'Loading page hits...') %>
+    </div>
+  </div>
+</div>

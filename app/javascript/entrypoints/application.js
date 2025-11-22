@@ -267,6 +267,224 @@ document.addEventListener('DOMContentLoaded', () => {
   enhanceSearchBar('.home-search');
 });
 
+// Page search: fetch IIIF search + manifest on the client so the Rails render doesn't block
+function getMetaContent(name) {
+  return document.querySelector(`meta[name="${name}"]`)?.content?.trim();
+}
+
+function trimTrailingSlash(str = '') {
+  if (!str) return '';
+  return str.endsWith('/') ? str.slice(0, -1) : str;
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function fetchJsonWithTimeout(url, timeoutMs = 7000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { headers: { Accept: 'application/json' }, signal: controller.signal })
+    .finally(() => clearTimeout(timer))
+    .then((res) => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    });
+}
+
+function parseSearchItems(json) {
+  if (Array.isArray(json?.items) && json.items.length) return json.items;
+  if (Array.isArray(json?.resources) && json.resources.length) return json.resources;
+  return [];
+}
+
+function buildCanvasIndexMap(manifestJson) {
+  const canvases = Array.isArray(manifestJson?.items)
+    ? manifestJson.items
+    : manifestJson?.sequences?.[0]?.canvases || [];
+  const map = {};
+  canvases.forEach((canvas, idx) => {
+    const id = canvas.id || canvas['@id'];
+    if (id) map[id] = idx + 1;
+  });
+  return map;
+}
+
+function collectPageNumbers(items, canvasMap) {
+  const pages = [];
+  items.forEach((item) => {
+    const target = item.target || item.on;
+    if (!target) return;
+    const canvasUrl = String(target).split('#')[0];
+    let index = canvasMap[canvasUrl];
+    if (index == null) {
+      const trailing = canvasUrl.split('/').pop();
+      const match = Object.keys(canvasMap).find((key) => key.endsWith(`/${trailing}`));
+      if (match) index = canvasMap[match];
+    }
+    if (index) pages.push(index);
+  });
+  return Array.from(new Set(pages)).sort((a, b) => a - b);
+}
+
+function renderPageSearchEmpty(container) {
+  const body = container.querySelector('[data-page-search-body]');
+  const badge = container.querySelector('.page-search-count');
+  const status = container.querySelector('.page-search-status');
+  if (badge) badge.textContent = '0';
+  if (status) status.textContent = '';
+  const emptyMsg = container.dataset.noResultsHtml || 'No page matches found.';
+  if (body) body.innerHTML = `<div class="page-search-header"><span>${emptyMsg}</span></div>`;
+}
+
+function renderPageSearchResults(container, pages, term, docId) {
+  const body = container.querySelector('[data-page-search-body]');
+  const badge = container.querySelector('.page-search-count');
+  const status = container.querySelector('.page-search-status');
+  if (badge) badge.textContent = pages.length;
+  if (status) status.textContent = '';
+  const params = new URLSearchParams(window.location.search);
+  const currentPage = parseInt(params.get('pageNum'), 10) || 0;
+  const ariaTemplate = container.dataset.goToPageAriaTemplate || 'Go to page __PAGE__';
+  const showMoreLabel = container.dataset.showMoreLabel || 'Show more';
+  const lang = document.documentElement.lang || 'en';
+  const showLessLabel =
+    container.dataset.showLessLabel ||
+    (lang.startsWith('fr') ? 'Afficher moins' : 'Show less');
+  const prevHitLabel = escapeHtml(container.dataset.prevHitLabel || '');
+  const prevHitAria = escapeHtml(container.dataset.prevHitAria || '');
+  const nextHitLabel = escapeHtml(container.dataset.nextHitLabel || '');
+  const nextHitAria = escapeHtml(container.dataset.nextHitAria || '');
+
+  const hrefFor = (pageNum) =>
+    `/catalog/${encodeURIComponent(docId)}?pageNum=${pageNum}&q=${encodeURIComponent(term)}`;
+
+  const chips = pages.map((page) => {
+    const isCurrent = currentPage === page;
+    const aria = escapeHtml(ariaTemplate.replace('__PAGE__', page));
+    return `<a role="listitem"
+               class="chip page-chip ${isCurrent ? 'is-current' : ''}"
+               ${isCurrent ? 'aria-current="page"' : ''}
+               aria-label="${aria}"
+               href="${hrefFor(page)}">
+              ${page}
+            </a>`;
+  });
+
+  const visibleChips = chips.slice(0, 24).join('');
+  const restChips = chips.slice(24).join('');
+  const moreWrapper = restChips ? `<span class="page-search-more" hidden>${restChips}</span>` : '';
+
+  const prevHit = currentPage > 0 ? pages.filter((p) => p < currentPage).pop() : null;
+  const nextHit = currentPage > 0 ? pages.find((p) => p > currentPage) : null;
+
+  const prevBtn = prevHit
+    ? `<a class="btn btn-outline-secondary btn-sm chip-nav"
+           href="${hrefFor(prevHit)}"
+           aria-label="${prevHitAria}">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        <span class="d-none d-sm-inline">${prevHitLabel}</span>
+      </a>`
+    : '';
+
+  const nextBtn = nextHit
+    ? `<a class="btn btn-outline-secondary btn-sm chip-nav"
+           href="${hrefFor(nextHit)}"
+           aria-label="${nextHitAria}">
+        <span class="d-none d-sm-inline">${nextHitLabel}</span>
+        <i class="bi bi-arrow-right ms-sm-1" aria-hidden="true"></i>
+      </a>`
+    : '';
+
+  const toolbar = prevBtn || nextBtn
+    ? `<div class="page-search-toolbar d-flex align-items-center gap-2 mb-2">${prevBtn}${nextBtn}</div>`
+    : '';
+
+  const toggle = restChips
+    ? `<div class="page-search-togglebar mt-2">
+         <button type="button"
+                 class="btn btn-link btn-sm page-search-toggle p-0"
+                 data-label-more="${escapeHtml(showMoreLabel)}"
+                 data-label-less="${escapeHtml(showLessLabel)}">
+           <i class="bi bi-chevron-down" aria-hidden="true"></i>
+           <span>${escapeHtml(showMoreLabel)}</span>
+         </button>
+       </div>`
+    : '';
+
+  if (body) {
+    body.innerHTML = `${toolbar}
+      <div class="page-chip-list" role="list">
+        ${visibleChips}
+        ${moreWrapper}
+      </div>
+      ${toggle}`;
+  }
+}
+
+async function hydratePageSearch(container) {
+  const term = (container.dataset.term || '').trim();
+  const arkUrl = container.dataset.arkUrl || '';
+  const arkPath = container.dataset.arkPath || arkUrl.replace(/^https?:\/\/n2t.net\/ark:\//i, '');
+  if (/^69429\/s/i.test(arkPath)) {
+    renderPageSearchEmpty(container);
+    return;
+  }
+  if (!term || term === '*:*' || !arkUrl) {
+    renderPageSearchEmpty(container);
+    return;
+  }
+
+  const contentBase =
+    trimTrailingSlash(getMetaContent('iiif-content-search-base')) ||
+    'https://crkn-iiif-content-search.azurewebsites.net/search';
+  const manifestBase =
+    trimTrailingSlash(getMetaContent('iiif-manifest-base')) ||
+    'https://crkn-iiif-api.azurewebsites.net/manifest';
+
+  const searchUrl = `${contentBase}/${encodeURIComponent(arkPath)}?q=${encodeURIComponent(term)}`;
+  const manifestUrl = `${manifestBase}/${arkPath}`;
+
+  try {
+    const [searchJson, manifestJson] = await Promise.all([
+      fetchJsonWithTimeout(searchUrl, 6000),
+      fetchJsonWithTimeout(manifestUrl, 6000),
+    ]);
+    const items = parseSearchItems(searchJson);
+    const canvasMap = buildCanvasIndexMap(manifestJson);
+    const pages = collectPageNumbers(items, canvasMap);
+    if (!pages.length) {
+      renderPageSearchEmpty(container);
+      return;
+    }
+    renderPageSearchResults(container, pages, term, container.dataset.docId);
+  } catch (err) {
+    console.warn('Page search fetch failed', err);
+    const status = container.querySelector('.page-search-status');
+    if (status) status.textContent = '';
+    const body = container.querySelector('[data-page-search-body]');
+    if (body) {
+      body.innerHTML = '<div class="text-muted small">Unable to load page matches right now.</div>';
+    }
+  }
+}
+
+function initPageSearch() {
+  const containers = document.querySelectorAll('[data-page-search="true"]');
+  containers.forEach((container) => {
+    if (container.dataset.pageSearchHydrated === '1') return;
+    container.dataset.pageSearchHydrated = '1';
+    hydratePageSearch(container);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initPageSearch);
+
 // Page search chips: toggle show more/less
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('.page-search-toggle');
@@ -278,8 +496,8 @@ document.addEventListener('click', (e) => {
   const span = btn.querySelector('span');
   const icon = btn.querySelector('i');
   const lang = document.documentElement.lang || 'en';
-  const labelMore = lang.startsWith('fr') ? 'Afficher plus' : 'Show more';
-  const labelLess = lang.startsWith('fr') ? 'Afficher moins' : 'Show less';
+  const labelMore = btn.dataset.labelMore || (lang.startsWith('fr') ? 'Afficher plus' : 'Show more');
+  const labelLess = btn.dataset.labelLess || (lang.startsWith('fr') ? 'Afficher moins' : 'Show less');
 
   const hidden = more.hasAttribute('hidden');
   if (hidden) {

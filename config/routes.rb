@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/about/serials', to: 'pages#about_serials'
   get '/about/government-publications', to: 'pages#about_govpubs'
   get '/about/maps', to: 'pages#about_maps'
+  get '/what-is-iiif', to: 'pages#what_is_iiif', as: :what_is_iiif
   # Allow slashes inside :ark (e.g., ark:/69429/m0k35m90313z)
   get '/dl/:id/*ark', to: 'downloads#index', constraints: { id: /[0-z\.]+/ }, format: false
   #root to: "catalog#index"

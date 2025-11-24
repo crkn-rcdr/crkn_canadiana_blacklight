@@ -23,6 +23,7 @@ i {
     }
 }
 .document-main-section {
+    margin-top: 1rem;
     .document-record-header {
         display: flex;
         align-items: center;
@@ -114,7 +115,7 @@ button i {
 /* Ensure main content adjusts */
 #doc-main {
     transition: margin-left 0.3s ease-in-out;
-    margin: 0.9rem 0 0 0 !important;
+    margin: 0.5rem 0 0 0 !important;
     padding: 0 !important;
         position: relative;
 }
@@ -176,7 +177,7 @@ button i {
   .blacklight-catalog-show .document-main-section { max-width: 100% !important; }
 }
 #toggle-doc-metadata2[aria-expanded="true"], #toggle-doc-metadata3[aria-expanded="true"] {
-    display:none;
+    display:none !important;
 }
 
 #toggle-doc-metadata2, #toggle-doc-metadata3 {
@@ -187,15 +188,30 @@ button i {
     display: flex;
     align-items: center;
     margin-left: 0.1rem;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0rem;
     span {
-        font-size: 20px !important;
         margin-left:0.5rem;
     }
 }
 #toggle-doc-metadata3 {
     margin-left: 0.5rem;
     margin-bottom: 0.5rem;
+}
+#download-toolbar {
+    margin-bottom: 0.5rem;
+}
+#download-toolbar .btn {
+    font-size: 0.95rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    line-height: 1.2;
+}
+#download-toolbar .btn i {
+    font-size: 1rem;
+}
+#download-toolbar .btn,
+.toolbox-actions .btn {
+    box-shadow: none;
 }
 #document-togglable-content {
     background-color: white;

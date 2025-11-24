@@ -583,8 +583,8 @@ footer.bg-dark {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background-color: #f3f4f6;
-  color: #111;
+  /*background-color: #f3f4f6;*/
+  color: #111 !important;
   border: 1px solid rgba(0,0,0,.08);
   border-radius: var( --bs-btn-border-radius);
   padding: 8px 16px;
@@ -598,9 +598,8 @@ footer.bg-dark {
   background-color: #e5e7eb;
 }
 
-.copy-link-btn .icon {
-  width: 18px;
-  height: 18px;
+.copy-link-btn i {
+  color: #111 !important;
 }
 
 .copy-link-btn:focus-visible { outline: 3px solid rgba(13,110,253,.4); outline-offset: 2px; }

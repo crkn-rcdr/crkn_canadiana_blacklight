@@ -38,7 +38,7 @@ fr:
       crop_tooltip: Ouvrir l’outil de rognage dans un nouvel onglet
       generate_pdf: Générer un PDF
       pdf_tooltip: Créer un PDF à partir du manifeste IIIF
-      edit_manifest_copy: Éditer une copie du manifeste
+      edit_manifest_copy:  Modifier une copie du manifeste
       edit_manifest_tooltip: Ouvrir une copie du manifeste IIIF dans l’éditeur
       copy_manifest_link: Copier le lien du manifeste
       copy_tooltip: Copier l’URL du manifeste IIIF

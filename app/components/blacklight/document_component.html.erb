@@ -14,7 +14,6 @@
     <%= body %>
   <% else %>
     <div class="document-main-section">
-      <br/>
 
       <% if @component.to_s == 'div' %>
         <div class="crumbs">
@@ -68,33 +67,27 @@
             </div>
             <!-- Main Content -->
             <div id="doc-main" class="col">
-              <% if @document._source["is_serial"]&.first == "No" %>
-                <button id="toggle-doc-metadata2" class="btn btn-outline-custom" type="button" data-bs-toggle="collapse" data-bs-target="#toggle-menu" aria-expanded="true" aria-controls="toggle-menu">
-                    <i class="bi bi-layout-sidebar"></i><span><%= t('labels.L_RECORD') %></span>
-                </button>
-                <% if @document._source["ark"] %>
-                  <div id="my-mirador" data-docid="<%= @document._source['ark'] %>"></div>
-                  
-                <% else %>
-                  <img src="/assets/404.webp" class="not-found-icon"/>
-                  <p>Sorry, there was a problem loading the images for this item.</p>
-                <% end %>
 
-                
+              <% if @document._source["is_serial"]&.first == "No" %>
               <div>
+                  
                   <div class="mt-2 d-flex gap-2 flex-wrap" id="download-toolbar"
                        data-docid="<%= @document._source['id'] %>"
                        data-arkpath="<%= @document._source['ark'].to_s.gsub('https://n2t.net/ark:/','') %>">
-                    <a id="btn-download-img" class="btn btn-soft-primary btn-sm" target="_blank" rel="noopener">
-                      <i class="bi bi-image" aria-hidden="true"></i>
+                   
+                      <button id="toggle-doc-metadata2" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#toggle-menu" aria-expanded="true" aria-controls="toggle-menu">
+                          <i class="bi bi-layout-sidebar fs-5" aria-hidden="true"></i><span><%= t('labels.L_RECORD') %></span>
+                      </button>
+                    <a id="btn-download-img" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6" target="_blank" rel="noopener">
+                      <i class="bi bi-image fs-5" aria-hidden="true"></i>
                       Download current image
                     </a>
-                    <a id="btn-download-page" class="btn btn-soft-primary btn-sm" target="_blank" rel="noopener">
-                      <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i>
+                    <a id="btn-download-page" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6" target="_blank" rel="noopener">
+                      <i class="bi bi-file-earmark-arrow-down fs-5" aria-hidden="true"></i>
                       Download current image as PDF
                     </a>
-                    <a id="btn-download-full" class="btn btn-soft-primary btn-sm" target="_blank" rel="noopener">
-                      <i class="bi bi-filetype-pdf" aria-hidden="true"></i>
+                    <a id="btn-download-full" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6" target="_blank" rel="noopener">
+                      <i class="bi bi-filetype-pdf fs-5" aria-hidden="true"></i>
                       Download full searchable PDF
                     </a>
                   </div>
@@ -189,9 +182,18 @@
                       })();
                     })();
                   </script>
-                </div>
 
-                
+              </div>
+
+
+                <% if @document._source["ark"] %>
+                  <div id="my-mirador" data-docid="<%= @document._source['ark'] %>"></div>
+                  
+                <% else %>
+                  <img src="/assets/404.webp" class="not-found-icon"/>
+                  <p>Sorry, there was a problem loading the images for this item.</p>
+                <% end %>
+
                 <%= render(::IiifComponent.new(document: @document, term: params[:q])) %>
               <% else %>
               <button id="toggle-doc-metadata3" class="btn btn-outline-custom" type="button" data-bs-toggle="collapse" data-bs-target="#toggle-menu" aria-expanded="true" aria-controls="toggle-menu">

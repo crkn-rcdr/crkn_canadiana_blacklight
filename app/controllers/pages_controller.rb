@@ -6,4 +6,5 @@ class PagesController < ApplicationController
     def about_serials; end
     def about_govpubs; end
     def about_maps; end
+    def what_is_iiif; end
 end

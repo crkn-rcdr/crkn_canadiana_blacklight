@@ -22,7 +22,7 @@ en:
       visit_site_aria: "Visit %{name} website"
     page_search:
       matching_pages_for_html: "Matching pages for <strong>%{term}</strong>"
-      no_results_html: "No results for '<strong>%{term}</strong>' in this item"
+      no_results_html: "No results in this item"
       show_more: Show more
       show_less: Show less
       go_to_page_aria: "Go to page %{page}"

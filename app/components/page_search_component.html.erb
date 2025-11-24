@@ -17,12 +17,6 @@
     <span class="matching-image-label" term="<%= @term %>">
       <%= t('blacklight.page_search.matching_pages_for_html', term: @term) %>
     </span>
-    <span class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis page-search-count"
-          aria-live="polite"
-          aria-atomic="true"></span>
-    <span class="text-muted small page-search-status">
-      <%= t('blacklight.page_search.loading', default: 'Loading...') %>
-    </span>
   </div>
 
   <div class="page-search-body" data-page-search-body>

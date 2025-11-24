@@ -35,7 +35,7 @@ i {
     }
 }
 
-.page-sidebar[aria-label="Tools"] {
+.page-sidebar[aria-label="Tools"], .page-sidebar[aria-label="Outils"] {
     width: 100%;
     .card {
         border: none;
@@ -58,7 +58,7 @@ i {
     }
 }
 /* Hide separate sidebar Tools; links live in the Toolbox card to avoid duplication */
-.blacklight-catalog-show .page-sidebar[aria-label="Tools"] { display: none; }
+.blacklight-catalog-show .page-sidebar[aria-label="Tools"],  .blacklight-catalog-show .page-sidebar[aria-label="Outils"] { display: none; }
 
 /* Make show page content span full page width (mobile only; see block at bottom) */
 @media only screen and (max-width: 1024px) {

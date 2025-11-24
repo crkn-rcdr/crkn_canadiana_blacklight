@@ -22,7 +22,7 @@ fr:
       visit_site_aria: "Visiter le site de %{name}"
     page_search:
       matching_pages_for_html: "Pages correspondantes pour <strong>%{term}</strong>"
-      no_results_html: "Aucun résultat pour « <strong>%{term}</strong> » dans cet élément"
+      no_results_html: "Aucun résultat dans cet élément"
       show_more: Afficher plus
       show_less: Afficher moins
       go_to_page_aria: "Aller à la page %{page}"

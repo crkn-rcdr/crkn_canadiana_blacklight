@@ -1,8 +1,12 @@
+# frozen_string_literal: true
 require 'time'
 $:.unshift './config'
+
 class MarcIndexer < Blacklight::Marc::Indexer
   # this mixin defines lambda factory method get_format for legacy marc formats
   include Blacklight::Marc::Indexer::Formats
+
+  HIER_DELIM = '|' # used by blacklight-hierarchy for splitting
 
   def initialize
     super
@@ -13,33 +17,42 @@ class MarcIndexer < Blacklight::Marc::Indexer
       # set this to be non-negative if threshold should be enforced
       provide 'solr_writer.max_skipped', -1
     end
+
     # https://github.com/ruby-marc/ruby-marc
     # https://github.com/traject/traject/blob/5d720e2ba0a277cf7af455763f520cd6a2d956c7/README.md?plain=1#L279
     to_field "id", extract_marc("001"), trim, first_only
-    # TODO: could use the serials 990 instead 
+
     # 901 = "Is issue"  => Yes; otherwise (missing/different) => No
     to_field "is_issue" do |record, accumulator|
       v = record["901"]&.value&.strip
       accumulator.replace [ (v&.casecmp("Is issue")&.zero?) ? "Yes" : "No" ]
     end
 
-    # 901 = "Is serial" => Yes; otherwise (missing/different) => No
+    # --- serial_key: prefer 902$b; fallback to left side of 001 before '_' ---
+    to_field "serial_key" do |record, acc|
+      key = record["902"]&.subfields&.find { |sf| sf.code == 'b' }&.value&.strip
+      if key && !key.empty?
+        acc.replace [key]
+      end
+    end
+
+    # --- serial_title: nil-safe split on ':' ---
+    to_field "serial_title", extract_marc('245a'), first_only do |_rec, acc|
+      v = acc.first
+      if v && v.include?(' : ')
+        acc.replace([v.split(' : ', 2).first.strip])
+      elsif v && v.include?(':')
+        acc.replace([v.split(':', 2).first.strip])
+      else
+        acc.replace(v ? [v.strip] : [])
+      end
+    end
+
+    # --- is_serial: true for parent serials, not individual issues ---
     to_field "is_serial" do |record, accumulator|
       v = record["901"]&.value&.strip
       accumulator.replace [ (v&.casecmp("Is series")&.zero?) ? "Yes" : "No" ]
     end
-
-    # serial_key from 902$b (first only)
-    to_field "serial_key", extract_marc('902b'), first_only
-
-    to_field "serial_title",  extract_marc('245a'), first_only do |rec, acc|
-      if acc[0] && acc[0].count(":") >= 1
-        parts = acc[0].split(':', 2)
-        acc.replace [parts[0]]
-      else
-        acc.replace []
-      end
-    end 
 
     to_field 'marc_ss', get_xml
     to_field "all_text_timv", extract_all_marc_values do |r, acc|
@@ -51,25 +64,21 @@ class MarcIndexer < Blacklight::Marc::Indexer
 
     #Look into this
     #to_field "isbn_tsim", extract_marc('020a', separator: nil) do |rec, acc|
-    #     orig = acc.dup
-    #     # acc.map!{|x| StdNum::ISBN.allNormalizedValues(x)} # Can't handle 'x' assigned after by them~
-    #     acc << orig
-    #     acc.flatten!
-    #     acc.uniq!
+    #  orig = acc.dup
+    #  acc << orig
+    #  acc.flatten!
+    #  acc.uniq!
     #end
 
     to_field 'material_type_ssm', extract_marc('300a'), trim_punctuation
 
     # Title fields
-    # get rid of / in title
-    # 245 So, just keeping the $a and $b could work.
-
     # full title
     to_field 'full_title_tsim', extract_marc('245ab')
     to_field 'full_title_ssm', extract_marc('245ab', alternate_script: false), trim_punctuation
     to_field 'full_title_vern_ssm', extract_marc('245ab', alternate_script: :only), trim_punctuation
 
-    # primary title 
+    # primary title
     to_field 'title_tsim', extract_marc('245a')
     to_field 'title_ssm', extract_marc('245a', alternate_script: false), trim_punctuation
     to_field 'title_vern_ssm', extract_marc('245a', alternate_script: :only), trim_punctuation
@@ -80,9 +89,6 @@ class MarcIndexer < Blacklight::Marc::Indexer
     to_field 'subtitle_vern_ssm', extract_marc('245b', alternate_script: :only), trim_punctuation
 
     # Other Titles
-    # Alternative Title - 246 field - right into the title or right below 
-    # Uniform Title - Other title is in 830 field
-    # 730, 740, 240, 242, 243, 247
     to_field 'title_addl_tsim',
       extract_marc(%W{
         246abcdefgnp
@@ -97,8 +103,6 @@ class MarcIndexer < Blacklight::Marc::Indexer
     to_field 'title_si', marc_sortable_title
 
     # Author fields
-    # Make author Creator -> 100, 110, 111, 130
-    # Creator -> 700, 710, 711, 720
     to_field 'author_tsim', extract_marc("100abcegqu:110abcdegnu:111acdegjnqu:130#{ATOZ}:700abcegqu:710abcdegnu:711acdegjnqu:720#{ATOZ}")
     to_field 'author_ssm', extract_marc("100abcdq:110#{ATOZ}:111#{ATOZ}:130#{ATOZ}:700abcegqu:710abcdegnu:711acdegjnqu:720#{ATOZ}", alternate_script: false)
     to_field 'author_vern_ssm', extract_marc("100abcdq:110#{ATOZ}:111#{ATOZ}:130#{ATOZ}:700abcegqu:710abcdegnu:711acdegjnqu:720#{ATOZ}", alternate_script: :only)
@@ -145,27 +149,46 @@ class MarcIndexer < Blacklight::Marc::Indexer
       688#{ATOZ}
     ).join(':')), trim_punctuation
 
-    # Publication fields
-    # Remove the accents from the string
-    #remove_accent = lambda {|rec, acc| acc.map!{|x| 
-    #  x = I18n.transliterate(x)
-    #  x = x.tr('?', '')
-    #  x = x.tr('[', '')
-    #  x = x.tr(']', '')
-    #  x = x.tr('.', '')
-    #  x.tr(',', '')
-    #} }
-
     # Published statement
-    to_field 'published_ssm', extract_marc('260abcefg:264abc', alternate_script: false), trim_punctuation #remove_accent
-    to_field 'published_vern_ssm', extract_marc('260abcefg:264abc', alternate_script: :only), trim_punctuation #remove_accent
+    to_field 'published_ssm', extract_marc('260abcefg:264abc', alternate_script: false), trim_punctuation
+    to_field 'published_vern_ssm', extract_marc('260abcefg:264abc', alternate_script: :only), trim_punctuation
 
-    # Published Dated
-    to_field 'pub_date_si', marc_publication_date
+    # Published Dates
+    to_field 'pub_date_si',   marc_publication_date
     to_field 'pub_date_ssim', marc_publication_date
 
-    # Additional CRKN Information
-    to_field 'collection_tsim', extract_marc('999a')
+    # ----------------------------
+    # CRKN additions
+    # ----------------------------
+
+    # Materials facet + collection helpers based on 999 $e (EN) / $f (FR)
+    #to_field 'materials_ssim_en' do |rec, acc|
+    #  acc.replace(materials_by_language(rec)[:en])
+    #end
+    #to_field 'materials_ssm_en' do |rec, acc|
+    #  acc.replace(materials_by_language(rec)[:en])
+    #end
+    #to_field 'materials_ssim_fr' do |rec, acc|
+    #  acc.replace(materials_by_language(rec)[:fr])
+    #end
+    #to_field 'materials_ssm_fr' do |rec, acc|
+    #  acc.replace(materials_by_language(rec)[:fr])
+    #end
+
+    # human-readable path for display/debug (language specific)
+    to_field 'collectionen_path' do |rec, acc|
+      collection_paths_by_language(rec)[:en].each do |segments|
+        acc.concat(path_permutations(segments))
+      end
+      acc.uniq!
+    end
+    to_field 'collectionfr_path' do |rec, acc|
+      collection_paths_by_language(rec)[:fr].each do |segments|
+        acc.concat(path_permutations(segments))
+      end
+      acc.uniq!
+    end
+
     to_field 'depositor_tsim', extract_marc('590a')
 
     # Document Source
@@ -173,7 +196,7 @@ class MarcIndexer < Blacklight::Marc::Indexer
 
     # Rights Statement
     to_field 'rights_stat_tsim', extract_marc('540abcdfgqu')
-    
+
     # Access Note
     to_field 'access_note_tsim', extract_marc('506abcdefgqu')
 
@@ -188,18 +211,14 @@ class MarcIndexer < Blacklight::Marc::Indexer
     ).join(':'))
 
     # Source of Description
-    to_field 'source_of_description_tsim', extract_marc(%W(
-      588#{ATOZ}
-    ))
+    to_field 'source_of_description_tsim', extract_marc(%W(588#{ATOZ}))
 
     # Series
-    # CIHM don't need?? Need to ask Jason
-    # Will need for issues
     to_field 'title_series_tsim', extract_marc("440anpv:490av")
 
     to_field 'permalink_fulltext_ssm', extract_marc("856g")
 
-    to_field 'date_added' do |record, accumulator| 
+    to_field 'date_added' do |record, accumulator|
       raw = record['998']&.value
       if raw
         # Parse MARC timestamp (e.g., "20240716103000.0005") and format only the date
@@ -207,6 +226,7 @@ class MarcIndexer < Blacklight::Marc::Indexer
         accumulator << date
       end
     end
+
     to_field 'date_edited' do |record, accumulator|
       raw = record['005']&.value
       if raw
@@ -215,8 +235,9 @@ class MarcIndexer < Blacklight::Marc::Indexer
         accumulator << iso
       end
     end
+
     # URL Fields
-    notfulltext = /abstract|description|sample text|table of contents|/i
+    notfulltext = /abstract|description|sample text|table of contents/i
     to_field('url_fulltext_ssm') do |rec, acc|
       rec.fields('856').each do |f|
         case f.indicator2
@@ -267,9 +288,94 @@ class MarcIndexer < Blacklight::Marc::Indexer
       end
       acc.compact! # eliminate nils
     end
-    to_field 'lc_alpha_ssim', extract_marc('050a'), alpha_only, first_only 
+    to_field 'lc_alpha_ssim', extract_marc('050a'), alpha_only, first_only
 
     to_field 'lc_b4cutter_ssim', extract_marc('050a'), first_only
+  end
 
+  private
+
+  FRENCH_KEYWORDS = %w[serie series carte cartes annuelle annuelles periodique periodiques publication publications journaux].freeze
+  ENGLISH_KEYWORDS = %w[serial serials map maps annual annuals periodical periodicals publication publications newspaper newspapers].freeze
+
+  def materials_by_language(record)
+    collection_paths_by_language(record).transform_values do |paths|
+      paths.map(&:first).compact.uniq
+    end
+  end
+
+  def collection_paths_by_language(record)
+    result = { en: [], fr: [] }
+    record.fields('999').each do |field|
+      collection_segments_by_language(field).each do |lang, values|
+        normalized = normalize_collection_segments(values)
+        result[lang] << normalized unless normalized.empty?
+      end
+    end
+    result.transform_values(&:uniq)
+  end
+
+  def collection_segments_by_language(field)
+    segments = { en: [], fr: [] }
+    field.each do |subfield|
+      case subfield.code
+      when 'e'
+        segments[:en] << subfield.value
+      when 'f'
+        segments[:fr] << subfield.value
+      end
+    end
+    segments
+  end
+
+  def normalize_collection_segments(values)
+    Array(values).map { |value| normalize_collection_value(value) }.reject(&:blank?)
+  end
+
+  def normalize_collection_value(value)
+    value.to_s.strip.sub(/\.\z/, '')
+  end
+
+  def path_permutations(segments)
+    values = []
+    current = nil
+    segments.each do |segment|
+      current = current ? "#{current}/#{segment}" : segment
+      values << current
+    end
+    values
+  end
+
+  def detect_language_code(str)
+    return nil if str.blank?
+
+    downcased  = str.downcase
+    normalized = strip_diacritics(downcased)
+
+    return 'fr' unless downcased.ascii_only?
+    return 'fr' if normalized.include?('en serie') || normalized.include?('publications en serie')
+    return 'fr' if FRENCH_KEYWORDS.any? { |word| normalized.include?(word) }
+    return 'eng' if ENGLISH_KEYWORDS.any? { |word| normalized.include?(word) }
+
+    nil
+  end
+
+  def opposite_language_code(code)
+    return nil if code.nil?
+    code == 'fr' ? 'eng' : (code == 'eng' ? 'fr' : nil)
+  end
+
+  def strip_diacritics(str)
+    return '' if str.blank?
+
+    if str.respond_to?(:unicode_normalize)
+      str.unicode_normalize(:nfd).gsub(/\p{Mn}/, '')
+    else
+      ActiveSupport::Inflector.transliterate(str)
+    end
   end
 end
+
+
+
+

@@ -16,17 +16,32 @@
     <div class="document-main-section">
 
       <% if @component.to_s == 'div' %>
-        <div class="crumbs">
-          <a href="/catalog"><%= t('labels.L_SEARCH_BREADCRUMB') %></a> <span>/</span>
-          <% @document._source["collection_tsim"].each do |val| %>
-            <a href="/catalog?f%5Bcollection_tsim_str%5D%5B%5D=<%= val %>"><%= val %></a> /
-          <% end %>
-          <% if @document._source['is_issue']&.first == "Yes" && @document._source['serial_title'] %>
-            <a href="/catalog/<%= @document._source['serial_key'][0] %>"><%= @document._source['serial_title'][0] %></a> /
-          <% end %>
-        </div>
+        <% breadcrumb_paths = helpers.collection_breadcrumb_paths(@document) %>
+        <% if breadcrumb_paths.present? %>
+          <nav class="collection-breadcrumbs mb-3" aria-label="<%= t('breadcrumbs.collections', default: 'Collections') %>">
+            <% breadcrumb_paths.each do |path| %>
+              <ol class="breadcrumb mb-1">
+                <li class="breadcrumb-item"><a href="/catalog"><%= t('labels.L_SEARCH_BREADCRUMB') %></a></li>
+                <% path.each_with_index do |segment, idx| %>
+                  <% active = (idx == path.length - 1) %>
+                  <li class="breadcrumb-item <%= 'active' if active %>">
+                    <%= link_to segment[:label],
+                                helpers.collection_breadcrumb_url(segment[:value], segment[:field]),
+                                aria: (active ? { current: 'page' } : {}) %>
+                  </li>
+                <% end %>
+                <% if @document._source['is_issue']&.first == "Yes" && @document._source['serial_title'] %>
+                  <li class="breadcrumb-item">
+                    <a href="/catalog/<%= @document._source['serial_key'][0] %>"><%= @document._source['serial_title'][0] %></a>
+                  </li> 
+                <% end %>
+              </ol>
+            <% end %>
+          </nav>
+        <% end %>
         <br/>
       <% end %>
+
 
       <%= title %>
       <%= embed %>

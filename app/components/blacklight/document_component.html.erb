@@ -92,16 +92,19 @@
                       <button id="toggle-doc-metadata2" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6" type="button" data-bs-toggle="collapse" data-bs-target="#toggle-menu" aria-expanded="true" aria-controls="toggle-menu">
                           <i class="bi bi-layout-sidebar fs-5" aria-hidden="true"></i><span><%= t('labels.L_RECORD') %></span>
                       </button>
-                    <a id="btn-download-img" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6" target="_blank" rel="noopener">
+                    <a id="btn-download-img" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6 disabled" target="_blank" rel="noopener" aria-disabled="true">
                       <i class="bi bi-image fs-5" aria-hidden="true"></i>
+                      <span class="visually-hidden"><%= t('blacklight.tools.download_image_aria', default: 'Download current image') %></span>
                       Download current image
                     </a>
-                    <a id="btn-download-page" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6" target="_blank" rel="noopener">
+                    <a id="btn-download-page" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6 disabled" target="_blank" rel="noopener" aria-disabled="true">
                       <i class="bi bi-file-earmark-arrow-down fs-5" aria-hidden="true"></i>
+                      <span class="visually-hidden"><%= t('blacklight.tools.download_page_pdf_aria', default: 'Download current image as PDF') %></span>
                       Download current image as PDF
                     </a>
-                    <a id="btn-download-full" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6" target="_blank" rel="noopener">
+                    <a id="btn-download-full" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6 disabled" target="_blank" rel="noopener" aria-disabled="true">
                       <i class="bi bi-filetype-pdf fs-5" aria-hidden="true"></i>
+                      <span class="visually-hidden"><%= t('blacklight.tools.download_full_pdf_aria', default: 'Download full searchable PDF') %></span>
                       Download full searchable PDF
                     </a>
                   </div>
@@ -116,6 +119,51 @@
                       const full = document.getElementById('btn-download-full');
                       const page = document.getElementById('btn-download-page');
                       const pageImg = document.getElementById('btn-download-img');
+                      const invalidLinks = new Set();
+
+                      function disableLink(el) {
+                        if (!el) return;
+                        el.classList.add('disabled');
+                        el.setAttribute('aria-disabled', 'true');
+                        el.removeAttribute('href');
+                      }
+
+                      function enableLink(el, href) {
+                        if (!el || !href) return;
+                        el.href = href;
+                        el.classList.remove('disabled');
+                        el.removeAttribute('aria-disabled');
+                      }
+
+                      // Check if a link looks usable. We only mark as bad on explicit 404.
+                      async function validateAndEnable(el, href, { strict = false } = {}) {
+                        if (!el || !href) { disableLink(el); return; }
+                        if (invalidLinks.has(href)) { disableLink(el); return; }
+
+                        try {
+                          const resp = await fetch(href, { method: 'HEAD' });
+                          if (resp && resp.ok) {
+                            enableLink(el, href);
+                            return;
+                          }
+                          if (resp && resp.status === 404) {
+                            invalidLinks.add(href);
+                          }
+                          if (strict) {
+                            disableLink(el);
+                            return;
+                          }
+                          // non-OK but not strict: do not enable, keep disabled
+                          disableLink(el);
+                        } catch (_) {
+                          // Network/CORS error: only enable when not strict
+                          if (!strict) {
+                            enableLink(el, href);
+                          } else {
+                            disableLink(el);
+                          }
+                        }
+                      }
 
                       // Update links based on current pageNum in the URL
                       function updateForCurrentPage(data){
@@ -124,12 +172,9 @@
                         // Full-document PDF (static once data is fetched)
                         if (full) {
                           if (data.docPdfUri) {
-                            full.href = data.docPdfUri;
-                            full.classList.remove('disabled');
-                            full.removeAttribute('aria-disabled');
+                            validateAndEnable(full, data.docPdfUri, { strict: true });
                           } else {
-                            full.classList.add('disabled');
-                            full.setAttribute('aria-disabled','true');
+                            disableLink(full);
                           }
                         }
 
@@ -143,24 +188,18 @@
                         const listPdf = data.canvasDownloadPdfUris || [];
                         if (page) {
                           if (listPdf[idx]) {
-                            page.href = listPdf[idx];
-                            page.classList.remove('disabled');
-                            page.removeAttribute('aria-disabled');
+                            validateAndEnable(page, listPdf[idx]);
                           } else {
-                            page.classList.add('disabled');
-                            page.setAttribute('aria-disabled','true');
+                            disableLink(page);
                           }
                         }
 
                         const listImg = data.canvasDownloadImgUris || [];
                         if (pageImg) {
                           if (listImg[idx]) {
-                            pageImg.href = listImg[idx];
-                            pageImg.classList.remove('disabled');
-                            pageImg.removeAttribute('aria-disabled');
+                            validateAndEnable(pageImg, listImg[idx]);
                           } else {
-                            pageImg.classList.add('disabled');
-                            pageImg.setAttribute('aria-disabled','true');
+                            disableLink(pageImg);
                           }
                         }
                       }
@@ -180,20 +219,14 @@
                       window.addEventListener('popstate', onLocationChange);
                       window.addEventListener('hashchange', onLocationChange);
 
-                      // Patch history methods so pushState/replaceState also trigger updates
-                      (function() {
-                        const wrap = function(type){
-                          const orig = history[type];
-                          return function(){
-                            const res = orig.apply(this, arguments);
-                            try { window.dispatchEvent(new Event('locationchange')); } catch(e) {}
-                            return res;
-                          };
-                        };
-                        history.pushState = wrap('pushState');
-                        history.replaceState = wrap('replaceState');
-                        window.addEventListener('locationchange', onLocationChange);
-                      })();
+                      // Poll for pageNum changes (covers pushState/replaceState navigation in viewer)
+                      let lastSearch = window.location.search;
+                      setInterval(() => {
+                        if (window.location.search !== lastSearch) {
+                          lastSearch = window.location.search;
+                          onLocationChange();
+                        }
+                      }, 750);
                     })();
                   </script>
 

@@ -209,6 +209,11 @@ button i {
 #download-toolbar .btn i {
     font-size: 1rem;
 }
+#download-toolbar .btn.disabled,
+#download-toolbar .btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
 #download-toolbar .btn,
 .toolbox-actions .btn {
     box-shadow: none;

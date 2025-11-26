@@ -107,6 +107,7 @@
                       <span class="visually-hidden"><%= t('blacklight.tools.download_full_pdf_aria', default: 'Download full searchable PDF') %></span>
                       Download full searchable PDF
                     </a>
+                    <span id="download-status" class="text-muted small" aria-live="polite"></span>
                   </div>
                   <script>
                     (function(){
@@ -135,47 +136,23 @@
                         el.removeAttribute('aria-disabled');
                       }
 
-                      // Check if a link looks usable. We only mark as bad on explicit 404.
-                      async function validateAndEnable(el, href, { strict = false } = {}) {
-                        if (!el || !href) { disableLink(el); return; }
-                        if (invalidLinks.has(href)) { disableLink(el); return; }
-
-                        try {
-                          const resp = await fetch(href, { method: 'HEAD' });
-                          if (resp && resp.ok) {
-                            enableLink(el, href);
-                            return;
-                          }
-                          if (resp && resp.status === 404) {
-                            invalidLinks.add(href);
-                          }
-                          if (strict) {
-                            disableLink(el);
-                            return;
-                          }
-                          // non-OK but not strict: do not enable, keep disabled
-                          disableLink(el);
-                        } catch (_) {
-                          // Network/CORS error: only enable when not strict
-                          if (!strict) {
-                            enableLink(el, href);
-                          } else {
-                            disableLink(el);
-                          }
-                        }
+                      // Use backend existence flags; no client-side HEAD (avoids CORS).
+                      function setLinkState(el, href, exists) {
+                        if (!el || !href) return disableLink(el);
+                        // Only disable when we explicitly know it does not exist.
+                        if (exists === false) return disableLink(el);
+                        enableLink(el, href);
                       }
 
                       // Update links based on current pageNum in the URL
                       function updateForCurrentPage(data){
                         if (!data) return;
+                        const status = document.getElementById('download-status');
+                        if (status) status.textContent = <%= raw t('blacklight.tools.download_checking', default: 'Checking availability...').to_json %>;
 
                         // Full-document PDF (static once data is fetched)
                         if (full) {
-                          if (data.docPdfUri) {
-                            validateAndEnable(full, data.docPdfUri, { strict: true });
-                          } else {
-                            disableLink(full);
-                          }
+                          setLinkState(full, data.docPdfUri, data.docPdfExists);
                         }
 
                         const params = new URLSearchParams(window.location.search);
@@ -186,22 +163,15 @@
                         }
 
                         const listPdf = data.canvasDownloadPdfUris || [];
-                        if (page) {
-                          if (listPdf[idx]) {
-                            validateAndEnable(page, listPdf[idx]);
-                          } else {
-                            disableLink(page);
-                          }
-                        }
+                        const pdfExists = data.canvasPdfExists || [];
+                        setLinkState(page, listPdf[idx], pdfExists[idx]);
 
                         const listImg = data.canvasDownloadImgUris || [];
                         if (pageImg) {
-                          if (listImg[idx]) {
-                            validateAndEnable(pageImg, listImg[idx]);
-                          } else {
-                            disableLink(pageImg);
-                          }
+                          setLinkState(pageImg, listImg[idx], !!listImg[idx]);
                         }
+
+                        if (status) status.textContent = '';
                       }
 
                       // Fetch once, then update on URL changes

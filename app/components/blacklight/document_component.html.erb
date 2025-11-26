@@ -94,20 +94,20 @@
                       </button>
                     <a id="btn-download-img" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6 disabled" target="_blank" rel="noopener" aria-disabled="true">
                       <i class="bi bi-image fs-5" aria-hidden="true"></i>
-                      <span class="visually-hidden"><%= t('blacklight.tools.download_image_aria', default: 'Download current image') %></span>
-                      Download current image
+                      <%= t('blacklight.tools.download_image_aria') %>
                     </a>
                     <a id="btn-download-page" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6 disabled" target="_blank" rel="noopener" aria-disabled="true">
                       <i class="bi bi-file-earmark-arrow-down fs-5" aria-hidden="true"></i>
-                      <span class="visually-hidden"><%= t('blacklight.tools.download_page_pdf_aria', default: 'Download current image as PDF') %></span>
-                      Download current image as PDF
+                      <%= t('blacklight.tools.download_page_pdf_aria') %>
                     </a>
                     <a id="btn-download-full" class="btn btn-outline-custom btn-sm d-inline-flex align-items-center gap-2 fs-6 disabled" target="_blank" rel="noopener" aria-disabled="true">
                       <i class="bi bi-filetype-pdf fs-5" aria-hidden="true"></i>
-                      <span class="visually-hidden"><%= t('blacklight.tools.download_full_pdf_aria', default: 'Download full searchable PDF') %></span>
-                      Download full searchable PDF
+                      <%= t('blacklight.tools.download_full_pdf_aria') %>
                     </a>
-                    <span id="download-status" class="text-muted small" aria-live="polite"></span>
+                    <span id="download-status" class="text-muted small ms-2 d-inline-flex align-items-center gap-1" aria-live="polite" aria-atomic="true">
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <span class="download-status-text"><%= t('blacklight.tools.download_checking') %></span>
+                    </span>
                   </div>
                   <script>
                     (function(){
@@ -148,7 +148,10 @@
                       function updateForCurrentPage(data){
                         if (!data) return;
                         const status = document.getElementById('download-status');
-                        if (status) status.textContent = <%= raw t('blacklight.tools.download_checking', default: 'Checking availability...').to_json %>;
+                        const statusText = status?.querySelector('.download-status-text');
+                        const statusSpinner = status?.querySelector('.spinner-border');
+                        if (statusText) statusText.textContent = <%= raw t('blacklight.tools.download_checking', default: 'Checking availability...').to_json %>;
+                        if (statusSpinner) statusSpinner.hidden = false;
 
                         // Full-document PDF (static once data is fetched)
                         if (full) {
@@ -171,7 +174,11 @@
                           setLinkState(pageImg, listImg[idx], !!listImg[idx]);
                         }
 
-                        if (status) status.textContent = '';
+                        if (status && statusText) {
+                          const anyEnabled = [full, page, pageImg].some(el => el && !el.classList.contains('disabled'));
+                          statusText.textContent = anyEnabled ? '' : <%= raw t('blacklight.tools.download_unavailable', default: 'Not available for this page.').to_json %>;
+                          if (statusSpinner) statusSpinner.hidden = true;
+                        }
                       }
 
                       // Fetch once, then update on URL changes

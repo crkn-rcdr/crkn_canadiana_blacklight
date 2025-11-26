@@ -31,6 +31,11 @@ fr:
       prev_hit_aria: Aller à l’occurrence précédente
       next_hit_aria: Aller à l’occurrence suivante
     tools:
+      download_image_aria: Télécharger l'image 
+      download_page_pdf_aria: Télécharger l'image en PDF
+      download_full_pdf_aria: Télécharger le PDF complet
+      download_unavailable: Non disponible pour cette page
+      download_checking: Vérification de la disponibilité des options de téléchargement
       toolbox_title: Boîte à outils
       title: Outils
       subtitle: Exporter, modifier ou partager cet item

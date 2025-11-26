@@ -1,5 +1,5 @@
 class DownloadsController < ApplicationController
-    HEAD_TIMEOUT = 5
+    HEAD_TIMEOUT = 50
 
     def index
         @documentId            = params[:id]
@@ -51,12 +51,19 @@ class DownloadsController < ApplicationController
             canvas_pdf_uri        = "#{swift_uri}#{path}?filename=#{@documentId}.#{canvasNumber}.pdf#{uri_suffix}"
             canvas_img_uri        = "https://image-tor.canadiana.ca/iiif/2/#{extracted_string}/full/max/0/default.jpg"
             canvas_pdf_download_uris << canvas_pdf_uri
-            exists_val = swift_head_ok?("access-files/#{canvasId}.pdf")
-            canvas_pdf_exists << (exists_val == true)
             canvas_img_download_uris << canvas_img_uri
           end
         rescue => e
           Rails.logger.warn("DownloadsController manifest error: #{e.class}: #{e.message}") if defined?(Rails)
+        end
+
+        # Only check existence for the requested page (if provided)
+        current_idx = params[:pageNum].to_i - 1
+        current_idx = nil if current_idx && current_idx < 0
+        canvas_pdf_exists = Array.new(canvas_pdf_download_uris.length)
+        if current_idx && canvas_pdf_download_uris[current_idx]
+          exists_val = swift_head_ok?(canvas_pdf_download_uris[current_idx])
+          canvas_pdf_exists[current_idx] = (exists_val == true)
         end
         render :json => {
           "canvasDownloadPdfUris"  => canvas_pdf_download_uris,
@@ -71,29 +78,23 @@ class DownloadsController < ApplicationController
 
     def swift_head_ok?(object_path)
       token, storage_url, fallback_storage = swift_auth
-      return false unless token && (storage_url || fallback_storage)
+      base = storage_url || fallback_storage
+      return false unless token && base
 
-      # Prefer the configured preauth URL first, then any storage returned by auth
-      storage_urls = [storage_url, fallback_storage].compact.uniq
-      storage_urls.each do |base|
-        url = File.join(base, object_path)
-        uri = URI.parse(url)
-        begin
-          Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https', open_timeout: HEAD_TIMEOUT, read_timeout: HEAD_TIMEOUT) do |http|
-            # Use a small ranged GET to avoid CORS/HEAD blocking; only fetch first byte
-            req = Net::HTTP::Get.new(uri.request_uri)
-            req['X-Auth-Token'] = token
-            req['Range'] = 'bytes=0-0'
-            res = http.request(req)
-            return true if res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPPartialContent)
-          end
-        rescue Net::OpenTimeout, Net::ReadTimeout
-          Rails.logger.info("Swift HEAD timeout for #{url}") if defined?(Rails)
-          next
-        rescue => e
-          Rails.logger.info("Swift HEAD failed for #{url}: #{e.class}: #{e.message}") if defined?(Rails)
-          next
+      url = File.join(base, object_path)
+      uri = URI.parse(url)
+      begin
+        Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https', open_timeout: HEAD_TIMEOUT, read_timeout: HEAD_TIMEOUT) do |http|
+          req = Net::HTTP::Get.new(uri.request_uri)
+          req['X-Auth-Token'] = token
+          req['Range'] = 'bytes=0-0'
+          res = http.request(req)
+          return true if res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPPartialContent)
         end
+      rescue Net::OpenTimeout, Net::ReadTimeout
+        Rails.logger.info("Swift HEAD timeout for #{url}") if defined?(Rails)
+      rescue => e
+        Rails.logger.info("Swift HEAD failed for #{url}: #{e.class}: #{e.message}") if defined?(Rails)
       end
       nil
     end

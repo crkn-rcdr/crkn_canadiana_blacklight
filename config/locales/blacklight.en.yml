@@ -31,6 +31,11 @@ en:
       prev_hit_aria: Go to previous match
       next_hit_aria: Go to next match
     tools:
+      download_image_aria: Download current image
+      download_page_pdf_aria: Download current image as PDF
+      download_full_pdf_aria: Download full searchable PDF
+      download_unavailable: Not available for this page.
+      download_checking: Checking availability of download options...
       toolbox_title: Toolbox
       title: Tools
       subtitle: Export, edit, or share this item

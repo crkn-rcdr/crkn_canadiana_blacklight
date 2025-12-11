@@ -120,8 +120,8 @@ class CatalogController < ApplicationController
     config.add_show_field 'language_ssim', label: ->(_f, _c) { I18n.t('blacklight.metadata.language.label') }, helper_method: :format_facet
     config.add_show_field 'notes_tsim', label: ->(_f, _c) { I18n.t('blacklight.metadata.notes.label') }, helper_method: :format_text
     config.add_show_field 'original_version_note_tsim', label: ->(_f, _c) { I18n.t('blacklight.metadata.original_version_note.label') }, helper_method: :format_text
-    config.add_show_field 'access_note_tsim', label: ->(_f, _c) { I18n.t('blacklight.metadata.access_note.label') }, helper_method: :format_text
-    config.add_show_field 'source_of_description_tsim', label: ->(_f, _c) { I18n.t('blacklight.metadata.source_of_description.label') }, helper_method: :format_text
+    #config.add_show_field 'access_note_tsim', label: ->(_f, _c) { I18n.t('blacklight.metadata.access_note.label') }, helper_method: :format_text
+    #config.add_show_field 'source_of_description_tsim', label: ->(_f, _c) { I18n.t('blacklight.metadata.source_of_description.label') }, helper_method: :format_text
     config.add_show_field 'date_added', label: ->(_f, _c) { I18n.t('blacklight.metadata.date_added.label') }, helper_method: :format_date
 
     # ----- SEARCH FIELDS -----

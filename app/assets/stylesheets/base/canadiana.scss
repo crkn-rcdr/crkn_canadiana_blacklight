@@ -88,10 +88,16 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 .search-query-form {
     width: 100% !important;
+    margin-bottom:0;
 }
 /* Global search bar (top of pages except home) */
 .navbar-search {
-  padding: .75rem 0; border-bottom: 1px solid rgba(0,0,0,.06);
+  padding: .75rem 0; border-bottom: none;
+}
+
+.sort-pagination,
+.pagination-search-widgets {
+  border-bottom: none;
 }
 .navbar-search .input-group {
   border: 1px solid rgba(0,0,0,.12);
@@ -516,7 +522,7 @@ footer.bg-dark {
   margin-top: .5rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .02em; color: #6c757d;
 }
 .blacklight-catalog-index .documents-list .document-metadata p { margin-bottom: .25rem !important; }
-.blacklight-catalog-index #sortAndPerPage { border-bottom: 1px solid rgba(0,0,0,.06); padding-bottom: .5rem; margin-bottom: .75rem; }
+.blacklight-catalog-index #sortAndPerPage { border-bottom: none; padding-top: .75rem; margin-bottom: .2rem; }
 @media only screen and (max-width: 1024px) {
     .home-cards {
         width: 100% !important;
@@ -546,12 +552,15 @@ footer.bg-dark {
     }
 }
 
-#appliedParams { margin-bottom: .75rem; margin-top: 1rem !important; }
+#appliedParams { margin-bottom: .75rem; margin-top: 0 !important; }
 /* Unified tools styling (IIIF + sidebar Tools) */
 .show-tools.card,
 .iiif-tools-list,
 .toolbox-card {
-  background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 12px; padding: .75rem 1rem;
+  background: #fff; 
+  border: 1px solid rgba(0,0,0,.08) !important; 
+  border-radius: 12px; 
+  padding: .75rem 1rem;
   box-shadow: 0 8px 24px rgba(0,0,0,.04);
 }
 .iiif-tools-list, .show-tools.card, .toolbox-card { margin-top: 1rem; }
@@ -674,7 +683,7 @@ footer.bg-dark {
 }
 .facet-values li:hover { background: #f7f9fb; }
 .facet-values .facet-label { flex: 1 1 auto; min-width: 0; }
-.facet-values .facet-label a { text-decoration: none; color: #0f172a; }
+.facet-values .facet-label a { text-decoration: none; color: #0f172a; width: 100%; display: block;}
 .facet-values .facet-count {
   background: #eef2f7;
   color: #374151;

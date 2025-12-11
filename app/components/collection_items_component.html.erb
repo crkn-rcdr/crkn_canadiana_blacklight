@@ -3,7 +3,7 @@
     <% @collection_items.each do |collection_item| %>
       <% if collection_item['is_issue']&.first == "Yes" %>
         <div class="card" style="width: 20rem; width: 20rem; margin: 0 1.4rem 1rem 0;">
-        <div class="card-img-top" id="osd-<%= collection_item['id'] %>" style="height: 250px; border-bottom: 1px solid #ccc; margin-bottom: 1rem;"></div>
+        <div class="card-img-top" id="osd-<%= collection_item['id'] %>" style="height: 400px; border-bottom:none; margin-bottom: 0;"></div>
           <div class="card-body">
             <% if collection_item['subtitle_tsim'] %>
               <h5 class="card-title">
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
           return `https://image-tor.canadiana.ca/iiif/2/${encodeURIComponent(lastTwoParts)}/info.json`;
         });
 
-        OpenSeadragon({
+        const viewer = OpenSeadragon({
           element: container,
           prefixUrl: "/assets/",
           sequenceMode: true,
@@ -110,9 +110,11 @@ document.addEventListener("DOMContentLoaded", function () {
           immediateRender: true,
           showReferenceStrip: false,
           showHomeControl: false,
-          showZoomControl: true,
-          showFullPageControl: true
+          showZoomControl: false,
+          showFullPageControl: false,
+          defaultZoomLevel: 1.1
         });
+
 
       } catch (e) {
         console.error("Failed to load manifest or initialize OpenSeadragon for", containerId, e);

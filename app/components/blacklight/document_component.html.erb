@@ -58,12 +58,8 @@
                 </button>
               </div>
               <div>  
-                <%= metadata %>
-                <% metadata_sections.each do |section| %>
-                  <%= section %>
-                <% end %>
-
-                <ul class="list-unstyled mb-0">
+              
+                <ul class="list-unstyled mb-0" style="margin-top: 1rem;">
                   <li class="mb-1">
                     <a href="/catalog/<%= params[:id] %>/librarian_view" data-blacklight-modal="trigger" data-turbo="false">
                       <i class="bi bi-journal-text me-1" aria-hidden="true"></i>
@@ -77,6 +73,12 @@
                     </a>
                   </li>
                 </ul>
+                
+                <%= metadata %>
+                <% metadata_sections.each do |section| %>
+                  <%= section %>
+                <% end %>
+
               </div>
             </div>
             <!-- Main Content -->

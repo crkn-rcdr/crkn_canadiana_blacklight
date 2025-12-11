@@ -464,7 +464,7 @@ async function hydratePageSearch(container) {
     }
     renderPageSearchResults(container, pages, term, container.dataset.docId);
   } catch (err) {
-    console.warn('Page search fetch failed', err);
+    console.warn('Page search fetch failed', err, searchUrl, manifestUrl);
     const status = container.querySelector('.page-search-status');
     if (status) status.textContent = '';
     const body = container.querySelector('[data-page-search-body]');

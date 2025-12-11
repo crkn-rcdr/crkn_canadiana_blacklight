@@ -1,5 +1,5 @@
 class CollectionItemsComponent < ViewComponent::Base
-  def initialize(documentId:, page: 1, per_page: 10)
+  def initialize(documentId:, page: 1, per_page: 12)
     @documentId = documentId
     @page = page.to_i
     @per_page = per_page.to_i

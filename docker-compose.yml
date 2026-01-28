@@ -10,8 +10,6 @@ services:
       - test
     env_file:
       - .env
-    environment:
-      - RAILS_ENV=development
     volumes:
       - ./bin:/app/bin
       - ./app:/app/app

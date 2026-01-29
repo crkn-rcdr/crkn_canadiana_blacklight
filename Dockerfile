@@ -38,6 +38,7 @@ FROM base AS runtime
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       libsqlite3-0 \
+      nodejs \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /usr/local/bundle /usr/local/bundle

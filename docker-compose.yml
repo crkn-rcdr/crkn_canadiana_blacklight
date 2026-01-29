@@ -4,10 +4,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        SECRET_KEY_BASE: ${SECRET_KEY_BASE}
     ports:
       - "3000:3000"
-    networks:
-      - test
     env_file:
       - .env
     volumes:
@@ -16,16 +16,3 @@ services:
       - ./db:/app/db
       - ./config:/app/config
       - ./public:/app/public
-  solr:
-    image: solr
-    ports:
-      - "8983:8983"
-    networks:
-      - test
-    volumes:
-      - ./data:/var/solr
-volumes:
-  data:
-networks:
-  test:
-    driver: bridge

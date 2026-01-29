@@ -18,7 +18,7 @@ COPY . .
 
 RUN yarn install
 
-RUN RAILS_ENV=production rails vite:build
+RUN rails vite:build
 
 EXPOSE 3000
 

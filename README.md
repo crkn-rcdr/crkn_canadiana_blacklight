@@ -176,7 +176,12 @@ sudo /opt/bitnami/ctlscript.sh restart solr
 
 ## Development
 
-Common commands:
+Run the container:
+```bash
+docker compose up
+```
+
+Common in-container commands:
 
 - `bin/rails server` - Start the app.
 - `bin/rails console` - Interactive Rails console.

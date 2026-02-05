@@ -106,8 +106,8 @@ curl -X POST -H "Content-Type: application/json" "http://localhost:8983/solr/bla
 
 For CRKN production, Solr runs outside of Docker Compose. High-level steps:
 
-1. SSH to the Solr VM.
-1. Create the `blacklight_marc_demo` core and `conf` directory.
+1. SSH to the Solr container.
+1. Create the `blacklight_marc` core and `conf` directory.
 1. Copy the default configset.
 1. Replace `solrconfig.xml` and `managed-schema.xml` with the versions from this repo.
 1. Restart Solr.

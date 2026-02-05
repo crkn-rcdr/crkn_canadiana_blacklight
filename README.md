@@ -166,3 +166,4 @@ Notes:
 - Blacklight Workshop: https://workshop.projectblacklight.org/
 - IIIF overview: https://iiif.io/
 - IIIF Content Search API v2: https://iiif.io/api/search/2.0/
+- Debugging Rails: https://guides.rubyonrails.org/debugging_rails_applications.html

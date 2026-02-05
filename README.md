@@ -1,6 +1,6 @@
 # CRKN Canadiana Blacklight
 
-CRKN Canadiana Blacklight is a Rails 7 + Blacklight 8.8 app for search and discovery over MARC records, backed by Solr and integrated with IIIF (manifest + content search) endpoints, using Mirador viewer for IIIF Manifest Display.
+CRKN Canadiana Blacklight is a Rails 7 + Blacklight 8.8 app for search and discovery over MARC records, backed by Solr and integrated with IIIF (manifest + content search) endpoints, using [Mirador](https://github.com/ProjectMirador/mirador) viewer for IIIF Manifest Display.
 
 ## Quick Start (Docker, recommended)
 

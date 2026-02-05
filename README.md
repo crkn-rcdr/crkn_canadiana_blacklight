@@ -104,59 +104,13 @@ curl -X POST -H "Content-Type: application/json" "http://localhost:8983/solr/bla
 
 ### Production Solr Setup (CRKN)
 
-For CRKN production, Solr runs outside of Docker Compose. High-level steps:
-
+For CRKN production, Solr runs in a docker container. 
+High-level steps:
 1. SSH to the Solr container.
-1. Create the `blacklight_marc` core and `conf` directory.
-1. Copy the default configset.
-1. Replace `solrconfig.xml` and `managed-schema.xml` with the versions from this repo.
-1. Restart Solr.
-
-Commands:
-
-```bash
-sudo cat /home/bitnami/bitnami_credentials
-ssh -i ~/.ssh/<id file>.pem <user>@4.229.225.26
-sudo mkdir /opt/bitnami/solr/server/solr/blacklight_marc_demo
-sudo mkdir /opt/bitnami/solr/server/solr/blacklight_marc_demo/conf
-sudo cp -r /opt/bitnami/solr/server/solr/configsets/_default/conf/* /opt/bitnami/solr/server/solr/blacklight_marc_demo/conf/
-cd /opt/bitnami/solr/server/solr/blacklight_marc_demo/conf/
-sudo rm solrconfig.xml
-sudo vi solrconfig.xml
-sudo rm managed-schema.xml
-sudo vi managed-schema.xml
-```
-
-Ensure the following users and permissions are configured in `security.json`:
-
-```json
-{
-  "authorization": {
-    "class": "solr.RuleBasedAuthorizationPlugin",
-    "permissions": [
-      {
-        "name": "read",
-        "role": [
-          "admin",
-          "public"
-        ]
-      },
-      {
-        "name": "all",
-        "role": "admin"
-      }
-    ],
-    "user-role": {
-      "admin": "admin",
-      "public": "public",
-      "manager": "admin"
-    }
-  }
-}
-```
-
-Restart Solr to apply the changes:
-
+2. Create the `blacklight_marc` core and `conf` directory.
+3. Copy the default configset.
+4. Replace `solrconfig.xml` and `managed-schema.xml` with the versions from this repo.
+5. Restart Solr.
 ```bash
 sudo /opt/bitnami/ctlscript.sh restart solr
 ```

@@ -14,6 +14,69 @@ class CatalogController < ApplicationController
   IIIF_CONTENT_SEARCH_MAX_PAGES = 20
   IIIF_CONTENT_SEARCH_MAX_SNIPPETS = 5_000
   TX_GEN_SEPARATOR = '-' * 40
+  # Keep these query-field weights aligned with the text-aware Solr handlers.
+  TEXT_SEARCH_QF_FIELDS = %w[
+    all_text_timv
+    tx_gen^2
+    tx_hant
+    tx_cjk
+    tx_ja
+    tx_ko
+    tx_th
+    tx_indic
+    tx_cyrl
+    tx_he
+    tx_el
+    tx_fr
+    tx_de
+    tx_nl
+    tx_da
+    tx_fi
+    tx_sv
+    tx_es
+    tx_it
+    tx_hu
+    tx_ga
+    tx_general_lang
+    tx_indigenous
+  ].freeze
+  TEXT_SEARCH_PF_FIELDS = %w[
+    all_text_timv^10
+    tx_gen^8
+    tx_hant^8
+    tx_cjk^8
+    tx_ja^8
+    tx_ko^8
+    tx_th^8
+    tx_indic^8
+    tx_cyrl^8
+    tx_he^8
+    tx_el^8
+    tx_fr^8
+    tx_de^8
+    tx_nl^8
+    tx_da^8
+    tx_fi^8
+    tx_sv^8
+    tx_es^8
+    tx_it^8
+    tx_hu^8
+    tx_ga^8
+    tx_general_lang^8
+    tx_indigenous^8
+  ].freeze
+  ALL_FIELDS_QF = (
+    %w[
+      id
+      title_tsim^3
+      title_addl_tsim^2
+      author_tsim^2
+      subject_tsim^2
+    ] + TEXT_SEARCH_QF_FIELDS
+  ).join(' ').freeze
+  ALL_FIELDS_PF = TEXT_SEARCH_PF_FIELDS.join(' ').freeze
+  TEXT_FIELDS_QF = TEXT_SEARCH_QF_FIELDS.join(' ').freeze
+  TEXT_FIELDS_PF = TEXT_SEARCH_PF_FIELDS.join(' ').freeze
 
   # Blacklight's track action is a redirect used for click tracking and may
   # be invoked without an authenticity token. Skip CSRF verification for it.
@@ -134,7 +197,10 @@ class CatalogController < ApplicationController
     config.add_show_field 'date_added', label: ->(_f, _c) { I18n.t('blacklight.metadata.date_added.label') }, helper_method: :format_date
 
     # ----- SEARCH FIELDS -----
-    config.add_search_field 'all_fields', label: ->(_c) { I18n.t('blacklight.metadata.all_fields.label') }
+    config.add_search_field('all_fields') do |field|
+      field.solr_parameters = { qf: ALL_FIELDS_QF, pf: ALL_FIELDS_PF }
+      field.label = ->(_c) { I18n.t('blacklight.metadata.all_fields.label') }
+    end
 
     config.add_search_field('full_title_tsim') do |field|
       field.solr_parameters = { qf: 'full_title_tsim', pf: 'full_title_tsim' }
@@ -153,7 +219,7 @@ class CatalogController < ApplicationController
     end
 
     config.add_search_field('tx_gen') do |field|
-      field.solr_parameters = { qf: 'tx_gen', pf: 'tx_gen' }
+      field.solr_parameters = { qf: TEXT_FIELDS_QF, pf: TEXT_FIELDS_PF }
       field.label = ->(_c) { I18n.t('blacklight.metadata.fulltx.label') }
     end
 
@@ -405,8 +471,6 @@ class CatalogController < ApplicationController
     lang.to_s.downcase
   end
 end
-
-
 
 
 

@@ -4,7 +4,8 @@ class CollectionItemsComponent < ViewComponent::Base
     @page = page.to_i
     @per_page = per_page.to_i
 
-    rsolr = RSolr.connect url: 'http://public:hdwi389e8d!ds@4.229.225.26/solr/blacklight_marc_demo'
+    solr_url = ENV.fetch("SOLR_URL")
+    rsolr = RSolr.connect url: solr_url
 
     start = (@page - 1) * @per_page
 

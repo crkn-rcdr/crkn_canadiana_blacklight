@@ -12,8 +12,8 @@ class CollectionItemsComponent < ViewComponent::Base
     @response_data = rsolr.get 'select', params: {
       q: '*:*',
       fq: [
-        "serial_key:#{RSolr.solr_escape(@documentId)}",
-        'is_issue:Yes'
+        %(serial_key:"#{RSolr.solr_escape(@documentId)}"),
+        'is_issue:"Yes"'
       ],
       start: start,
       rows: @per_page,

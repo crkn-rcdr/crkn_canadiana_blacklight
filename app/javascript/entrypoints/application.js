@@ -1234,8 +1234,7 @@ function collectScrollRevealTargets(root) {
     'blockquote',
     'figcaption',
     'a.home-inline-link',
-    'a.hero-secondary-link',
-    'a.hero-primary-btn',
+    'a.home-hero__cta',
     'a.about-modern-cta',
     'a.home-statement-cta'
   ].join(', ');

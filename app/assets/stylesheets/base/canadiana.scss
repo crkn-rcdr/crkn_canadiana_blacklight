@@ -5,7 +5,7 @@
     --bs-dark-rgb: var(--theme-bg); 
     --bs-link-hover-color: var(--theme-primary); 
     --bs-link-color: var(--theme-primary); 
-    --site-radius: 3px;
+    --site-radius: 3px !important;
     --bs-border-radius: var(--site-radius);
     --bs-border-radius-sm: var(--site-radius);
     --bs-border-radius-lg: var(--site-radius);
@@ -23,6 +23,9 @@
     --bs-nav-pills-border-radius: var(--site-radius);
     --bs-accordion-border-radius: var(--site-radius);
     --body-copy-size: 1rem;
+    --topbar-nav-font-size: 1rem;
+    --topbar-logo-width: 204px;
+    --topbar-logo-height: 56px;
     --bs-body-font-size: var(--body-copy-size);
     --bs-btn-font-size: var(--body-copy-size);
     /* Section rhythm */
@@ -32,7 +35,14 @@
     /* Headings */
     --h2-size: 1.5rem;
     --h2-size-lg: 1.85rem;
-    --brand-green: #4ABE00; /* from provided brand gradient */
+    --brand-green: #43880f; /* heritage solid green */
+    --brand-green-dark: #33710b;
+    --brand-green-deep: #2e6800;
+    --brand-green-lime: #4ABE00; /* lime stop used in hero/header gradients */
+    --brand-green-card-lime: #5FC023; /* heritage card gradient highlight */
+    --brand-green-soft: rgba(74, 190, 0, 0.06);
+    --brand-green-gradient: linear-gradient(150deg, var(--brand-green-deep) 0%, var(--brand-green-dark) 54%, var(--brand-green-lime) 100%);
+    --brand-green-card-gradient: linear-gradient(180deg, var(--brand-green-dark) 34%, var(--brand-green-card-lime) 100%);
     --brand-teal: #1F8591;  /* from provided brand gradient */
     --accent-green: var(--brand-green);
     --accent-teal: var(--brand-teal);
@@ -50,6 +60,19 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 .card-body {
   font-size: var(--body-copy-size);
 }
@@ -60,6 +83,15 @@ body {
 .card-body dd,
 .card-body label {
   font-size: inherit;
+}
+
+.about-modern-card-body,
+.about-modern-card-body p,
+.about-modern-card-body li,
+.about-modern-card-body dt,
+.about-modern-card-body dd,
+.about-modern-meta {
+  font-size: var(--body-copy-size);
 }
 
 .btn,
@@ -125,8 +157,7 @@ summary:focus-visible,
 }
 .navbar-logo {
     background: transparent url(/assets/canadiana-tag-color.svg) no-repeat top left;
-    height: 80px !important;
-    width: 245px !important;
+    background-size: contain;
 }
 .nav-item {
     margin-left: 1rem;
@@ -910,29 +941,6 @@ summary:focus-visible,
 .blacklight-pages-home .navbar-search {
     display: none;
 }
-.blacklight-pages-home .navbar {
-    position: absolute;
-    z-index: 2;
-    left: 0;
-    right: 0;
-    background: rgba(0,0,0,0.35) !important;
-    backdrop-filter: saturate(140%) blur(8px);
-    -webkit-backdrop-filter: saturate(140%) blur(8px);
-    color: white;
-    //border-bottom: 1px solid rgba(255,255,255,0.15);
-}
-.navbar a {
-    color: var(--theme-primary) !important;
-}
-.blacklight-pages-home .navbar a {
-    color: white !important;
-}
-.blacklight-pages-home .navbar a:hover {
-    color: #e8f6f8 !important;
-}
-.blacklight-pages-home .navbar-logo {
-    background: transparent url(/assets/canadiana-tag-white.svg) no-repeat top left;
-}
 #main-container {
     min-height: 74vh;
 }
@@ -969,43 +977,7 @@ summary:focus-visible,
   background-image: url("/assets/linkedin-white.svg");
 }
 
-.nav-list {
-    list-style: none; 
-    padding: 0; 
-    margin: 0;
-}
-.nav-list li {
-    display: inline !important; 
-    margin-right: 10px !important;
-}
-.nav-link {
-    display: inline !important; 
-    margin-right: 0 !important;
-}
-.nav-list a {
-    text-decoration: none !important;
-}
-.nav-list-upper {
-    display: flex;
-    justify-content: flex-end;
-    font-size: 80%;
-}
-
 @media only screen and (max-width: 600px) {
-    .nav-list li {
-        display: block !important;
-        margin-top:10px;
-    }
-    .nav-link {
-        display: block !important;
-        margin-top:10px;
-    }
-    .nav-list-upper {
-        flex-direction: column;
-    }
-    .nav-list-upper li {
-        margin-top:10px;
-    }
     /* Mobile search layout: keep everything on one row */
     .home-search { 
         width: calc(100vw - 2rem) !important; 
@@ -1774,50 +1746,9 @@ summary:focus-visible,
   margin-right: 0;
 }
 
-.blacklight-pages-home .navbar {
-  position: relative;
-  z-index: 10;
-  background: #fff !important;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  //border-bottom: 1px solid rgba(0,0,0,.08);
-  color: #1f2a2c;
-  padding-top: .5rem;
-  padding-bottom: .55rem;
-}
-
-.blacklight-pages-home .navbar a {
-  color: #1f2a2c !important;
-}
-
-.blacklight-pages-home .navbar a:hover {
-  color: var(--theme-primary) !important;
-}
-
-.blacklight-pages-home .navbar-logo {
-  background: transparent url(/assets/canadiana-tag-color.svg) no-repeat top left;
-  background-size: contain;
-  width: 190px !important;
-  height: 58px !important;
-}
-
 .home-page {
   background: white;
   color: #122225;
-}
-
-.blacklight-pages-home .nav-list-upper {
-  font-size: .68rem;
-  margin-bottom: .2rem;
-}
-
-.blacklight-pages-home .nav-item {
-  margin-left: .8rem;
-}
-
-.blacklight-pages-home .nav-link {
-  font-size: .8rem;
-  letter-spacing: .01em;
 }
 
 .home-page .site-section > .container,
@@ -1966,16 +1897,8 @@ summary:focus-visible,
   color: #0f5962;
 }
 
-.home-page .home-walkthrough.heritage-bg a {
-  color: #275900;
-}
-
 .home-page .home-walkthrough.canadiana-walkthrough .home-walkthrough__icon {
   color: #1f6d79;
-}
-
-.home-page .home-walkthrough.heritage-bg .home-walkthrough__icon {
-  color: #367a00;
 }
 
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
@@ -1987,23 +1910,10 @@ summary:focus-visible,
     color: transparent;
   }
 
-  .home-page .home-walkthrough.heritage-bg a {
-    background: linear-gradient(135deg, #275900 0%, #367a00 58%, #2e6800 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-  }
 }
 
 .home-page .home-walkthrough.canadiana-walkthrough a:focus-visible {
   outline: 2px solid #0f5962;
-  outline-offset: 4px;
-  border-radius: 6px;
-}
-
-.home-page .home-walkthrough.heritage-bg a:focus-visible {
-  outline: 2px solid #275900;
   outline-offset: 4px;
   border-radius: 6px;
 }
@@ -2058,7 +1968,7 @@ summary:focus-visible,
   height: 52px;
   border-radius: 999px;
   border: 0;
-  background: linear-gradient(145deg, #339eab 0%, #59c20d 100%);
+  background: linear-gradient(145deg, #339eab 0%, var(--brand-green-lime) 100%);
   color: #fff;
   display: inline-flex;
   align-items: center;
@@ -2113,10 +2023,6 @@ summary:focus-visible,
   transform: translateY(0);
 }
 
-.home-page .home-explore.heritage-bg .home-slider__nav {
-  background: var(--home-heritage-search-bg);
-}
-
 .home-page .home-explore .home-slider__nav:hover,
 .home-page .home-explore .home-slider__nav:focus-visible {
   transform: translateY(-1px);
@@ -2127,10 +2033,6 @@ summary:focus-visible,
   outline: 2px solid #fff;
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(12, 63, 70, .35), 0 8px 18px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 255, 255, .26);
-}
-
-.home-page .home-explore.heritage-bg .home-slider__nav:focus-visible {
-  box-shadow: 0 0 0 4px rgba(23, 53, 0, .35), 0 8px 18px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 255, 255, .26);
 }
 
 .home-page .home-explore .home-slider__nav:disabled {
@@ -2147,7 +2049,7 @@ summary:focus-visible,
 .home-page .home-split-card {
   display: grid;
   grid-template-columns: minmax(0, 46%) minmax(0, 54%);
-  border-radius: 18px;
+  border-radius: var(--site-radius);
   overflow: hidden;
   min-height: clamp(340px, 24vw, 495px);
   box-shadow: none;
@@ -2175,8 +2077,7 @@ summary:focus-visible,
 }
 
 .home-page .home-split-card--green .home-split-card__content {
-  background:
-    linear-gradient(148deg, #218f25 0%, #41ae1d 42%, #67c314 100%);
+  background: var(--brand-green-gradient);
 }
 
 .home-page .home-split-card__title {
@@ -2198,7 +2099,7 @@ summary:focus-visible,
 }
 
 .home-page .home-split-card__cta {
-  border-radius: 999px;
+  border-radius: var(--site-radius);
   border: 0;
   background: #fff;
   color: black;
@@ -2446,11 +2347,21 @@ summary:focus-visible,
   display: none !important;
 }
 
-.topbar {
-  --bs-navbar-padding-y: 0;
+.navbar.topbar,
+.navbar.navbar-expand-lg.topbar {
+  --bs-navbar-padding-y: 0 !important;
+  --bs-navbar-padding-x: 0 !important;
   padding: 0 !important;
-  display: block;
+  display: block !important;
+  flex-wrap: initial !important;
+  align-items: normal !important;
+  justify-content: normal !important;
   background: #fff !important;
+}
+
+.navbar.topbar > .topbar-utility,
+.navbar.topbar > .topbar-main {
+  width: 100%;
 }
 
 .topbar-utility .canadiana-shell,
@@ -2485,7 +2396,7 @@ summary:focus-visible,
 .topbar-language-switch {
   line-height: 1.2;
   color: #2d4f53;
-  font-size: clamp(.86rem, .68vw, .95rem);
+  font-size: var(--topbar-nav-font-size);
   letter-spacing: .01em;
   white-space: nowrap;
 }
@@ -2586,8 +2497,8 @@ summary:focus-visible,
   flex: 0 0 auto;
   display: block;
   align-self: center;
-  width: 292px !important;
-  height: 80px !important;
+  width: var(--topbar-logo-width) !important;
+  height: var(--topbar-logo-height) !important;
   background: transparent url(/assets/canadiana-tag-color.svg) no-repeat left center;
   background-size: contain;
 }
@@ -2621,7 +2532,7 @@ summary:focus-visible,
   color: #222930 !important;
   text-decoration: none !important;
   white-space: nowrap;
-  font-size: clamp(.94rem, .78vw, 1.02rem);
+  font-size: var(--topbar-nav-font-size);
   line-height: 1.18;
   font-weight: 500;
   letter-spacing: .003em;
@@ -2641,7 +2552,7 @@ summary:focus-visible,
   color: #222930 !important;
   text-decoration: none !important;
   white-space: nowrap;
-  font-size: clamp(.94rem, .78vw, 1.02rem);
+  font-size: var(--topbar-nav-font-size);
   line-height: 1.18;
   font-weight: 500;
   letter-spacing: .003em;
@@ -2694,7 +2605,7 @@ summary:focus-visible,
 
 .nav-list.nav-list-main .nav-dropdown-menu .dropdown-item {
   color: #11181f;
-  font-size: .98rem;
+  font-size: var(--topbar-nav-font-size);
   font-weight: 500;
   white-space: nowrap;
   display: block;
@@ -2736,9 +2647,9 @@ summary:focus-visible,
 
 .nav-list.nav-list-main .nav-dropdown-menu .dropdown-item--heritage:hover,
 .nav-list.nav-list-main .nav-dropdown-menu .dropdown-item--heritage:focus {
-  color: #367a00;
+  color: var(--brand-green-dark);
   border-color: rgba(24, 37, 47, .2);
-  background: rgba(74, 190, 0, .06);
+  background: var(--brand-green-soft);
 }
 
 .nav-list.nav-list-main .nav-dropdown-menu .dropdown-item:focus-visible {
@@ -2762,34 +2673,10 @@ summary:focus-visible,
 .nav-list.nav-list-main .nav-dropdown-menu .dropdown-item__status {
   display: block;
   margin-top: .2rem;
-  font-size: .76rem;
+  font-size: var(--topbar-nav-font-size);
   font-weight: 600;
   letter-spacing: .02em;
   text-transform: uppercase;
-}
-
-@media (min-width: 1200px) {
-  html[lang^='fr'] .topbar-main .canadiana-shell {
-    padding-left: clamp(14px, 1.45vw, 24px);
-    padding-right: clamp(14px, 1.45vw, 24px);
-  }
-
-  html[lang^='fr'] .topbar-main .navbar-brand.navbar-logo {
-    width: 220px !important;
-    height: 58px !important;
-  }
-
-  html[lang^='fr'] .nav-list.nav-list-main {
-    gap: clamp(.45rem, .7vw, .72rem);
-  }
-
-  html[lang^='fr'] .nav-list.nav-list-main a {
-    font-size: clamp(.86rem, .56vw, .95rem);
-  }
-
-  html[lang^='fr'] .nav-list.nav-list-main .nav-dropdown-toggle {
-    font-size: clamp(.86rem, .56vw, .95rem);
-  }
 }
 
 .blacklight-pages-home .topbar {
@@ -2832,8 +2719,8 @@ summary:focus-visible,
   }
 
   .topbar-main .navbar-brand.navbar-logo {
-    width: 234px !important;
-    height: 74px !important;
+    width: 164px !important;
+    height: 52px !important;
   }
 
   .nav-list.nav-list-main {
@@ -2852,8 +2739,8 @@ summary:focus-visible,
   }
 
   .topbar-main .navbar-brand.navbar-logo {
-    width: 220px !important;
-    height: 58px !important;
+    width: 154px !important;
+    height: 41px !important;
   }
 
   .nav-list.nav-list-main {
@@ -2861,11 +2748,11 @@ summary:focus-visible,
   }
 
   .nav-list.nav-list-main a {
-    font-size: .9rem;
+    font-size: var(--topbar-nav-font-size);
   }
 
   .nav-list.nav-list-main .nav-dropdown-toggle {
-    font-size: .9rem;
+    font-size: var(--topbar-nav-font-size);
   }
 }
 
@@ -2881,7 +2768,7 @@ summary:focus-visible,
   }
 
   .topbar-language-switch {
-    font-size: .86rem;
+    font-size: var(--topbar-nav-font-size);
   }
 
   .topbar .sm-icon {
@@ -2912,8 +2799,8 @@ summary:focus-visible,
   }
 
   .topbar-main .navbar-brand.navbar-logo {
-    width: 216px !important;
-    height: 70px !important;
+    width: 151px !important;
+    height: 49px !important;
   }
 
   .topbar-main .navbar-collapse {
@@ -2938,7 +2825,7 @@ summary:focus-visible,
   }
 
   .nav-list.nav-list-main a {
-    font-size: .96rem;
+    font-size: var(--topbar-nav-font-size);
   }
 
   .nav-list.nav-list-main > li > a,
@@ -2963,7 +2850,7 @@ summary:focus-visible,
   .nav-list.nav-list-main .nav-dropdown-toggle {
     width: 100%;
     justify-content: space-between;
-    font-size: .96rem;
+    font-size: var(--topbar-nav-font-size);
   }
 
   .nav-list.nav-list-main .nav-dropdown-toggle::after {
@@ -3055,7 +2942,7 @@ summary:focus-visible,
   --home-body-copy-size: clamp(1.07rem, 1.35vw, 1.62rem);
   --home-body-copy-leading: 1.55;
   --home-canadiana-search-bg: linear-gradient(135deg, #388e9a 0%, #2f7a86 58%, #236b76 100%);
-  --home-heritage-search-bg: linear-gradient(135deg, #43880f 0%, #367a00 58%, #2f6a00 100%);
+  --home-heritage-search-bg: var(--brand-green-gradient);
 }
 
 @media (min-width: 1880px) {
@@ -3388,14 +3275,6 @@ summary:focus-visible,
   //border-radius: 28px !important;
 }
 
-.heritage-bg {
-  background: #f0f1f2 !important;
-}
-
-.heritage-bg.site-section.home-explore {
-  border-radius: 0 0 35px 35px;
-}
-
 /* Canadiana search band: match inset media card layout */
 .home-page .home-collection-band--canadiana .home-collection-band__panel {
   background: var(--home-canadiana-search-bg);
@@ -3489,11 +3368,15 @@ summary:focus-visible,
   --collection-search-form-max: 60rem;
   --collection-search-statement-max: 24.5rem;
   --collection-search-bg: #f0f1f2;
-  --collection-search-statement: #43890a;
-  --collection-search-button: #9ba2aa;
-  --collection-search-button-hover: #9ba2aa;
-  --collection-search-button-text: rgba(255, 255, 255, 0.94);
+  --collection-search-statement: var(--brand-green);
+  --collection-search-button: var(--brand-green);
+  --collection-search-button-hover: var(--brand-green-dark);
+  --collection-search-button-text: #fff;
   --collection-search-button-cursor: not-allowed;
+}
+
+.home-page .home-canadiana-search {
+  padding-top: 1.5rem;
 }
 
 .home-page .home-canadiana-search > .canadiana-shell,
@@ -3541,13 +3424,13 @@ summary:focus-visible,
 }
 
 .home-page .home-heritage-search__lede a:not(.home-heritage-search__link) {
-  color: #43890a;
+  color: var(--brand-green);
   text-decoration-color: currentColor;
 }
 
 .home-page .home-heritage-search__lede a:not(.home-heritage-search__link):hover,
 .home-page .home-heritage-search__lede a:not(.home-heritage-search__link):focus-visible {
-  color: #397608;
+  color: var(--brand-green-dark);
 }
 
 .home-page .home-canadiana-search__link,
@@ -3749,6 +3632,10 @@ summary:focus-visible,
     padding-bottom: 2rem;
   }
 
+  .home-page .home-canadiana-search {
+    padding-top: 1.5rem;
+  }
+
   .home-page .home-canadiana-search__title,
   .home-page .home-heritage-search__title {
     margin-bottom: 0.85rem;
@@ -3818,7 +3705,7 @@ summary:focus-visible,
 }
 
 .home-page .home-explore.home-explore-canadiana,
-.home-page .home-explore.heritage-bg {
+.home-page .home-explore.home-explore-heritage {
   padding-top: var(--home-sequence-gap-sm) !important;
 }
 
@@ -3893,7 +3780,7 @@ summary:focus-visible,
   }
 
   .home-page .home-explore.home-explore-canadiana,
-  .home-page .home-explore.heritage-bg {
+  .home-page .home-explore.home-explore-heritage {
     padding-top: var(--home-sequence-gap-sm) !important;
   }
 
@@ -3923,8 +3810,6 @@ summary:focus-visible,
 
 .home-page .home-hero {
   --home-hero-curve-edge: clamp(1.1rem, 1.8vw, 1.7rem);
-  --home-hero-curve-mid: clamp(0.45rem, 0.9vw, 0.85rem);
-  --home-hero-curve-inner: clamp(0.08rem, 0.22vw, 0.18rem);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -3937,11 +3822,27 @@ summary:focus-visible,
     0 0,
     100% 0,
     100% calc(100% - var(--home-hero-curve-edge)),
-    84% calc(100% - var(--home-hero-curve-mid)),
-    68% calc(100% - var(--home-hero-curve-inner)),
+    95% calc(100% - calc(var(--home-hero-curve-edge) * 0.798)),
+    90% calc(100% - calc(var(--home-hero-curve-edge) * 0.623)),
+    85% calc(100% - calc(var(--home-hero-curve-edge) * 0.472)),
+    80% calc(100% - calc(var(--home-hero-curve-edge) * 0.344)),
+    75% calc(100% - calc(var(--home-hero-curve-edge) * 0.237)),
+    70% calc(100% - calc(var(--home-hero-curve-edge) * 0.151)),
+    65% calc(100% - calc(var(--home-hero-curve-edge) * 0.084)),
+    60% calc(100% - calc(var(--home-hero-curve-edge) * 0.037)),
+    55% calc(100% - calc(var(--home-hero-curve-edge) * 0.009)),
+    52.5% calc(100% - calc(var(--home-hero-curve-edge) * 0.002)),
     50% 100%,
-    32% calc(100% - var(--home-hero-curve-inner)),
-    16% calc(100% - var(--home-hero-curve-mid)),
+    47.5% calc(100% - calc(var(--home-hero-curve-edge) * 0.002)),
+    45% calc(100% - calc(var(--home-hero-curve-edge) * 0.009)),
+    40% calc(100% - calc(var(--home-hero-curve-edge) * 0.037)),
+    35% calc(100% - calc(var(--home-hero-curve-edge) * 0.084)),
+    30% calc(100% - calc(var(--home-hero-curve-edge) * 0.151)),
+    25% calc(100% - calc(var(--home-hero-curve-edge) * 0.237)),
+    20% calc(100% - calc(var(--home-hero-curve-edge) * 0.344)),
+    15% calc(100% - calc(var(--home-hero-curve-edge) * 0.472)),
+    10% calc(100% - calc(var(--home-hero-curve-edge) * 0.623)),
+    5% calc(100% - calc(var(--home-hero-curve-edge) * 0.798)),
     0 calc(100% - var(--home-hero-curve-edge))
   );
 }
@@ -4004,7 +3905,7 @@ html[lang="fr"] .home-page .home-hero__title {
   margin: 0;
   max-width: 40rem;
   color: var(--home-hero-copy);
-  font-size: clamp(0.92rem, 0.98vw, 1.1rem);
+  font-size: var(--body-copy-size);
   line-height: 1.28;
   text-wrap: pretty;
 }
@@ -4060,7 +3961,7 @@ html[lang="fr"] .home-page .home-hero__title {
 
 .home-page .home-hero__stat-card {
   width: 100%;
-  max-width: 320px;
+  max-width: 330px;
   justify-self: end;
   margin-top: clamp(0.45rem, 1vw, 0.95rem);
   padding: clamp(1.45rem, 1.85vw, 1.72rem) clamp(1.45rem, 2vw, 1.8rem);
@@ -4072,11 +3973,11 @@ html[lang="fr"] .home-page .home-hero__title {
 
 .home-page .home-hero__stat-value {
   margin: 0 0 0.42rem;
-  font-size: clamp(1.82rem, 2.26vw, 2.38rem);
+  font-size: 32px;
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.03em;
-  background: linear-gradient(90deg, #55c400 0%, #41a54e 46%, #3a8c90 100%);
+  background: linear-gradient(90deg, var(--brand-green-lime) 0%, #4c9c37 46%, #3a8c90 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -4085,16 +3986,16 @@ html[lang="fr"] .home-page .home-hero__title {
 .home-page .home-hero__stat-copy {
   margin: 0 0 0.9rem;
   color: #15272d;
-  font-size: clamp(0.86rem, 0.94vw, 1rem);
-  line-height: 1.18;
+  font-size: 19px;
+  line-height: 1.35;
 }
 
 .home-page .home-hero__stat-note {
   margin: 0;
   max-width: 25rem;
   color: #263941;
-  font-size: clamp(0.8rem, 0.88vw, 0.94rem);
-  line-height: 1.36;
+  font-size: var(--body-copy-size);
+  line-height: 1.45;
 }
 
 .home-page .home-hero__stat-note a {
@@ -4121,12 +4022,8 @@ html[lang="fr"] .home-page .home-hero__title {
     font-size: clamp(1.82rem, 3.6vw, 2.55rem);
   }
 
-  .home-page .home-hero__copy {
-    font-size: clamp(0.9rem, 1.2vw, 1rem);
-  }
-
   .home-page .home-hero__stat-card {
-    max-width: 320px;
+    max-width: 330px;
     margin-top: 0.4rem;
   }
 }
@@ -4134,8 +4031,6 @@ html[lang="fr"] .home-page .home-hero__title {
 @media (max-width: 991px) {
   .home-page .home-hero {
     --home-hero-curve-edge: 1.05rem;
-    --home-hero-curve-mid: 0.42rem;
-    --home-hero-curve-inner: 0.08rem;
     padding: 1.9rem 0 3rem;
   }
 
@@ -4155,7 +4050,7 @@ html[lang="fr"] .home-page .home-hero__title {
 
   .home-page .home-hero__copy {
     max-width: 100%;
-    font-size: 0.98rem;
+    font-size: var(--body-copy-size);
     line-height: 1.4;
   }
 
@@ -4181,8 +4076,6 @@ html[lang="fr"] .home-page .home-hero__title {
 @media (max-width: 575px) {
   .home-page .home-hero {
     --home-hero-curve-edge: 0.9rem;
-    --home-hero-curve-mid: 0.34rem;
-    --home-hero-curve-inner: 0.06rem;
     padding-bottom: 2.6rem;
   }
 
@@ -4209,10 +4102,6 @@ html[lang="fr"] .home-page .home-hero__title {
   .home-page .home-hero__cta-icons {
     gap: 0.55rem;
     font-size: 1.2rem;
-  }
-
-  .home-page .home-hero__stat-value {
-    font-size: clamp(1.75rem, 7.6vw, 2.2rem);
   }
 }
 
@@ -6399,7 +6288,7 @@ html[lang="fr"] .home-page .home-hero__title {
   }
 
   .home-page .home-explore .home-split-card {
-    border-radius: 16px;
+    border-radius: var(--site-radius);
   }
 
   .home-page .home-explore .home-split-card__content {
@@ -6423,6 +6312,238 @@ html[lang="fr"] .home-page .home-hero__title {
 
   .home-page .home-explore .home-split-card__media {
     min-height: clamp(170px, 44vw, 250px);
+  }
+}
+
+/* Compact homepage explore sliders: Canadiana + Heritage */
+.home-page .home-explore-canadiana,
+.home-page .home-explore-heritage {
+  --home-explore-card-height: 260px;
+  padding-top: clamp(0.9rem, 1.3vw, 1.2rem) !important;
+  padding-bottom: clamp(2.2rem, 3vw, 3rem) !important;
+}
+
+.home-page .home-explore-canadiana .section-title,
+.home-page .home-explore-heritage .section-title {
+  font-size: clamp(1.9rem, 2.4vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: clamp(0.85rem, 1.2vw, 1.15rem);
+}
+
+.home-page .home-explore-canadiana .home-slider,
+.home-page .home-explore-heritage .home-slider {
+  gap: clamp(0.8rem, 1.3vw, 1rem);
+  margin-top: 0;
+}
+
+.home-page .home-explore-canadiana .home-slider__viewport,
+.home-page .home-explore-heritage .home-slider__viewport {
+  padding: 0.1rem 0 0.2rem;
+}
+
+.home-page .home-explore-canadiana .home-slider__nav,
+.home-page .home-explore-heritage .home-slider__nav {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  box-shadow: 0 8px 16px rgba(21, 36, 41, 0.14);
+}
+
+.home-page .home-explore-canadiana .home-slider__nav {
+  background: linear-gradient(150deg, #3a8691 0%, #59c4db 100%);
+}
+
+.home-page .home-explore-heritage {
+  background: #f0f1f2 !important;
+}
+
+.home-page .home-explore-heritage .home-slider__nav {
+  background: var(--home-heritage-search-bg);
+}
+
+.home-page .home-explore-heritage .home-slider__nav:focus-visible {
+  box-shadow: 0 0 0 4px rgba(46, 104, 0, 0.28), 0 8px 16px rgba(21, 36, 41, 0.14);
+}
+
+.home-page .home-explore-canadiana .home-slider__nav .bi,
+.home-page .home-explore-heritage .home-slider__nav .bi {
+  font-size: 1.55rem;
+}
+
+.home-page .home-explore-canadiana .home-split-grid,
+.home-page .home-explore-heritage .home-split-grid {
+  gap: 0.75rem;
+}
+
+.home-page .home-explore-canadiana .home-split-grid--slider .home-split-card,
+.home-page .home-explore-heritage .home-split-grid--slider .home-split-card {
+  width: clamp(560px, 40vw, 760px);
+}
+
+.home-page .home-explore-canadiana .home-split-card,
+.home-page .home-explore-heritage .home-split-card {
+  grid-template-columns: minmax(0, 42%) minmax(0, 58%);
+  min-height: var(--home-explore-card-height);
+  height: var(--home-explore-card-height);
+  max-height: var(--home-explore-card-height);
+  border: 0;
+  border-radius: var(--site-radius);
+  background: #ffffff;
+}
+
+.home-page .home-explore-canadiana .home-split-card__content,
+.home-page .home-explore-heritage .home-split-card__content {
+  padding: clamp(0.85rem, 1.15vw, 1rem) clamp(0.9rem, 1.2vw, 1rem) clamp(0.8rem, 1.05vw, 0.95rem);
+  justify-content: space-between;
+  gap: 0;
+}
+
+.home-page .home-explore-canadiana .home-split-card--teal .home-split-card__content {
+  background: linear-gradient(150deg, #3d8790 0%, #4a9ba7 58%, #67c6dd 100%);
+}
+
+.home-page .home-explore-heritage .home-split-card--green .home-split-card__content {
+  background: var(--brand-green-card-gradient);
+}
+
+.home-page .home-explore-canadiana .home-split-card__title,
+.home-page .home-explore-heritage .home-split-card__title {
+  margin: 0 0 0.5rem;
+  max-width: none;
+  font-size: clamp(1.35rem, 1.55vw, 1.75rem);
+  line-height: 1.08;
+  font-weight: 400;
+}
+
+.home-page .home-explore-canadiana .home-split-card__text,
+.home-page .home-explore-heritage .home-split-card__text {
+  max-width: 23ch;
+  font-size: 0.95rem;
+  line-height: 1.42;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.home-page .home-explore-canadiana .home-split-card__actions,
+.home-page .home-explore-heritage .home-split-card__actions {
+  margin-top: auto;
+}
+
+.home-page .home-explore-canadiana .home-split-card__cta,
+.home-page .home-explore-heritage .home-split-card__cta {
+  padding: 0.48rem 0.95rem;
+  border-radius: var(--site-radius);
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.home-page .home-explore-canadiana .home-split-card__cta {
+  color: #2c7a87;
+}
+
+.home-page .home-explore-canadiana .home-split-card__cta:hover,
+.home-page .home-explore-canadiana .home-split-card__cta:focus-visible {
+  color: #245f69;
+  background: #f4f7f8;
+}
+
+.home-page .home-explore-heritage .home-split-card__cta {
+  color: var(--brand-green-dark);
+}
+
+.home-page .home-explore-heritage .home-split-card__cta:hover,
+.home-page .home-explore-heritage .home-split-card__cta:focus-visible {
+  color: var(--brand-green-deep);
+  background: #f5f8f1;
+}
+
+.home-page .home-explore-canadiana .home-split-card__media,
+.home-page .home-explore-heritage .home-split-card__media {
+  min-height: var(--home-explore-card-height);
+  height: var(--home-explore-card-height);
+  max-height: var(--home-explore-card-height);
+}
+
+@media (max-width: 992px) {
+  .home-page .home-explore-canadiana,
+  .home-page .home-explore-heritage {
+    padding-bottom: clamp(2rem, 4vw, 2.5rem) !important;
+  }
+
+  .home-page .home-explore-canadiana .home-split-grid--slider .home-split-card,
+  .home-page .home-explore-heritage .home-split-grid--slider .home-split-card {
+    width: calc(100vw - 4.75rem);
+    max-width: 34rem;
+  }
+
+  .home-page .home-explore-canadiana .home-split-card,
+  .home-page .home-explore-heritage .home-split-card {
+    min-height: var(--home-explore-card-height);
+    height: var(--home-explore-card-height);
+    max-height: var(--home-explore-card-height);
+  }
+
+  .home-page .home-explore-canadiana .home-split-card__media,
+  .home-page .home-explore-heritage .home-split-card__media {
+    min-height: var(--home-explore-card-height);
+    height: var(--home-explore-card-height);
+    max-height: var(--home-explore-card-height);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-page .home-explore-canadiana .home-slider,
+  .home-page .home-explore-heritage .home-slider {
+    gap: 0.55rem;
+  }
+
+  .home-page .home-explore-canadiana .home-slider__nav,
+  .home-page .home-explore-heritage .home-slider__nav {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+  }
+
+  .home-page .home-explore-canadiana .home-slider__nav .bi,
+  .home-page .home-explore-heritage .home-slider__nav .bi {
+    font-size: 1.4rem;
+  }
+
+  .home-page .home-explore-canadiana .home-split-grid--slider .home-split-card,
+  .home-page .home-explore-heritage .home-split-grid--slider .home-split-card {
+    width: calc(100vw - 2rem);
+  }
+
+  .home-page .home-explore-canadiana .home-split-card,
+  .home-page .home-explore-heritage .home-split-card {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+  }
+
+  .home-page .home-explore-canadiana .home-split-card__content,
+  .home-page .home-explore-heritage .home-split-card__content {
+    padding: 0.9rem 0.9rem 0.85rem;
+  }
+
+  .home-page .home-explore-canadiana .home-split-card__title,
+  .home-page .home-explore-heritage .home-split-card__title {
+    max-width: none;
+    font-size: clamp(1.35rem, 6vw, 1.7rem);
+  }
+
+  .home-page .home-explore-canadiana .home-split-card__text,
+  .home-page .home-explore-heritage .home-split-card__text {
+    max-width: none;
+  }
+
+  .home-page .home-explore-canadiana .home-split-card__media,
+  .home-page .home-explore-heritage .home-split-card__media {
+    min-height: clamp(160px, 42vw, 210px);
+    height: auto;
+    max-height: none;
   }
 }
 
@@ -6459,8 +6580,8 @@ html[lang="fr"] .home-page .home-hero__title {
 }
 
 .blacklight-pages-about_heritage {
-  --about-accent: #338500;
-  --about-accent-hover: #2a6f00;
+  --about-accent: var(--brand-green);
+  --about-accent-hover: var(--brand-green-dark);
 }
 
 .blacklight-pages-about_canadiana .about-modern-section,
@@ -6840,7 +6961,7 @@ html[lang="fr"] .home-page .home-hero__title {
 
 .blacklight-pages-about_canadiana .about-modern-detail-intro {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   line-height: 1.5;
   color: #2d3a4b;
 }
@@ -6868,14 +6989,14 @@ html[lang="fr"] .home-page .home-hero__title {
 }
 
 .blacklight-pages-about_canadiana .about-modern-detail-size-label {
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   font-weight: 700;
   letter-spacing: 0.02em;
   color: rgba(18, 32, 48, 0.72);
 }
 
 .blacklight-pages-about_canadiana .about-modern-detail-size-value {
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   font-weight: 700;
   color: #13273b;
 }
@@ -6885,7 +7006,7 @@ html[lang="fr"] .home-page .home-hero__title {
   align-items: center;
   margin: 0;
   padding: 0.36rem 0.72rem;
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   font-weight: 600;
   color: #253a50;
 }
@@ -6896,7 +7017,7 @@ html[lang="fr"] .home-page .home-hero__title {
   border-radius: 14px;
   border: 1px dashed rgba(18, 32, 48, 0.28);
   background: #fff;
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   line-height: 1.48;
 }
 
@@ -6926,7 +7047,7 @@ html[lang="fr"] .home-page .home-hero__title {
 .blacklight-pages-about_canadiana .about-modern-detail-panel h4,
 .blacklight-pages-about_canadiana .about-modern-detail-panel h5 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   font-weight: 700;
   line-height: 1.5;
   color: #1d2a39;
@@ -6938,7 +7059,7 @@ html[lang="fr"] .home-page .home-hero__title {
 .blacklight-pages-about_canadiana .about-modern-detail-chip,
 .blacklight-pages-about_canadiana .about-modern-detail-panel p {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   line-height: 1.5;
   color: #2c3c4e;
 }
@@ -6955,7 +7076,7 @@ html[lang="fr"] .home-page .home-hero__title {
   margin: 0;
   padding-left: 1rem;
   position: relative;
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   line-height: 1.5;
   color: #2c3c4e;
 }
@@ -6985,7 +7106,7 @@ html[lang="fr"] .home-page .home-hero__title {
   border: 1px solid rgba(12, 18, 28, 0.22);
   background: #101723;
   color: #fff !important;
-  font-size: 0.88rem;
+  font-size: var(--body-copy-size);
   font-weight: 600;
   line-height: 1.1;
   text-decoration: none;
@@ -7057,7 +7178,7 @@ html[lang="fr"] .home-page .home-hero__title {
 
 .blacklight-pages-about_canadiana .about-modern-meta,
 .blacklight-pages-about_heritage .about-modern-meta {
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
 }
 
 .blacklight-pages-about_canadiana .about-modern-cta,
@@ -7069,7 +7190,7 @@ html[lang="fr"] .home-page .home-hero__title {
   border: 1px solid rgba(11, 14, 18, 0.22);
   background: #232418;
   color: #fff !important;
-  font-size: 0.92rem;
+  font-size: var(--body-copy-size);
   font-weight: 500;
   line-height: 1;
   text-decoration: none;
@@ -7263,7 +7384,7 @@ html[lang="fr"] .home-page .home-hero__title {
 
   .blacklight-pages-about_canadiana .about-modern-detail-link {
     padding: 0.82rem 1.35rem;
-    font-size: 1.08rem;
+    font-size: var(--body-copy-size);
   }
 
   .blacklight-pages-about_canadiana .about-intro-copy .section-title,
@@ -7323,7 +7444,7 @@ html[lang="fr"] .home-page .home-hero__title {
   .blacklight-pages-about_heritage .about-modern-card--steps li,
   .blacklight-pages-about_heritage .about-modern-card--heritage-list ul,
   .blacklight-pages-about_heritage .about-modern-card--heritage-list li {
-    font-size: 1.4rem;
+    font-size: var(--body-copy-size);
     line-height: 1.65;
   }
 
@@ -7344,7 +7465,7 @@ html[lang="fr"] .home-page .home-hero__title {
   .blacklight-pages-about_heritage .about-modern-card-body p,
   .blacklight-pages-about_canadiana .about-modern-meta,
   .blacklight-pages-about_heritage .about-modern-meta {
-    font-size: 1.32rem;
+    font-size: var(--body-copy-size);
     line-height: 1.64;
   }
 
@@ -7366,7 +7487,7 @@ html[lang="fr"] .home-page .home-hero__title {
   .blacklight-pages-about_canadiana .about-modern-detail-panel h5,
   .blacklight-pages-about_canadiana .about-modern-detail-panel p,
   .blacklight-pages-about_canadiana .about-modern-detail-list li {
-    font-size: 1.12rem;
+    font-size: var(--body-copy-size);
     line-height: 1.58;
   }
 

@@ -28,7 +28,7 @@ class MarcIndexer < Blacklight::Marc::Indexer
       accumulator.replace [ (v&.casecmp("Is issue")&.zero?) ? "Yes" : "No" ]
     end
 
-    # --- serial_key: prefer 902$b; fallback to left side of 001 before '_' ---
+    # --- serial_key: 902$b ---
     to_field "serial_key" do |record, acc|
       key = record["902"]&.subfields&.find { |sf| sf.code == 'b' }&.value&.strip
       if key && !key.empty?

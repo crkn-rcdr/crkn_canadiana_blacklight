@@ -24,8 +24,6 @@ CRKN Canadiana Blacklight is a Rails 7 + Blacklight 8.8 app for search and disco
 
 The app will be available at `http://localhost:3000`.
 
-Important for production mode: do not run `docker compose ... up` after the `run --rm` command above. The `run` command already starts the app container, and `db:prepare` must run in that same container.
-
 Note: Docker Compose only runs the Rails app. You must provide a Solr core and update `config/blacklight.yml` if needed.
 
 ## Docker Desktop + WSL2 (Windows + Ubuntu)
@@ -142,6 +140,8 @@ Run the production container:
 ```bash
 docker compose -f docker-compose.prod.yml up --build --force-recreate
 ```
+
+The default `docker-compose.yml` uses the same production-style startup flow, so `docker compose up --build --force-recreate` also works.
 
 Common in-container commands:
 

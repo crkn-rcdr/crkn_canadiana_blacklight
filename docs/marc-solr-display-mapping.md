@@ -91,7 +91,7 @@ These appear in the file but are currently disabled:
 
 | Field | MARC source(s) | Status / notes |
 | --- | --- | --- |
-| `isbn_tsim` | `020$a` | Commented out in the current indexer. The older `MarcIndexerOriginal` normalized ISBNs, but that logic is not active now. |
+| `isbn_tsim` | `020$a` | Commented out in the current indexer. There is no active ISBN indexing logic in `app/models/marc_indexer.rb`. |
 | `materials_ssim_en` | Derived from `999$e` | Commented out. |
 | `materials_ssm_en` | Derived from `999$e` | Commented out. |
 | `materials_ssim_fr` | Derived from `999$f` | Commented out. |
@@ -99,8 +99,6 @@ These appear in the file but are currently disabled:
 
 ## Code observations worth keeping in mind
 
-- `serial_key` comment drift: the comment says it should prefer `902$b` and fall back to the left side of `001`, but the code only implements `902$b`.
-- `is_serial` comment drift: the current code checks only whether `901` equals `Is series`; it does not combine `999` plus `901`.
 - `collectionen_path` / `collectionfr_path` are built from literal `999$e` / `999$f` sequences and expanded into prefix paths with `/` separators for `blacklight-hierarchy`.
 - `materials_by_language`, `detect_language_code`, `opposite_language_code`, and `HIER_DELIM` are present but currently unused by the active mappings.
 - `marc_ss` is the field used by `app/models/solr_document.rb` for MARC document extension behavior.

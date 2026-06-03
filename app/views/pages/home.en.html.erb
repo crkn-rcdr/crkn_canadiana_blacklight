@@ -317,67 +317,94 @@
   <% end %>
   <section class="site-section home-featured" id="featured-content">
     <div class="canadiana-shell">
-      <div class="home-featured-head">
-        <h2 class="section-title">Featured Content</h2>
-        <% if show_featured_pagination %>
-          <div class="home-featured-nav">
-            <% if prev_featured_disabled %>
-              <span class="home-slider__nav home-featured-nav__icon is-disabled" aria-hidden="true">
-                <i class="bi bi-chevron-left" aria-hidden="true"></i>
-              </span>
-            <% else %>
-              <a class="home-slider__nav home-featured-nav__icon" href="<%= url_for(prev_featured_params) %>" aria-label="Previous featured items">
-                <i class="bi bi-chevron-left" aria-hidden="true"></i>
-              </a>
-            <% end %>
-            <% if next_featured_disabled %>
-              <span class="home-slider__nav home-featured-nav__icon is-disabled" aria-hidden="true">
-                <i class="bi bi-chevron-right" aria-hidden="true"></i>
-              </span>
-            <% else %>
-              <a class="home-slider__nav home-featured-nav__icon" href="<%= url_for(next_featured_params) %>" aria-label="Next featured items">
-                <i class="bi bi-chevron-right" aria-hidden="true"></i>
-              </a>
+      <div class="home-featured-showcase">
+        <div class="home-featured-showcase__records">
+          <div class="home-featured-head">
+            <h2 class="section-title">Featured Content</h2>
+            <% if show_featured_pagination %>
+              <div class="home-featured-nav">
+                <% if prev_featured_disabled %>
+                  <span class="home-slider__nav home-featured-nav__icon is-disabled" aria-hidden="true">
+                    <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                  </span>
+                <% else %>
+                  <a class="home-slider__nav home-featured-nav__icon" href="<%= url_for(prev_featured_params) %>" aria-label="Previous featured items">
+                    <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                  </a>
+                <% end %>
+                <% if next_featured_disabled %>
+                  <span class="home-slider__nav home-featured-nav__icon is-disabled" aria-hidden="true">
+                    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                  </span>
+                <% else %>
+                  <a class="home-slider__nav home-featured-nav__icon" href="<%= url_for(next_featured_params) %>" aria-label="Next featured items">
+                    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                  </a>
+                <% end %>
+              </div>
             <% end %>
           </div>
-        <% end %>
-      </div>
-      <%= render featured_component %>
-    </div>
-  </section>
-
-  <section class="site-section home-exhibition-preview-head" aria-labelledby="home-exhibition-preview-title">
-    <div class="home-exhibition-preview__intro">
-      <h2 id="home-exhibition-preview-title" class="section-title">Step Inside Our Digital Exhibits</h2>
-    </div>
-  </section>
-
-  <section class="site-section home-exhibition-preview" aria-labelledby="home-exhibition-preview-title">
-    <div class="canadiana-shell">
-      <div class="home-exhibition-preview__stage">
-        <div class="home-exhibition-preview__pin">
-          <div class="home-exhibition-preview__grid">
-            <article class="home-exhibition-preview__card">
-              <div class="home-exhibition-preview__nav" aria-label="Exhibit navigation">
-                <button type="button" class="home-exhibition-preview__nav-button" data-exhibit-nav="prev">Previous exhibit</button>
-                <button type="button" class="home-exhibition-preview__nav-button" data-exhibit-nav="next">Next exhibit</button>
-              </div>
-              <div class="home-exhibition-preview__viewport">
-                <button type="button" class="home-exhibition-preview__activate" aria-label="Activate exhibit and explore by scrolling">
-                  Click to explore exhibit
-                </button>
-                <iframe
-                  class="home-exhibition-preview__frame"
-                  src="https://preview.exhibitionviewer.org/preview/scroll?manifest=https://crkn-iiif-api.azurewebsites.net/manifest/69429/m2026000088n389"
-                  title="Exploring Historical Scientific Publications in the Canadiana Collection"
-                  loading="lazy"
-                  tabindex="-1"
-                  allowfullscreen>
-                </iframe>
-              </div>
-            </article>
-          </div>
+          <%= render featured_component %>
         </div>
+
+        <aside class="home-featured-showcase__exhibit" aria-labelledby="featured-exhibit-title">
+          <h3 id="featured-exhibit-title" class="visually-hidden">Featured Exhibit</h3>
+          <div class="home-featured-showcase__exhibit-frame" data-lenis-prevent>
+            <iframe
+              class="home-featured-showcase__iframe"
+              src="https://preview.exhibitionviewer.org/preview/scroll?manifest=https://www-iiif-pres.canadiana.ca/manifest/69429/m2026000088n389"
+              title="Exploring Historical Scientific Publications in the Canadiana Collection"
+              loading="lazy"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <%= render(MembersComponent.new) %>
+
+  <section class="site-section home-resources" aria-labelledby="home-resources-title">
+    <div class="canadiana-shell">
+      <h2 id="home-resources-title" class="section-title">Resources &amp; Documentation</h2>
+
+      <div class="home-resources-grid">
+        <article class="home-resource-card">
+          <div class="home-resource-card__icon" aria-hidden="true">
+            <i class="bi bi-columns-gap"></i>
+          </div>
+          <h3>Compare the Collections</h3>
+          <p>CRKN provides access to two major digital heritage collections: Canadiana and Heritage.</p>
+          <a class="home-resource-card__cta" href="<%= compare_collections_path(lang: I18n.locale) %>">Learn More</a>
+        </article>
+
+        <article class="home-resource-card">
+          <div class="home-resource-card__icon" aria-hidden="true">
+            <i class="bi bi-newspaper"></i>
+          </div>
+          <h3>Navigating the Collections</h3>
+          <p>Browse, search, and explore the Canadiana Collections more easily with these tips.</p>
+          <a class="home-resource-card__cta" href="<%= navigating_collections_path(lang: I18n.locale) %>">Learn More</a>
+        </article>
+
+        <article class="home-resource-card">
+          <div class="home-resource-card__icon" aria-hidden="true">
+            <i class="bi bi-blockquote-left"></i>
+          </div>
+          <h3>Citation Guide</h3>
+          <p>Find out how to easily cite materials from the Canadiana Collection.</p>
+          <a class="home-resource-card__cta" href="<%= citation_guide_path(lang: I18n.locale) %>">Learn More</a>
+        </article>
+
+        <article class="home-resource-card">
+          <div class="home-resource-card__icon" aria-hidden="true">
+            <i class="bi bi-terminal"></i>
+          </div>
+          <h3>API Access</h3>
+          <p>CRKN provides programmatic access to discovery metadata through Canadiana APIs.</p>
+          <a class="home-resource-card__cta" href="<%= api_access_path(lang: I18n.locale) %>">Learn More</a>
+        </article>
       </div>
     </div>
   </section>
@@ -405,12 +432,10 @@
           </a>
         </article>
         <div class="home-statement-media">
-          <img src="<%= asset_path('statement.png') %>" alt="Person reviewing archival documents at a worktable" loading="lazy">
+          <img src="<%= asset_path('pinkbars.png') %>" alt="" aria-hidden="true" loading="lazy">
         </div>
       </div>
     </div>
   </section>
-
-  <%= render(MembersComponent.new) %>
   <%= render partial: 'shared/home_jump_top', locals: { text: 'Jump to Top', aria_label: 'Jump to Top', trigger_selector: '#search-canadiana' } %>
 </div>

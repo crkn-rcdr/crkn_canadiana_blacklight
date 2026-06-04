@@ -9181,6 +9181,7 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   border-radius: var(--about-heritage-radius);
   background: transparent;
   color: #ffffff !important;
+  font-family: inherit;
   font-size: 0.82rem;
   font-weight: 700;
   line-height: 1.2;
@@ -9191,8 +9192,14 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   white-space: nowrap;
 }
 
-.blacklight-pages-about_heritage .about-heritage-hero__cta:hover,
-.blacklight-pages-about_heritage .about-heritage-hero__cta:focus {
+.blacklight-pages-about_heritage .about-heritage-hero__cta--disabled,
+.blacklight-pages-about_heritage .about-heritage-hero__cta:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__cta:not(:disabled):hover,
+.blacklight-pages-about_heritage .about-heritage-hero__cta:not(:disabled):focus {
   background: rgba(255, 255, 255, 0.12);
   border-color: #ffffff;
   color: #ffffff !important;

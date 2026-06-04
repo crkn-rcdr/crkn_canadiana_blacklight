@@ -286,6 +286,12 @@ function enhanceSearchBar(rootSelector) {
     body.classList.contains('blacklight-catalog-show') ||
     body.classList.contains('blacklight-catalog-index')
   );
+  const hasCatalogHero = body.classList.contains('blacklight-catalog-index') &&
+    !!document.querySelector('.catalog-search-hero');
+
+  if (hasCatalogHero && !root.classList.contains('catalog-search-hero__search')) {
+    return;
+  }
 
   if (isCatalogPageSearch && !root.querySelector('.catalog-show-search-heading')) {
     const headingContainer = document.createElement('div');
@@ -1013,6 +1019,12 @@ let aboutFeaturePanTargets = [];
 let aboutFeaturePanRafId = null;
 let aboutFeaturePanListenersBound = false;
 
+function getAboutFeaturePanContainer(img) {
+  return img.closest(
+    '.about-modern-card--media, .canadiana-story-mosaic__card--image'
+  );
+}
+
 function shouldInitAboutFeaturePan() {
   const body = document.body;
   if (!body) return false;
@@ -1030,7 +1042,7 @@ function queueAboutFeaturePanUpdate() {
 
     const viewportHeight = Math.max(window.innerHeight || 0, 1);
     aboutFeaturePanTargets.forEach((img) => {
-      const mediaCard = img.closest('.about-modern-card--media');
+      const mediaCard = getAboutFeaturePanContainer(img);
       if (!mediaCard) return;
 
       const rect = mediaCard.getBoundingClientRect();
@@ -1049,7 +1061,7 @@ function initAboutFeaturePan() {
 
   aboutFeaturePanTargets = Array.from(
     document.querySelectorAll(
-      '.about-modern-feature-grid .about-modern-card--media img, .about-modern-work-grid .about-modern-card--media img'
+      '.about-modern-feature-grid .about-modern-card--media img, .about-modern-work-grid .about-modern-card--media img, .canadiana-story-mosaic__card--image img'
     )
   );
   if (!aboutFeaturePanTargets.length) return;
@@ -1109,5 +1121,57 @@ function moveCatalogAppliedParams() {
   target.appendChild(appliedParams);
 }
 
+function adjustCatalogShowBreadcrumbActions() {
+  if (!document.body.classList.contains('blacklight-catalog-show')) return;
+
+  const breadcrumb = document.querySelector('.blacklight-catalog-show .collection-breadcrumbs');
+  const appliedParams = document.querySelector('.blacklight-catalog-show #appliedParams');
+  const paginationWidgets = document.querySelector('.blacklight-catalog-show .pagination-search-widgets');
+
+  if (!breadcrumb || !appliedParams) return;
+
+  let actionRow = document.querySelector('.blacklight-catalog-show .catalog-show-breadcrumb-row');
+  if (!actionRow) {
+    actionRow = document.createElement('div');
+    actionRow.className = 'catalog-show-breadcrumb-row';
+    breadcrumb.insertAdjacentElement('afterend', actionRow);
+  }
+
+  if (appliedParams.parentElement !== actionRow) {
+    actionRow.appendChild(appliedParams);
+  }
+
+  if (paginationWidgets && paginationWidgets.parentElement !== actionRow) {
+    actionRow.appendChild(paginationWidgets);
+  }
+
+  appliedParams.classList.add('catalog-show-breadcrumb-actions');
+
+  const lang = document.documentElement.lang || 'en';
+  const isFr = lang.startsWith('fr');
+  const startOverText = isFr ? 'Recommencer' : 'Start Over';
+  const backToSearchText = isFr ? 'Retour à la recherche' : 'Back to Search';
+  const backToResultsText = isFr ? 'Retour aux résultats de recherche' : 'Back to Search Results';
+
+  appliedParams.querySelectorAll('a, button, .btn').forEach((control) => {
+    const label = control.textContent.replace(/\s+/g, ' ').trim();
+
+    if (label === startOverText) {
+      control.remove();
+      return;
+    }
+
+    if (label === backToSearchText) {
+      control.textContent = backToResultsText;
+    }
+  });
+
+  if (!appliedParams.children.length) {
+    appliedParams.remove();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', moveCatalogAppliedParams);
 document.addEventListener('turbo:load', moveCatalogAppliedParams);
+document.addEventListener('DOMContentLoaded', adjustCatalogShowBreadcrumbActions);
+document.addEventListener('turbo:load', adjustCatalogShowBreadcrumbActions);

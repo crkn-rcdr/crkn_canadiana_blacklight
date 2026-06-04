@@ -35,6 +35,96 @@ i {
     }
 }
 
+.blacklight-catalog-show .document-main-section {
+    margin-top: 0.5rem;
+}
+
+.blacklight-catalog-show .collection-breadcrumbs {
+    margin: 0 0 0.7rem;
+    padding: 0.8rem;
+    background: linear-gradient(90deg, #1D808B 34%, #37BFCE 100%);
+    border-radius: 3px;
+}
+
+.blacklight-catalog-show .collection-breadcrumbs .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    margin: 0 !important;
+    background: transparent;
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+.blacklight-catalog-show .collection-breadcrumbs .breadcrumb-item {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.blacklight-catalog-show .collection-breadcrumbs .breadcrumb-item + .breadcrumb-item::before {
+    padding-right: 0.7rem;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.blacklight-catalog-show .collection-breadcrumbs .collection-breadcrumbs__root {
+    font-weight: 700;
+}
+
+.blacklight-catalog-show .collection-breadcrumbs a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.blacklight-catalog-show .collection-breadcrumbs a:hover,
+.blacklight-catalog-show .collection-breadcrumbs a:focus-visible {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.blacklight-catalog-show #appliedParams.catalog-show-breadcrumb-actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.blacklight-catalog-show .catalog-show-breadcrumb-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 1rem;
+}
+
+.blacklight-catalog-show .catalog-show-breadcrumb-row .pagination-search-widgets {
+    margin: 0 0 0 auto;
+    padding-top: 0;
+    float: none;
+}
+
+.blacklight-catalog-show .catalog-show-breadcrumb-row .pagination-search-widgets .search-context.page-links {
+    margin: 0;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .blacklight-catalog-show .catalog-show-breadcrumb-row {
+        display: block;
+    }
+
+    .blacklight-catalog-show .catalog-show-breadcrumb-row .pagination-search-widgets {
+        margin-top: 0.55rem;
+    }
+
+    .blacklight-catalog-show .catalog-show-breadcrumb-row .pagination-search-widgets .search-context.page-links {
+        white-space: normal;
+    }
+}
+
 .page-sidebar[aria-label="Tools"], .page-sidebar[aria-label="Outils"] {
     width: 100%;
     .card {
@@ -78,6 +168,11 @@ i {
 #collection-items-list .card {
     padding: 0;
 }
+#collection-items-list .card-title,
+#collection-items-list .card-title a {
+    font-size: 20px !important;
+    line-height: 1.2;
+}
 .collection-item-card {
     width: 100% !important;
     margin: 0 !important;
@@ -86,6 +181,8 @@ i {
     height: 440px;
     border-bottom: none;
     margin-bottom: 0;
+    border-radius: 3px;
+    overflow: hidden;
 }
 #collection-items-list .collection-item__viewer {
     position: relative;
@@ -119,6 +216,10 @@ i {
     display: flex !important;
     align-items: center;
     justify-content: center;
+}
+
+.home-page #featured-items-list .openseadragon-canvas + div {
+    display: none !important;
 }
 
 .page-sidebar {
@@ -177,7 +278,7 @@ button i {
     .card { border: none; }
     .card-img-top { margin-bottom: 0; border-bottom: none; }
     h5 { margin-top: 0; }
-    .openseadragon-container { border-radius: 10px; }
+    .openseadragon-container { border-radius: 3px; }
 }
 
 #doc-main #collection-items-list { 
@@ -510,6 +611,17 @@ button i {
 .blacklight-catalog-show .document-overview h1 {
     font-size: clamp(1.95rem, calc(1.7rem + 1vw), 2.85rem);
     line-height: 1.1;
+}
+
+.blacklight-catalog-show .document-overview .documentHeader.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.blacklight-catalog-show .document-overview .documentHeader .document-title-heading,
+.blacklight-catalog-show .document-overview .documentHeader h2 {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
 }
 
 .blacklight-catalog-show .document-overview h2 {

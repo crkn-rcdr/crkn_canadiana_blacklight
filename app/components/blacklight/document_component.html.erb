@@ -17,11 +17,12 @@
 
       <% if @component.to_s == 'div' %>
         <% breadcrumb_paths = helpers.collection_breadcrumb_paths(@document) %>
+        <% root_breadcrumb_label = I18n.locale.to_s.start_with?('fr') ? 'Collection Canadiana' : 'Canadiana Collection' %>
         <% if breadcrumb_paths.present? %>
           <nav class="collection-breadcrumbs mb-3" aria-label="<%= t('breadcrumbs.collections', default: 'Collections') %>">
             <% breadcrumb_paths.each do |path| %>
               <ol class="breadcrumb mb-1">
-                <li class="breadcrumb-item"><a href="/catalog"><%= t('labels.L_SEARCH_BREADCRUMB') %></a></li>
+                <li class="breadcrumb-item collection-breadcrumbs__root"><a href="/catalog"><%= root_breadcrumb_label %></a></li>
                 <% path.each_with_index do |segment, idx| %>
                   <% active = (idx == path.length - 1) %>
                   <li class="breadcrumb-item <%= 'active' if active %>">

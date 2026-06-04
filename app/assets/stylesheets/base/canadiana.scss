@@ -1158,6 +1158,11 @@ summary:focus-visible,
 .iiif-tools-list .dropdown > .btn { border-radius: 999px; }
 .iiif-tools-list .copy-link-btn { border-radius: 999px; }
 
+.blacklight-catalog-show #details-heading,
+.blacklight-catalog-show #iiif-toolbox-title {
+  font-size: 24px !important;
+}
+
 @media (max-width: 768px) {
   /* Place tools after viewer and details, full width */
   .page-sidebar[aria-label="Tools"] { width: 100%; }
@@ -2093,7 +2098,7 @@ summary:focus-visible,
 .home-page .home-split-card__text {
   margin: 0;
   line-height: 1.44;
-  font-size: clamp(1rem, 1.08vw, 1.24rem);
+  font-size: var(--body-copy-size);
   color: rgba(255,255,255,.96);
 }
 
@@ -2174,7 +2179,8 @@ summary:focus-visible,
 .home-page .home-featured-showcase__iframe {
   display: block;
   width: 100%;
-  height: clamp(720px, 82vh, 980px);
+  height: calc(clamp(720px, 82vh, 980px) + 18px);
+  margin-bottom: -18px;
   border: 0;
   background: #fff;
 }
@@ -2301,7 +2307,7 @@ summary:focus-visible,
   }
 
   .home-page .home-featured-showcase__iframe {
-    height: clamp(620px, 74vh, 860px);
+    height: calc(clamp(620px, 74vh, 860px) + 18px);
   }
 
   .home-page .home-split-grid--slider .home-split-card {
@@ -2368,7 +2374,7 @@ summary:focus-visible,
   }
 
   .home-page .home-featured-showcase__iframe {
-    height: clamp(520px, 74vh, 760px);
+    height: calc(clamp(520px, 74vh, 760px) + 18px);
   }
 
   .home-page .home-featured-nav {
@@ -2392,7 +2398,7 @@ summary:focus-visible,
   }
 
   .home-page .home-featured-showcase__iframe {
-    height: clamp(460px, 72vh, 680px);
+    height: calc(clamp(460px, 72vh, 680px) + 18px);
   }
 }
 
@@ -3002,7 +3008,7 @@ summary:focus-visible,
 
 .home-page {
   --home-shell-gutter: 26px;
-  --home-body-copy-size: clamp(1.07rem, 1.35vw, 1.62rem);
+  --home-body-copy-size: 1rem;
   --home-body-copy-leading: 1.55;
   --home-canadiana-search-bg: linear-gradient(135deg, #388e9a 0%, #2f7a86 58%, #236b76 100%);
   --home-heritage-search-bg: var(--brand-green-gradient);
@@ -3843,7 +3849,7 @@ summary:focus-visible,
   align-items: center;
   text-align: center;
   height: 100%;
-  min-height: 26.5rem;
+  min-height: 24.5rem;
   padding: 2.15rem 1.9rem 1.75rem;
   border: 1px solid #e5e8ec;
   background: #fff;
@@ -3883,7 +3889,7 @@ summary:focus-visible,
   justify-content: center;
   width: 100%;
   max-width: 14rem;
-  min-height: 4rem;
+  min-height: 3.35rem;
   margin-top: auto;
   padding: 0.85rem 1.4rem;
   background: #000080;
@@ -3920,7 +3926,7 @@ summary:focus-visible,
 .home-page .members-segmented {
   border: 0;
   background: #eef2f5;
-  border-radius: var(--site-radius);
+  border-radius: var(--site-radius) var(--site-radius) 0 0;
   overflow: hidden;
 }
 
@@ -3930,7 +3936,7 @@ summary:focus-visible,
   font-size: clamp(0.9rem, 0.92vw, 0.98rem);
   font-weight: 650;
   color: #2f3b45;
-  border-radius: 0;
+  border-radius: 0 !important;
   background: transparent;
 }
 
@@ -3959,7 +3965,7 @@ summary:focus-visible,
 .home-page .members-search .form-control,
 .home-page .members-search .btn-clear-search {
   height: 2.7rem !important;
-  font-size: 0.86rem;
+  font-size: var(--body-copy-size);
 }
 
 .home-page .members-filters {
@@ -4080,7 +4086,7 @@ summary:focus-visible,
 
   .home-page .home-resource-card__cta {
     min-width: 11rem;
-    min-height: 3.4rem;
+    min-height: 3.35rem;
   }
 
   .home-page .members-segmented .btn {
@@ -4147,7 +4153,9 @@ summary:focus-visible,
   --home-hero-ink: #ffffff;
   --home-hero-copy: rgba(243, 250, 252, 0.92);
   --home-hero-outline: rgba(255, 255, 255, 0.9);
-  --home-hero-outline-hover: rgba(8, 44, 52, 0.22);
+  --home-hero-cta-bg: rgba(0, 0, 0, 0.2);
+  --home-hero-cta-bg-hover: rgba(0, 0, 0, 0.28);
+  --home-hero-outline-hover: var(--home-hero-cta-bg-hover);
   --home-hero-shadow: rgba(25, 74, 66, 0.12);
 }
 
@@ -4269,7 +4277,7 @@ html[lang="fr"] .home-page .home-hero__title {
   padding: 0.78rem 1rem;
   border: 2px solid var(--home-hero-outline);
   border-radius: 4px;
-  background: transparent;
+  background: var(--home-hero-cta-bg);
   color: #ffffff;
   font-size: 0.82rem;
   font-weight: 700;
@@ -4523,7 +4531,7 @@ html[lang="fr"] .home-page .home-hero__title {
 .home-page .home-statement-card .section-lede,
 .home-page .home-statement-card p,
 .home-page .home-statement-card li {
-  font-size: clamp(1rem, 1.05vw, 1.14rem);
+  font-size: var(--body-copy-size);
   line-height: 1.62;
   color: #2f3f49;
 }
@@ -4943,6 +4951,26 @@ html[lang="fr"] .home-page .home-hero__title {
   box-shadow: inset 0 -3px 0 var(--members-accent);
 }
 
+.home-page .members-section .members-tabs .btn.active {
+  position: relative;
+  box-shadow: none;
+}
+
+.home-page .members-section .members-tabs .btn.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--members-accent);
+}
+
+.home-page .members-section .members-tabs .btn.active:hover,
+.home-page .members-section .members-tabs .btn.active:focus {
+  box-shadow: none;
+}
+
 /* API access page refresh */
 .blacklight-pages-api_access .api-site-section {
   padding-top: var(--page-header-content-gap);
@@ -4959,7 +4987,7 @@ html[lang="fr"] .home-page .home-hero__title {
 .blacklight-pages-about_canadiana #main-container.container,
 .blacklight-pages-about_heritage #main-container.container {
   max-width: 100%;
-  padding: var(--page-header-content-gap) clamp(0.35rem, 1vw, 1.25rem) 0;
+  padding: var(--page-header-content-gap) 0 0;
 }
 
 /* About pages: remove horizontal container/column gutters */
@@ -5580,13 +5608,6 @@ html[lang="fr"] .home-page .home-hero__title {
   box-shadow: var(--api-soft-shadow);
 }
 
-.blacklight-pages-api_access .api-access-page--modern .api-toc__title {
-  margin: 0 0 0.55rem;
-  font-size: 1rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--api-muted);
-}
 
 .blacklight-pages-api_access .api-access-page--modern .api-toc a {
   display: block;
@@ -5630,14 +5651,7 @@ html[lang="fr"] .home-page .home-hero__title {
 }
 
 .blacklight-pages-api_access .api-access-page--modern .api-card::before {
-  content: "";
-  position: absolute;
-  left: 0.92rem;
-  top: 0;
-  width: 88px;
-  height: 3px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #4abe00 0%, #1f8591 100%);
+  content: none;
 }
 
 .blacklight-pages-api_access .api-access-page--modern .api-card:hover {
@@ -6488,7 +6502,7 @@ html[lang="fr"] .home-page .home-hero__title {
 .home-page .home-explore-canadiana .home-split-card__text,
 .home-page .home-explore-heritage .home-split-card__text {
   max-width: 23ch;
-  font-size: 0.95rem;
+  font-size: var(--body-copy-size);
   line-height: 1.42;
   color: rgba(255, 255, 255, 0.96);
 }
@@ -8118,12 +8132,6 @@ html[lang="fr"] .home-page .home-hero__title {
     padding: 0 !important;
   }
 }
-.catalog-search-hero {
-  .navbar-search {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
 @media (min-width: 1400px) {
   .blacklight-catalog > #main-container, .blacklight-catalog > .container {
     width: 100% !important;
@@ -8133,11 +8141,6 @@ html[lang="fr"] .home-page .home-hero__title {
     div {
       padding: 0 !important;
     }
-  }
-}
-@media(max-width: 1550px) {
-  .catalog-search-hero .navbar-search {
-    margin-top: 0 !important;
   }
 }
 @media (min-width: 1550px) {
@@ -8364,92 +8367,6 @@ html[lang="fr"] .home-page .home-hero__title {
   }
 }
 
-.catalog-search-hero .navbar-search {
-    padding: 3rem 0 .75rem 0;
-}
-
-.blacklight-catalog-index .catalog-search-hero__search .input-group {
-  align-items: center;
-  padding: 0.22rem;
-  border: 3px solid #161b22;
-  border-radius: 999px;
-  background: #ffffff;
-  box-shadow: none;
-  overflow: hidden;
-}
-
-.blacklight-catalog-index .catalog-search-hero__search .input-group:focus-within {
-  border-color: #161b22;
-  box-shadow: 0 0 0 3px rgba(47, 123, 135, 0.12);
-}
-
-.blacklight-catalog-index .catalog-search-hero__search .search-field.form-select {
-  flex: 0 0 clamp(10.5rem, 16vw, 18rem);
-  width: clamp(10.5rem, 16vw, 18rem);
-  min-width: clamp(10.5rem, 16vw, 18rem);
-  max-width: clamp(10.5rem, 16vw, 18rem);
-  height: 4.25rem;
-  min-height: 4.25rem;
-  border-right: 1px solid #d5dbe0 !important;
-  border-radius: 999px 0 0 999px;
-  background-color: transparent;
-  padding: 0 1rem 0 1.1rem;
-  font-size: clamp(1rem, 1.02vw, 1.15rem);
-}
-
-.blacklight-catalog-index .catalog-search-hero__search .search-autocomplete-wrapper {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  align-items: stretch;
-  border-left: 0 !important;
-}
-
-.blacklight-catalog-index .catalog-search-hero__search .search-q.form-control {
-  flex: 1 1 auto;
-  width: 1%;
-  min-width: 0;
-  height: 4.25rem;
-  min-height: 4.25rem;
-  padding-inline: 1rem;
-  font-size: clamp(1rem, 1.02vw, 1.15rem);
-  color: #5a6577;
-  background: transparent;
-}
-
-.blacklight-catalog-index .catalog-search-hero__search .search-q.form-control::placeholder {
-  color: #5a6577;
-  opacity: 1;
-}
-
-.blacklight-catalog-index .catalog-search-hero__search #catalog-search-submit {
-  flex: 0 0 auto;
-  width: clamp(9.75rem, 15vw, 12.5rem);
-  min-width: clamp(9.75rem, 15vw, 12.5rem);
-  height: calc(4.25rem - 0.5rem);
-  min-height: calc(4.25rem - 0.5rem);
-  margin: 0.25rem;
-  padding: 0 1.4rem;
-  border: 0 !important;
-  border-left: 0 !important;
-  border-radius: 999px;
-  background: #2f7b87;
-  color: #ffffff;
-  justify-content: center;
-  font-size: clamp(1.05rem, 1.12vw, 1.32rem);
-  font-weight: 700;
-  box-shadow: none;
-}
-
-.blacklight-catalog-index .catalog-search-hero__search #catalog-search-submit:hover,
-.blacklight-catalog-index .catalog-search-hero__search #catalog-search-submit:focus {
-  background: #236571;
-}
-
-.blacklight-catalog-index .catalog-search-hero__search #catalog-search-submit .blacklight-icons-search {
-  display: none;
-}
-
 .blacklight-catalog-index .navbar-search .input-group,
 .blacklight-catalog-show .navbar-search .input-group {
   align-items: center;
@@ -8544,37 +8461,6 @@ html[lang="fr"] .home-page .home-hero__title {
 }
 
 @media (max-width: 768px) {
-  .blacklight-catalog-index .catalog-search-hero__search .input-group {
-    padding: 0.2rem;
-    border-width: 2px;
-  }
-
-  .blacklight-catalog-index .catalog-search-hero__search .search-field.form-select {
-    flex-basis: 7.5rem;
-    width: 7.5rem;
-    min-width: 7.5rem;
-    max-width: 7.5rem;
-    height: 3.7rem;
-    min-height: 3.7rem;
-    padding-inline: 0.85rem;
-  }
-
-  .blacklight-catalog-index .catalog-search-hero__search .search-q.form-control {
-    height: 3.7rem;
-    min-height: 3.7rem;
-    padding-inline: 0.8rem;
-  }
-
-  .blacklight-catalog-index .catalog-search-hero__search #catalog-search-submit {
-    width: 7.25rem;
-    min-width: 7.25rem;
-    height: calc(3.7rem - 0.5rem);
-    min-height: calc(3.7rem - 0.5rem);
-    margin: 0.25rem;
-    padding-inline: 1rem;
-    font-size: 1rem;
-  }
-
   .blacklight-catalog-index .navbar-search .input-group,
   .blacklight-catalog-show .navbar-search .input-group {
     padding: 0.2rem;
@@ -8609,4 +8495,1542 @@ html[lang="fr"] .home-page .home-hero__title {
     padding-inline: 1rem;
     font-size: 1rem;
   }
+}
+
+/* About Canadiana refresh */
+.blacklight-pages-about_canadiana .about-canadiana-page {
+  --about-canadiana-ink: #1c2832;
+  --about-canadiana-muted: #314654;
+  --about-canadiana-teal: #18818d;
+  --about-canadiana-teal-dark: #116975;
+  --about-canadiana-pink: #d80963;
+  --about-canadiana-green: #49b600;
+  --about-canadiana-green-dark: #2da440;
+  --about-canadiana-border: #d9e0e6;
+  --about-canadiana-radius: var(--site-radius);
+  color: var(--about-canadiana-ink);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-page .site-section {
+  padding-top: clamp(1.2rem, 2.3vw, 2rem);
+  padding-bottom: clamp(1.2rem, 2.3vw, 2rem);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-page .canadiana-shell {
+  max-width: 1220px;
+  margin-inline: auto;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-page h2,
+.blacklight-pages-about_canadiana .about-canadiana-page h3,
+.blacklight-pages-about_canadiana .about-canadiana-page h4 {
+  margin: 0;
+  color: var(--about-canadiana-ink);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-hero {
+  --home-hero-curve-edge: clamp(1rem, 1.7vw, 1.45rem);
+  padding: clamp(1.35rem, 2vw, 1.8rem) 0 clamp(3.15rem, 4.5vw, 4.2rem);
+  background:
+    linear-gradient(180deg, rgba(29, 128, 139, 0.9) 34%, rgba(55, 191, 206, 0.9) 100%),
+    var(--about-canadiana-hero-image) center 38% / cover no-repeat;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-hero > .canadiana-shell {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-hero::before {
+  background:
+    linear-gradient(180deg, rgba(11, 70, 79, 0.12) 0%, rgba(11, 70, 79, 0.12) 100%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.04) 100%);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-hero__layout {
+  position: relative;
+  min-height: clamp(290px, 22vw, 360px);
+  padding: clamp(1.1rem, 2vw, 1.6rem) clamp(2.45rem, 4.8vw, 5.3rem) 0;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-hero__copy-block {
+  max-width: none;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-page .home-hero__title {
+  max-width: none;
+  margin-bottom: 1rem;
+  font-size: clamp(2.15rem, 3vw, 3.35rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-hero__title {
+  max-width: 12ch;
+  font-size: clamp(1.95rem, 2.7vw, 2.95rem);
+  white-space: normal;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-page .home-hero__copy {
+  max-width: 40rem;
+  font-size: var(--body-copy-size);
+  line-height: 1.28;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-page .home-hero__actions {
+  margin-top: clamp(1.15rem, 2vw, 1.6rem);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-page .home-hero__cta {
+  flex: 0 1 clamp(220px, 16vw, 280px);
+  min-height: 3.25rem;
+  padding: 0.78rem 1rem;
+  gap: 1rem;
+  border-radius: var(--about-canadiana-radius);
+  font-size: 0.82rem;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-hero__cta-arrow {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-hero__credit {
+  position: absolute;
+  top: clamp(0.4rem, 0.9vw, 0.75rem);
+  right: clamp(1rem, 2vw, 1.5rem);
+  margin: 0;
+  color: #ffffff;
+  font-size: var(--body-copy-size);
+  line-height: 1.25;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.blacklight-pages-about_canadiana .canadiana-story-mosaic {
+  padding-top: 2.2rem;
+}
+
+.blacklight-pages-about_canadiana .canadiana-story-mosaic__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 0.88fr) minmax(0, 1.12fr) !important;
+  height: clamp(490px, 35vw, 670px) !important;
+  min-height: clamp(490px, 35vw, 670px) !important;
+  max-height: clamp(490px, 35vw, 670px) !important;
+  gap: 0;
+  max-width: 980px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--about-canadiana-radius);
+  align-items: stretch;
+}
+
+.blacklight-pages-about_canadiana .canadiana-story-mosaic__card {
+  min-height: 0 !important;
+  max-height: 100% !important;
+  height: 100% !important;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.blacklight-pages-about_canadiana .canadiana-story-mosaic__card--copy {
+  display: grid;
+  align-content: start;
+  gap: clamp(0.75rem, 1vw, 1rem);
+  padding: clamp(2rem, 2.4vw, 2.9rem);
+  background: var(--about-canadiana-teal);
+  color: #ffffff;
+}
+
+.blacklight-pages-about_canadiana .canadiana-story-mosaic__card--copy h2 {
+  color: #ffffff;
+  font-size: clamp(1.9rem, 2.2vw, 2.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.blacklight-pages-about_canadiana .canadiana-story-mosaic__card--copy p {
+  margin: 0;
+  font-size: var(--body-copy-size);
+  line-height: 1.45;
+}
+
+.blacklight-pages-about_canadiana .canadiana-story-mosaic__card--image {
+  position: relative;
+  overflow: hidden;
+}
+
+.blacklight-pages-about_canadiana .canadiana-story-mosaic__card--image img {
+  display: block;
+  width: 100%;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  object-fit: cover;
+  object-position: 50% var(--about-scroll-pan-y, 50%);
+  will-change: object-position;
+  transition: object-position .08s linear;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collections {
+  padding-top: 2.1rem;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-section-head {
+  margin-bottom: 1.45rem;
+  text-align: center;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-section-head h2,
+.blacklight-pages-about_canadiana .about-canadiana-faq h2,
+.blacklight-pages-about_canadiana .about-canadiana-work__copy h2 {
+  font-size: clamp(2rem, 2.5vw, 2.5rem);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection-list {
+  display: grid;
+  gap: clamp(1.55rem, 2.8vw, 2.5rem);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection {
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(280px, 0.96fr);
+  gap: clamp(1.4rem, 2.8vw, 2.8rem);
+  align-items: start;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__copy {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__copy h3 {
+  margin: 0 0 0.5rem;
+  max-width: none;
+  color: #11161c;
+  font-size: 24px !important;
+  line-height: 1.08;
+  font-weight: 400;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__copy p {
+  margin: 0;
+  color: var(--about-canadiana-muted);
+  font-size: var(--body-copy-size);
+  line-height: 1.55;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__facts span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.38rem 0.78rem;
+  border: 1px solid #c7d1d9;
+  border-radius: var(--about-canadiana-radius);
+  background: #ffffff;
+  color: #101f2b;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__highlights {
+  padding: 0.72rem 0.9rem;
+  border: 1px dashed #b9c7d2;
+  border-radius: var(--about-canadiana-radius);
+  background: #ffffff;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__highlights h4 {
+  margin-bottom: 0.38rem;
+  font-size: var(--body-copy-size);
+  font-weight: 700;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__highlights ul {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__highlights li {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #253949;
+  font-size: var(--body-copy-size);
+  line-height: 1.45;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__media {
+  display: grid;
+  justify-items: start;
+  gap: 0.7rem;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-collection__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.34 / 1;
+  object-fit: cover;
+  border: 1px solid #e1e6ea;
+  border-radius: var(--about-canadiana-radius);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-browse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 3.1rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: var(--about-canadiana-radius);
+  background: var(--about-canadiana-pink);
+  color: #ffffff !important;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-browse:hover,
+.blacklight-pages-about_canadiana .about-canadiana-browse:focus {
+  background: #b70753;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work {
+  padding-top: 2rem;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.95fr) minmax(300px, 0.98fr);
+  align-items: start;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  overflow: hidden;
+  border-radius: var(--about-canadiana-radius);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__copy {
+  display: grid;
+  align-content: start;
+  gap: clamp(0.55rem, 0.7vw, 0.85rem);
+  padding: clamp(1.7rem, 2vw, 2.4rem) clamp(1.7rem, 2vw, 2.4rem) clamp(2.15rem, 2.6vw, 2.9rem);
+  background: #4a919d;
+  color: #ffffff;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__copy h2,
+.blacklight-pages-about_canadiana .about-canadiana-work__copy a,
+.blacklight-pages-about_canadiana .about-canadiana-work__copy code {
+  color: #ffffff;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__copy h2 {
+  font-size: clamp(1.25rem, 1.8vw, 1.95rem);
+  font-weight: 300;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__copy ol {
+  margin: 0;
+  padding-left: 1.45rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__copy li {
+  font-size: var(--body-copy-size);
+  line-height: 1.45;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__copy code {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__media {
+  position: relative;
+  align-self: stretch;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1d808b 34%, #37bfce 100%);
+  opacity: 0.52;
+  pointer-events: none;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__media img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  object-position: left 18%;
+  filter: saturate(0.72) contrast(0.92);
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-faq {
+  padding-top: 1.8rem;
+  padding-bottom: 2.4rem;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-faq__list {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.95rem;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-faq details {
+  border: 1px solid rgba(31, 80, 54, 0.18);
+  border-radius: var(--about-canadiana-radius);
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-faq summary {
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  padding: 0.68rem 2.75rem 0.68rem 0.8rem;
+  background: linear-gradient(90deg, #16758d 0%, var(--about-canadiana-green) 100%);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-faq summary::after {
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 0.9rem;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-faq details[open] summary::after {
+  content: "−";
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-faq details p {
+  margin: 0;
+  padding: 0.85rem 0.9rem 1rem;
+  color: var(--about-canadiana-muted);
+  font-size: var(--body-copy-size);
+  line-height: 1.55;
+}
+
+@media (max-width: 1100px) {
+  .blacklight-pages-about_canadiana .about-canadiana-page .home-hero__title {
+    font-size: clamp(2rem, 4vw, 2.85rem);
+  }
+
+  html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-hero__title {
+    font-size: clamp(1.82rem, 3.6vw, 2.55rem);
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-collection {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-collection__media {
+    max-width: 470px;
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-work__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-work__media {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 700px) {
+  .blacklight-pages-about_canadiana .about-canadiana-hero {
+    padding-bottom: 2.6rem;
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-hero__layout {
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-hero__credit {
+    position: static;
+    max-width: 100%;
+    margin-top: 1rem;
+    text-align: left;
+  }
+
+  .blacklight-pages-about_canadiana .canadiana-story-mosaic__grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+
+  .blacklight-pages-about_canadiana .canadiana-story-mosaic__card {
+    min-height: 0;
+  }
+
+  .blacklight-pages-about_canadiana .canadiana-story-mosaic__card--image img {
+    min-height: 140px;
+  }
+}
+
+@media (max-width: 640px) {
+  .blacklight-pages-about_canadiana .about-canadiana-page .site-section {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-page .home-hero__title {
+    max-width: 100%;
+    font-size: clamp(1.72rem, 9vw, 2.3rem);
+  }
+
+  html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-hero__title {
+    font-size: clamp(1.58rem, 8.4vw, 2.05rem);
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-collection__facts {
+    gap: 0.35rem;
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-collection__facts span {
+    width: 100%;
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-browse {
+    width: auto;
+  }
+}
+
+.blacklight-pages-about_heritage .about-heritage-page {
+  --about-heritage-green: #43880f;
+  --about-heritage-green-bright: #58c012;
+  --about-heritage-green-deep: #2d6d08;
+  --about-heritage-pink: #d80963;
+  --about-heritage-ink: #161b21;
+  --about-heritage-muted: #334456;
+  --about-heritage-border: #d9e0e6;
+  --about-heritage-radius: var(--site-radius);
+  color: var(--about-heritage-ink);
+}
+
+.blacklight-pages-about_heritage .about-heritage-page .site-section {
+  padding-top: clamp(1.2rem, 2.3vw, 2rem);
+  padding-bottom: clamp(1.2rem, 2.3vw, 2rem);
+}
+
+.blacklight-pages-about_heritage .about-heritage-page .canadiana-shell {
+  max-width: 1220px;
+  margin-inline: auto;
+}
+
+.blacklight-pages-about_heritage .about-heritage-page h2,
+.blacklight-pages-about_heritage .about-heritage-page h3,
+.blacklight-pages-about_heritage .about-heritage-page h4 {
+  margin: 0;
+  color: var(--about-heritage-ink);
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero {
+  --home-hero-curve-edge: clamp(1rem, 1.7vw, 1.45rem);
+  position: relative;
+  padding: clamp(1.35rem, 2vw, 1.8rem) 0 clamp(3.15rem, 4.5vw, 4.2rem);
+  background:
+    linear-gradient(180deg, rgba(51, 113, 11, 0.85) 34%, rgba(95, 192, 35, 0.85) 100%),
+    var(--about-heritage-hero-image) center 38% / cover no-repeat;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--home-hero-curve-edge)),
+    95% calc(100% - calc(var(--home-hero-curve-edge) * 0.798)),
+    90% calc(100% - calc(var(--home-hero-curve-edge) * 0.623)),
+    85% calc(100% - calc(var(--home-hero-curve-edge) * 0.472)),
+    80% calc(100% - calc(var(--home-hero-curve-edge) * 0.344)),
+    75% calc(100% - calc(var(--home-hero-curve-edge) * 0.237)),
+    70% calc(100% - calc(var(--home-hero-curve-edge) * 0.151)),
+    65% calc(100% - calc(var(--home-hero-curve-edge) * 0.084)),
+    60% calc(100% - calc(var(--home-hero-curve-edge) * 0.037)),
+    55% calc(100% - calc(var(--home-hero-curve-edge) * 0.009)),
+    52.5% calc(100% - calc(var(--home-hero-curve-edge) * 0.002)),
+    50% 100%,
+    47.5% calc(100% - calc(var(--home-hero-curve-edge) * 0.002)),
+    45% calc(100% - calc(var(--home-hero-curve-edge) * 0.009)),
+    40% calc(100% - calc(var(--home-hero-curve-edge) * 0.037)),
+    35% calc(100% - calc(var(--home-hero-curve-edge) * 0.084)),
+    30% calc(100% - calc(var(--home-hero-curve-edge) * 0.151)),
+    25% calc(100% - calc(var(--home-hero-curve-edge) * 0.237)),
+    20% calc(100% - calc(var(--home-hero-curve-edge) * 0.344)),
+    15% calc(100% - calc(var(--home-hero-curve-edge) * 0.472)),
+    10% calc(100% - calc(var(--home-hero-curve-edge) * 0.623)),
+    5% calc(100% - calc(var(--home-hero-curve-edge) * 0.798)),
+    0 calc(100% - var(--home-hero-curve-edge))
+  );
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(14, 58, 10, 0.16) 0%, rgba(14, 58, 10, 0.16) 100%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.02) 100%);
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero > .canadiana-shell {
+  position: relative;
+  z-index: 1;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 430px);
+  gap: clamp(1.2rem, 2.2vw, 2rem);
+  align-items: start;
+  min-height: clamp(290px, 22vw, 360px);
+  padding: clamp(1.1rem, 2vw, 1.6rem) clamp(2.45rem, 4.8vw, 5.3rem) 0;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__copy {
+  max-width: 48rem;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__title {
+  margin: 0 0 1rem;
+  max-width: none;
+  color: #ffffff;
+  font-size: clamp(2.15rem, 3vw, 3.35rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
+  max-width: 15ch;
+  font-size: clamp(1.95rem, 2.7vw, 2.95rem);
+  white-space: normal;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__text {
+  margin: 0;
+  max-width: 33rem;
+  color: rgba(255, 255, 255, 0.97);
+  font-size: var(--body-copy-size);
+  line-height: 1.28;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: clamp(1.15rem, 2vw, 1.6rem);
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 0 1 clamp(220px, 17vw, 280px);
+  min-height: 3.25rem;
+  padding: 0.78rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--about-heritage-radius);
+  background: transparent;
+  color: #ffffff !important;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__cta:hover,
+.blacklight-pages-about_heritage .about-heritage-hero__cta:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ffffff;
+  color: #ffffff !important;
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__credit {
+  position: absolute;
+  top: clamp(0.4rem, 0.9vw, 0.75rem);
+  right: clamp(1rem, 2vw, 1.5rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  color: #ffffff;
+  font-size: var(--body-copy-size);
+  line-height: 1.25;
+  text-align: right;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__credit:hover,
+.blacklight-pages-about_heritage .about-heritage-hero__credit:focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__partner-card {
+  align-self: start;
+  justify-self: end;
+  margin-top: clamp(2rem, 3vw, 2.6rem);
+  width: 100%;
+  max-width: 460px;
+  padding: clamp(1rem, 1.4vw, 1.15rem) clamp(1.2rem, 1.7vw, 1.5rem);
+  border-radius: var(--about-heritage-radius);
+  background: #ffffff;
+  display: grid;
+  grid-template-columns: clamp(118px, 12vw, 150px) minmax(0, 1fr);
+  align-items: center;
+  justify-items: start;
+  gap: clamp(1rem, 1.6vw, 1.4rem);
+  text-align: left;
+  box-shadow: 0 12px 28px rgba(20, 52, 7, 0.14);
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__partner-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__partner-card p,
+.blacklight-pages-about_heritage .about-heritage-hero__partner-card a {
+  margin: 0;
+  color: #1b232c;
+  font-size: var(--body-copy-size);
+  line-height: 1.35;
+}
+
+.blacklight-pages-about_heritage .about-heritage-hero__partner-card a {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.blacklight-pages-about_heritage .about-heritage-section-head {
+  margin-bottom: clamp(1.35rem, 2.4vw, 2rem);
+  text-align: center;
+}
+
+.blacklight-pages-about_heritage .about-heritage-section-head h2,
+.blacklight-pages-about_heritage .about-heritage-faq h2,
+.blacklight-pages-about_heritage .about-heritage-work__copy h2 {
+  font-size: clamp(2rem, 2.5vw, 2.5rem);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+}
+
+.blacklight-pages-about_heritage .about-heritage-essentials {
+  padding-top: 2.25rem;
+}
+
+.blacklight-pages-about_heritage .about-heritage-essentials__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.4rem);
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.blacklight-pages-about_heritage .about-heritage-essential-card {
+  border: 1px solid var(--about-heritage-border);
+  border-radius: var(--about-heritage-radius);
+  background: #ffffff;
+  overflow: hidden;
+  text-align: center;
+}
+
+.blacklight-pages-about_heritage .about-heritage-essential-card img {
+  display: block;
+  width: 100%;
+  height: clamp(112px, 12vw, 148px);
+  object-fit: cover;
+  filter: grayscale(1) contrast(0.95) brightness(1.03);
+}
+
+.blacklight-pages-about_heritage .about-heritage-essential-card p {
+  margin: 0;
+  padding: 0.95rem 1rem 1.1rem;
+  color: var(--about-heritage-muted);
+  font-size: var(--body-copy-size);
+  line-height: 1.45;
+}
+
+.blacklight-pages-about_heritage .about-heritage-essential-card a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.blacklight-pages-about_heritage .about-heritage-topics {
+  padding-top: 1.65rem;
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic-list {
+  display: grid;
+  gap: 0;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  align-items: center;
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic--reverse {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic--reverse .about-heritage-topic__media {
+  order: 2;
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic--reverse .about-heritage-topic__copy {
+  order: 1;
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.72 / 1;
+  object-fit: cover;
+  border: 1px solid var(--about-heritage-border);
+  border-radius: var(--about-heritage-radius);
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic__copy {
+  display: grid;
+  align-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: clamp(1rem, 2vw, 1.6rem);
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic__copy h3 {
+  margin: 0;
+  color: #11161c;
+  font-size: 24px !important;
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.blacklight-pages-about_heritage .about-heritage-topic__copy p {
+  margin: 0;
+  color: var(--about-heritage-muted);
+  font-size: var(--body-copy-size);
+  line-height: 1.55;
+}
+
+.blacklight-pages-about_heritage .about-heritage-browse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 3.1rem;
+  width: fit-content;
+  padding: 0.7rem 1.35rem;
+  border-radius: var(--about-heritage-radius);
+  background: var(--about-heritage-pink);
+  color: #ffffff !important;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.blacklight-pages-about_heritage .about-heritage-browse:hover,
+.blacklight-pages-about_heritage .about-heritage-browse:focus {
+  background: #b70753;
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work {
+  padding-top: clamp(2rem, 3.6vw, 3rem);
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1.08fr);
+  overflow: hidden;
+  border-radius: var(--about-heritage-radius);
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__media {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(47, 115, 10, 0.32) 0%, rgba(80, 193, 18, 0.32) 100%);
+  pointer-events: none;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  object-fit: cover;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__copy {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  padding: clamp(1.45rem, 2vw, 1.85rem) clamp(1.45rem, 2vw, 1.85rem) clamp(1.7rem, 2.4vw, 2rem);
+  background: #338500;
+  color: #ffffff;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__copy h2,
+.blacklight-pages-about_heritage .about-heritage-work__copy a,
+.blacklight-pages-about_heritage .about-heritage-work__copy code {
+  color: #ffffff;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__copy h2 {
+  font-size: clamp(1.5rem, 1.9vw, 2rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__copy ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__copy li {
+  font-size: var(--body-copy-size);
+  line-height: 1.5;
+}
+
+.blacklight-pages-about_heritage .about-heritage-work__copy code {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: inherit;
+}
+
+.blacklight-pages-about_heritage .about-heritage-faq {
+  padding-top: 1.9rem;
+  padding-bottom: 2.4rem;
+}
+
+.blacklight-pages-about_heritage .about-heritage-faq__list {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.95rem;
+}
+
+.blacklight-pages-about_heritage .about-heritage-faq details {
+  border: 1px solid rgba(31, 80, 54, 0.18);
+  border-radius: var(--about-heritage-radius);
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.blacklight-pages-about_heritage .about-heritage-faq summary {
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  padding: 0.68rem 2.75rem 0.68rem 0.8rem;
+  background: linear-gradient(90deg, #16758d 0%, var(--about-heritage-green-bright) 100%);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.blacklight-pages-about_heritage .about-heritage-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.blacklight-pages-about_heritage .about-heritage-faq summary::after {
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: 0.9rem;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.blacklight-pages-about_heritage .about-heritage-faq details[open] summary::after {
+  content: "−";
+}
+
+.blacklight-pages-about_heritage .about-heritage-faq details p {
+  margin: 0;
+  padding: 0.85rem 0.9rem 1rem;
+  color: var(--about-heritage-muted);
+  font-size: var(--body-copy-size);
+  line-height: 1.55;
+}
+
+@media (max-width: 1100px) {
+  .blacklight-pages-about_heritage .about-heritage-hero__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 330px);
+    gap: 1.5rem;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__title {
+    font-size: clamp(2rem, 4vw, 2.85rem);
+  }
+
+  html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
+    font-size: clamp(1.82rem, 3.6vw, 2.55rem);
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-essentials__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-topic,
+  .blacklight-pages-about_heritage .about-heritage-topic--reverse {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-work__grid {
+    grid-template-columns: minmax(260px, 0.84fr) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .blacklight-pages-about_heritage .about-heritage-hero {
+    padding-bottom: 3rem;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__layout {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-top: 0.8rem;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__credit {
+    position: static;
+    margin-top: 0.35rem;
+    justify-self: start;
+    text-align: left;
+    white-space: normal;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__partner-card {
+    justify-self: start;
+    margin-top: 0;
+    max-width: 430px;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-topic,
+  .blacklight-pages-about_heritage .about-heritage-topic--reverse,
+  .blacklight-pages-about_heritage .about-heritage-work__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-topic--reverse .about-heritage-topic__media,
+  .blacklight-pages-about_heritage .about-heritage-topic--reverse .about-heritage-topic__copy {
+    order: initial;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-work__media {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .blacklight-pages-about_heritage .about-heritage-page .site-section {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero {
+    --home-hero-curve-edge: 0.9rem;
+    padding-bottom: 2.65rem;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__layout {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__title {
+    max-width: 100%;
+    font-size: clamp(1.72rem, 9vw, 2.3rem);
+    white-space: normal;
+  }
+
+  html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
+    font-size: clamp(1.58rem, 8.4vw, 2.05rem);
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__cta {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__partner-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-essentials__grid {
+    grid-template-columns: 1fr;
+  }
+
+.blacklight-pages-about_heritage .about-heritage-topic__copy h3 {
+    font-size: 22px !important;
+  }
+}
+
+.blacklight-catalog-index #main-container.container {
+  max-width: 100%;
+  padding: var(--page-header-content-gap) 0 0;
+}
+
+.blacklight-catalog-index #main-container > .row.base-first-row {
+  padding-left: clamp(20px, 2.6vw, 46px);
+  padding-right: clamp(20px, 2.6vw, 46px);
+}
+
+.blacklight-catalog-index #main-container > .row.base-first-row .navbar-search {
+  display: none;
+}
+
+.blacklight-catalog-index .navbar-search:not(.catalog-search-hero__search) {
+  display: none !important;
+}
+
+.blacklight-catalog-index .catalog-show-search-heading {
+  display: none !important;
+}
+
+.blacklight-catalog-show .navbar-search {
+  display: none !important;
+}
+
+.blacklight-catalog-show .catalog-show-search-heading {
+  display: none !important;
+}
+
+.blacklight-catalog-index .catalog-search-hero {
+  --home-hero-curve-edge: clamp(1rem, 1.7vw, 1.45rem);
+  position: relative;
+  margin: 0;
+  padding: clamp(1.35rem, 2vw, 1.8rem) 0 clamp(3.15rem, 4.5vw, 4.2rem);
+  background:
+    linear-gradient(180deg, rgba(29, 128, 139, 0.9) 34%, rgba(55, 191, 206, 0.9) 100%),
+    image-url("backgrounds/canadiana/oocihm.8_04048_394.31.jpg") center 38% / cover no-repeat;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--home-hero-curve-edge)),
+    95% calc(100% - calc(var(--home-hero-curve-edge) * 0.798)),
+    90% calc(100% - calc(var(--home-hero-curve-edge) * 0.623)),
+    85% calc(100% - calc(var(--home-hero-curve-edge) * 0.472)),
+    80% calc(100% - calc(var(--home-hero-curve-edge) * 0.344)),
+    75% calc(100% - calc(var(--home-hero-curve-edge) * 0.237)),
+    70% calc(100% - calc(var(--home-hero-curve-edge) * 0.151)),
+    65% calc(100% - calc(var(--home-hero-curve-edge) * 0.084)),
+    60% calc(100% - calc(var(--home-hero-curve-edge) * 0.037)),
+    55% calc(100% - calc(var(--home-hero-curve-edge) * 0.009)),
+    52.5% calc(100% - calc(var(--home-hero-curve-edge) * 0.002)),
+    50% 100%,
+    47.5% calc(100% - calc(var(--home-hero-curve-edge) * 0.002)),
+    45% calc(100% - calc(var(--home-hero-curve-edge) * 0.009)),
+    40% calc(100% - calc(var(--home-hero-curve-edge) * 0.037)),
+    35% calc(100% - calc(var(--home-hero-curve-edge) * 0.084)),
+    30% calc(100% - calc(var(--home-hero-curve-edge) * 0.151)),
+    25% calc(100% - calc(var(--home-hero-curve-edge) * 0.237)),
+    20% calc(100% - calc(var(--home-hero-curve-edge) * 0.344)),
+    15% calc(100% - calc(var(--home-hero-curve-edge) * 0.472)),
+    10% calc(100% - calc(var(--home-hero-curve-edge) * 0.623)),
+    5% calc(100% - calc(var(--home-hero-curve-edge) * 0.798)),
+    0 calc(100% - var(--home-hero-curve-edge))
+  );
+}
+
+.blacklight-catalog-index .catalog-search-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(11, 70, 79, 0.12) 0%, rgba(11, 70, 79, 0.12) 100%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.04) 100%);
+}
+
+.blacklight-catalog-index .catalog-search-hero > .canadiana-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1220px;
+  margin-inline: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.blacklight-catalog-index .catalog-search-hero__layout {
+  position: relative;
+  min-height: clamp(290px, 22vw, 360px);
+  padding: clamp(1.4rem, 2.3vw, 1.95rem) clamp(2.45rem, 4.8vw, 5.3rem) 0;
+}
+
+.blacklight-catalog-index .catalog-search-hero__credit {
+  position: absolute;
+  top: clamp(0.55rem, 1.1vw, 0.95rem);
+  right: clamp(1.2rem, 2.3vw, 1.9rem);
+  margin: 0;
+  color: #ffffff;
+  font-size: var(--body-copy-size);
+  line-height: 1.25;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.blacklight-catalog-index .catalog-search-hero__title {
+  margin: clamp(1.9rem, 3vw, 2.55rem) auto 0;
+  max-width: none;
+  color: #ffffff;
+  font-size: clamp(2.15rem, 3vw, 3.35rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.blacklight-catalog-index .catalog-search-hero__search {
+  width: 100%;
+  max-width: 58rem;
+  margin: clamp(1.35rem, 2.4vw, 1.9rem) auto 0 !important;
+  padding: 0 !important;
+}
+
+.blacklight-catalog-index .catalog-search-hero__search-form {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr) 13rem;
+  align-items: stretch;
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(22, 27, 33, 0.1);
+  border-radius: var(--site-radius, 3px);
+  box-shadow: 0 10px 24px rgba(15, 24, 33, 0.08);
+  overflow: hidden;
+}
+
+.blacklight-catalog-index .catalog-search-hero__field,
+.blacklight-catalog-index .catalog-search-hero__input,
+.blacklight-catalog-index .catalog-search-hero__submit {
+  min-width: 0;
+  height: clamp(4.25rem, 5.4vw, 6.1rem);
+  border: 0;
+  border-radius: 0;
+}
+
+.blacklight-catalog-index .catalog-search-hero__field,
+.blacklight-catalog-index .catalog-search-hero__input {
+  background: #ffffff;
+  color: #1e252d;
+  font-size: clamp(1rem, 1.02vw, 1.12rem);
+  box-shadow: none;
+}
+
+.blacklight-catalog-index .catalog-search-hero__field {
+  padding: 0 2.25rem 0 1rem;
+  border-right: 1px solid rgba(22, 27, 33, 0.12);
+}
+
+.blacklight-catalog-index .catalog-search-hero__input {
+  width: 100%;
+  padding: 0 1.15rem;
+}
+
+.blacklight-catalog-index .catalog-search-hero__input::placeholder {
+  color: #6d7580;
+  opacity: 1;
+}
+
+.blacklight-catalog-index .catalog-search-hero__submit {
+  background: #4c8893;
+  color: #ffffff;
+  font-size: clamp(1.05rem, 1.08vw, 1.22rem);
+  font-weight: 700;
+  border-radius: 3px;
+  box-shadow: none;
+}
+
+.blacklight-catalog-index .catalog-search-hero__submit:hover,
+.blacklight-catalog-index .catalog-search-hero__submit:focus-visible {
+  background: #3f747e;
+}
+
+.blacklight-catalog-index .catalog-search-hero__applied-shell {
+  padding-top: 1.1rem;
+  padding-bottom: 0.45rem;
+}
+
+.blacklight-catalog-index .catalog-search-hero__applied-shell > .canadiana-shell {
+  max-width: 1220px;
+  margin-inline: auto;
+  padding-left: clamp(20px, 2.6vw, 46px);
+  padding-right: clamp(20px, 2.6vw, 46px);
+}
+
+.blacklight-catalog-index .catalog-search-hero__applied {
+  min-height: 0;
+}
+
+.blacklight-catalog-index .document-title-heading,
+.blacklight-catalog-index .documents-list .documentHeader h3,
+.blacklight-catalog-index .facets-header h2,
+.blacklight-catalog-index #sidebar h2 {
+  font-size: 20px !important;
+  line-height: 1.2;
+}
+
+@media (max-width: 1200px) {
+  .blacklight-catalog-index .catalog-search-hero__search-form {
+    grid-template-columns: 8.75rem minmax(0, 1fr) 12rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .blacklight-catalog-index .catalog-search-hero__search-form {
+    grid-template-columns: 8.5rem minmax(0, 1fr) 10.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .blacklight-catalog-index .catalog-search-hero__search-form {
+    grid-template-columns: 1fr;
+  }
+
+  .blacklight-catalog-index .catalog-search-hero__field,
+  .blacklight-catalog-index .catalog-search-hero__input,
+  .blacklight-catalog-index .catalog-search-hero__submit {
+    height: 3.55rem;
+  }
+
+  .blacklight-catalog-index .catalog-search-hero__field {
+    border-right: 0;
+    border-bottom: 1px solid rgba(22, 27, 33, 0.12);
+  }
+
+  .blacklight-catalog-index .catalog-search-hero__input {
+    border-bottom: 1px solid rgba(22, 27, 33, 0.12);
+  }
+}
+
+@media (max-width: 640px) {
+  .blacklight-catalog-index .catalog-search-hero {
+    --home-hero-curve-edge: 0.9rem;
+    padding-bottom: 2.65rem;
+  }
+
+  .blacklight-catalog-index .catalog-search-hero__layout {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .blacklight-catalog-index .catalog-search-hero__title {
+    font-size: clamp(1.72rem, 9vw, 2.3rem);
+  }
+
+  .blacklight-catalog-index .catalog-search-hero__search {
+    margin-top: 1.35rem !important;
+  }
+}
+
+.blacklight-pages-system_status .api-access-page--modern h2,
+.blacklight-pages-contact_us .api-access-page--modern h2,
+.blacklight-pages-navigating_collections .api-access-page--modern h2,
+.blacklight-pages-citation_guide .api-access-page--modern h2,
+.blacklight-pages-api_access .api-access-page--modern h2,
+.blacklight-pages-compare_collections .api-access-page--modern h2,
+.blacklight-pages-compare_collections .compare-collection-body h2 {
+  font-size: 24px !important;
+}
+
+.blacklight-pages-system_status .api-access-page--modern h3,
+.blacklight-pages-contact_us .api-access-page--modern h3,
+.blacklight-pages-navigating_collections .api-access-page--modern h3,
+.blacklight-pages-citation_guide .api-access-page--modern h3,
+.blacklight-pages-api_access .api-access-page--modern h3,
+.blacklight-pages-compare_collections .api-access-page--modern h3,
+.blacklight-pages-compare_collections .compare-collection-body h3 {
+  font-size: 20px !important;
+}
+
+
+.blacklight-pages-api_access .api-access-page--modern .api-toc__title {
+  margin: 0 0 0.55rem;
+  font-size: 16px !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--api-muted);
+}
+
+.blacklight-pages-system_status .api-access-page--modern,
+.blacklight-pages-contact_us .api-access-page--modern,
+.blacklight-pages-navigating_collections .api-access-page--modern,
+.blacklight-pages-citation_guide .api-access-page--modern,
+.blacklight-pages-api_access .api-access-page--modern,
+.blacklight-pages-compare_collections .api-access-page--modern,
+.blacklight-pages-compare_collections .compare-collections-page {
+  --site-radius: 3px;
+}
+
+.blacklight-pages-system_status .api-access-page--modern .btn,
+.blacklight-pages-system_status .api-access-page--modern button,
+.blacklight-pages-contact_us .api-access-page--modern .btn,
+.blacklight-pages-contact_us .api-access-page--modern button,
+.blacklight-pages-navigating_collections .api-access-page--modern .btn,
+.blacklight-pages-navigating_collections .api-access-page--modern button,
+.blacklight-pages-citation_guide .api-access-page--modern .btn,
+.blacklight-pages-citation_guide .api-access-page--modern button,
+.blacklight-pages-api_access .api-access-page--modern .btn,
+.blacklight-pages-api_access .api-access-page--modern button,
+.blacklight-pages-compare_collections .api-access-page--modern .btn,
+.blacklight-pages-compare_collections .api-access-page--modern button,
+.blacklight-pages-compare_collections .compare-collections-page .btn,
+.blacklight-pages-compare_collections .compare-collections-page button,
+.blacklight-pages-system_status .api-access-page--modern .api-hero,
+.blacklight-pages-system_status .api-access-page--modern .api-hero__panel,
+.blacklight-pages-system_status .api-access-page--modern .api-toc,
+.blacklight-pages-system_status .api-access-page--modern .api-toc a,
+.blacklight-pages-system_status .api-access-page--modern .api-card,
+.blacklight-pages-system_status .api-access-page--modern .api-table-wrap,
+.blacklight-pages-system_status .api-access-page--modern .api-code,
+.blacklight-pages-system_status .api-access-page--modern .api-snippet--docmost,
+.blacklight-pages-system_status .api-access-page--modern .citation-related-docs__icon,
+.blacklight-pages-system_status .api-access-page--modern .citation-related-docs__link,
+.blacklight-pages-system_status .api-access-page--modern .navigating-download-option__img,
+.blacklight-pages-contact_us .api-access-page--modern .api-hero,
+.blacklight-pages-contact_us .api-access-page--modern .api-hero__panel,
+.blacklight-pages-contact_us .api-access-page--modern .api-toc,
+.blacklight-pages-contact_us .api-access-page--modern .api-toc a,
+.blacklight-pages-contact_us .api-access-page--modern .api-card,
+.blacklight-pages-contact_us .api-access-page--modern .api-table-wrap,
+.blacklight-pages-contact_us .api-access-page--modern .api-code,
+.blacklight-pages-contact_us .api-access-page--modern .api-snippet--docmost,
+.blacklight-pages-contact_us .api-access-page--modern .citation-related-docs__icon,
+.blacklight-pages-contact_us .api-access-page--modern .citation-related-docs__link,
+.blacklight-pages-contact_us .api-access-page--modern .navigating-download-option__img,
+.blacklight-pages-navigating_collections .api-access-page--modern .api-hero,
+.blacklight-pages-navigating_collections .api-access-page--modern .api-hero__panel,
+.blacklight-pages-navigating_collections .api-access-page--modern .api-toc,
+.blacklight-pages-navigating_collections .api-access-page--modern .api-toc a,
+.blacklight-pages-navigating_collections .api-access-page--modern .api-card,
+.blacklight-pages-navigating_collections .api-access-page--modern .api-table-wrap,
+.blacklight-pages-navigating_collections .api-access-page--modern .api-code,
+.blacklight-pages-navigating_collections .api-access-page--modern .api-snippet--docmost,
+.blacklight-pages-navigating_collections .api-access-page--modern .citation-related-docs__icon,
+.blacklight-pages-navigating_collections .api-access-page--modern .citation-related-docs__link,
+.blacklight-pages-navigating_collections .api-access-page--modern .navigating-download-option__img,
+.blacklight-pages-citation_guide .api-access-page--modern .api-hero,
+.blacklight-pages-citation_guide .api-access-page--modern .api-hero__panel,
+.blacklight-pages-citation_guide .api-access-page--modern .api-toc,
+.blacklight-pages-citation_guide .api-access-page--modern .api-toc a,
+.blacklight-pages-citation_guide .api-access-page--modern .api-card,
+.blacklight-pages-citation_guide .api-access-page--modern .api-table-wrap,
+.blacklight-pages-citation_guide .api-access-page--modern .api-code,
+.blacklight-pages-citation_guide .api-access-page--modern .api-snippet--docmost,
+.blacklight-pages-citation_guide .api-access-page--modern .citation-related-docs__icon,
+.blacklight-pages-citation_guide .api-access-page--modern .citation-related-docs__link,
+.blacklight-pages-citation_guide .api-access-page--modern .navigating-download-option__img,
+.blacklight-pages-api_access .api-access-page--modern .api-hero,
+.blacklight-pages-api_access .api-access-page--modern .api-hero__panel,
+.blacklight-pages-api_access .api-access-page--modern .api-toc,
+.blacklight-pages-api_access .api-access-page--modern .api-toc a,
+.blacklight-pages-api_access .api-access-page--modern .api-card,
+.blacklight-pages-api_access .api-access-page--modern .api-table-wrap,
+.blacklight-pages-api_access .api-access-page--modern .api-code,
+.blacklight-pages-api_access .api-access-page--modern .api-snippet--docmost,
+.blacklight-pages-api_access .api-access-page--modern .citation-related-docs__icon,
+.blacklight-pages-api_access .api-access-page--modern .citation-related-docs__link,
+.blacklight-pages-api_access .api-access-page--modern .navigating-download-option__img,
+.blacklight-pages-compare_collections .api-access-page--modern .api-hero,
+.blacklight-pages-compare_collections .api-access-page--modern .api-hero__panel,
+.blacklight-pages-compare_collections .api-access-page--modern .api-toc,
+.blacklight-pages-compare_collections .api-access-page--modern .api-toc a,
+.blacklight-pages-compare_collections .api-access-page--modern .api-card,
+.blacklight-pages-compare_collections .api-access-page--modern .api-table-wrap,
+.blacklight-pages-compare_collections .api-access-page--modern .api-code,
+.blacklight-pages-compare_collections .api-access-page--modern .api-snippet--docmost,
+.blacklight-pages-compare_collections .api-access-page--modern .citation-related-docs__icon,
+.blacklight-pages-compare_collections .api-access-page--modern .citation-related-docs__link,
+.blacklight-pages-compare_collections .api-access-page--modern .navigating-download-option__img,
+.blacklight-pages-compare_collections .compare-frame,
+.blacklight-pages-compare_collections .compare-control-panel,
+.blacklight-pages-compare_collections .compare-collection-card,
+.blacklight-pages-compare_collections .compare-collection-card img,
+.blacklight-pages-compare_collections .compare-collection-link,
+.blacklight-pages-compare_collections .compare-action-link,
+.blacklight-pages-compare_collections .compare-token {
+  border-radius: 3px !important;
 }

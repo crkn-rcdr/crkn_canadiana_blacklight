@@ -3413,6 +3413,10 @@ summary:focus-visible,
     --home-band-exhibit-frame-height: 657px;
     --home-band-panel-height: 632px;
   }
+
+  .home-page .home-hero__stat-card {
+    max-width: 361px !important;
+  }
 }
 
 /* Collection search sections */

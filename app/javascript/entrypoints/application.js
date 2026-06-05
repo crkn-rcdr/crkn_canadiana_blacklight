@@ -381,9 +381,21 @@ function attachTypedPlaceholder(input) {
   if (!phrases.length) return;
 
   input.dataset.typedPlaceholderReady = 'true';
+  const defaultPhrase = phrases[0];
+
+  input.addEventListener('focus', () => {
+    if (input.value.length === 0) {
+      input.setAttribute('placeholder', '');
+    }
+  });
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    input.setAttribute('placeholder', phrases[0]);
+    input.setAttribute('placeholder', defaultPhrase);
+    input.addEventListener('blur', () => {
+      if (input.value.length === 0) {
+        input.setAttribute('placeholder', defaultPhrase);
+      }
+    });
     return;
   }
 

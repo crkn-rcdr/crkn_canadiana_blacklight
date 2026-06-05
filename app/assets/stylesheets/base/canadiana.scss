@@ -3565,6 +3565,12 @@ summary:focus-visible,
   overflow: hidden;
 }
 
+.home-page .home-canadiana-search__form:focus-within,
+.home-page .home-heritage-search__form:focus-within {
+  border-color: rgba(29, 128, 139, 0.45);
+  box-shadow: 0 0 0 3px rgba(29, 128, 139, 0.12), 0 10px 24px rgba(15, 24, 33, 0.08);
+}
+
 .home-page .home-canadiana-search__field,
 .home-page .home-canadiana-search__input,
 .home-page .home-canadiana-search__submit,
@@ -3596,6 +3602,23 @@ summary:focus-visible,
 .home-page .home-canadiana-search__input,
 .home-page .home-heritage-search__input {
   padding: 0 1.15rem;
+}
+
+.home-page .home-canadiana-search__field:focus,
+.home-page .home-canadiana-search__field:focus-visible,
+.home-page .home-heritage-search__field:focus,
+.home-page .home-heritage-search__field:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-right-color: rgba(22, 27, 33, 0.12) !important;
+}
+
+.home-page .home-canadiana-search__input:focus,
+.home-page .home-canadiana-search__input:focus-visible,
+.home-page .home-heritage-search__input:focus,
+.home-page .home-heritage-search__input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .home-page .home-canadiana-search__input::placeholder,
@@ -3921,7 +3944,6 @@ summary:focus-visible,
 }
 
 .home-page .members-blurb {
-  max-width: 1100px;
   font-size: clamp(0.98rem, 1.15vw, 1.12rem);
   line-height: 1.55;
   margin-bottom: 0;
@@ -4323,6 +4345,7 @@ html[lang="fr"] .home-page .home-hero__title {
   width: 100%;
   max-width: 330px;
   justify-self: end;
+  margin: auto;
   margin-top: clamp(0.45rem, 1vw, 0.95rem);
   padding: clamp(1.45rem, 1.85vw, 1.72rem) clamp(1.45rem, 2vw, 1.8rem);
   background: #ffffff;
@@ -5000,6 +5023,7 @@ html[lang="fr"] .home-page .home-hero__title {
 
 /* About pages: remove horizontal container/column gutters */
 .blacklight-pages-navigating_collections #main-container.container,
+.blacklight-pages-what_is_iiif #main-container.container,
 .blacklight-pages-system_status #main-container.container,
 .blacklight-pages-api_access #main-container.container,
 .blacklight-pages-contact_us #main-container.container,
@@ -5012,6 +5036,7 @@ html[lang="fr"] .home-page .home-hero__title {
 .blacklight-pages-about_canadiana #main-container > .row.base-first-row,
 .blacklight-pages-about_heritage #main-container > .row.base-first-row,
 .blacklight-pages-navigating_collections #main-container > .row.base-first-row,
+.blacklight-pages-what_is_iiif #main-container > .row.base-first-row,
 .blacklight-pages-system_status #main-container > .row.base-first-row,
 .blacklight-pages-api_access #main-container > .row.base-first-row,
 .blacklight-pages-contact_us #main-container > .row.base-first-row,
@@ -5022,6 +5047,7 @@ html[lang="fr"] .home-page .home-hero__title {
 }
 
 .blacklight-pages-navigating_collections #main-container > .row.base-first-row,
+.blacklight-pages-what_is_iiif #main-container > .row.base-first-row,
 .blacklight-pages-system_status #main-container > .row.base-first-row,
 .blacklight-pages-api_access #main-container > .row.base-first-row,
 .blacklight-pages-contact_us #main-container > .row.base-first-row,
@@ -5035,6 +5061,7 @@ html[lang="fr"] .home-page .home-hero__title {
 .blacklight-pages-about_canadiana #main-container > .row.base-first-row > section,
 .blacklight-pages-about_heritage #main-container > .row.base-first-row > section,
 .blacklight-pages-navigating_collections #main-container > .row.base-first-row > section,
+.blacklight-pages-what_is_iiif #main-container > .row.base-first-row > section,
 .blacklight-pages-system_status #main-container > .row.base-first-row > section,
 .blacklight-pages-api_access #main-container > .row.base-first-row > section,
 .blacklight-pages-contact_us #main-container > .row.base-first-row > section,
@@ -5042,6 +5069,7 @@ html[lang="fr"] .home-page .home-hero__title {
 .blacklight-pages-about_canadiana #main-container .canadiana-shell,
 .blacklight-pages-about_heritage #main-container .canadiana-shell,
 .blacklight-pages-navigating_collections #main-container .canadiana-shell,
+.blacklight-pages-what_is_iiif #main-container .canadiana-shell,
 .blacklight-pages-system_status #main-container .canadiana-shell,
 .blacklight-pages-api_access #main-container .canadiana-shell,
 .blacklight-pages-contact_us #main-container .canadiana-shell,
@@ -8832,6 +8860,7 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
+  max-width: 100%;
   min-height: 3.1rem;
   padding: 0.7rem 1.35rem;
   border-radius: var(--about-canadiana-radius);
@@ -8841,6 +8870,14 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
   font-weight: 700;
   line-height: 1.2;
   text-decoration: none;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-browse span:first-child {
+  min-width: 0;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-browse span[aria-hidden="true"] {
+  flex: 0 0 auto;
 }
 
 .blacklight-pages-about_canadiana .about-canadiana-browse:hover,
@@ -8856,8 +8893,8 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
 
 .blacklight-pages-about_canadiana .about-canadiana-work__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.95fr) minmax(300px, 0.98fr);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 445px);
+  align-items: stretch;
   min-height: 0;
   height: auto;
   max-height: none;
@@ -8867,6 +8904,7 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
 
 .blacklight-pages-about_canadiana .about-canadiana-work__copy {
   display: grid;
+  min-width: 0;
   align-content: start;
   gap: clamp(0.55rem, 0.7vw, 0.85rem);
   padding: clamp(1.7rem, 2vw, 2.4rem) clamp(1.7rem, 2vw, 2.4rem) clamp(2.15rem, 2.6vw, 2.9rem);
@@ -8889,14 +8927,17 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
 
 .blacklight-pages-about_canadiana .about-canadiana-work__copy ol {
   margin: 0;
+  min-width: 0;
   padding-left: 1.45rem;
   display: grid;
   gap: 0.2rem;
 }
 
 .blacklight-pages-about_canadiana .about-canadiana-work__copy li {
+  min-width: 0;
   font-size: var(--body-copy-size);
   line-height: 1.45;
+  overflow-wrap: break-word;
 }
 
 .blacklight-pages-about_canadiana .about-canadiana-work__copy code {
@@ -8910,8 +8951,17 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
 .blacklight-pages-about_canadiana .about-canadiana-work__media {
   position: relative;
   align-self: stretch;
+  justify-self: stretch;
   min-height: 0;
+  min-width: 0;
+  width: 100%;
   overflow: hidden;
+}
+
+.blacklight-pages-about_canadiana .about-canadiana-work__media > a {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .blacklight-pages-about_canadiana .about-canadiana-work__media::after {
@@ -9016,6 +9066,8 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
   }
 
   .blacklight-pages-about_canadiana .about-canadiana-work__media {
+    justify-self: stretch;
+    width: 100%;
     min-height: 240px;
   }
 }
@@ -9174,11 +9226,11 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
 .blacklight-pages-about_heritage .about-heritage-hero__layout {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.34fr) minmax(390px, 530px);
+  grid-template-columns: minmax(0, 1fr) minmax(680px, 0.9fr);
   grid-template-areas:
     "copy credit"
     "copy partner";
-  gap: clamp(1.5rem, 3vw, 3rem);
+  gap: clamp(0.75rem, 1.1vw, 1rem);
   align-items: start;
   min-height: clamp(290px, 22vw, 360px);
   padding: clamp(1.1rem, 2vw, 1.6rem) var(--about-hero-shell-pad-inline) 0;
@@ -9263,10 +9315,8 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   position: static;
   justify-self: end;
   align-self: start;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
   margin: 0;
+  min-width: 0;
   max-width: 100%;
   color: #ffffff;
   font-size: var(--body-copy-size);
@@ -9288,7 +9338,7 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   justify-self: end;
   margin-top: -10rem;
   width: 100%;
-  max-width: 460px;
+  max-width: 400px;
   padding: clamp(1rem, 1.4vw, 1.15rem) clamp(1.2rem, 1.7vw, 1.5rem);
   border-radius: var(--about-heritage-radius);
   background: #ffffff;
@@ -9297,7 +9347,7 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   align-items: center;
   justify-items: start;
   gap: clamp(1rem, 1.6vw, 1.4rem);
-  text-align: left;
+  text-align: center;
   box-shadow: 0 12px 28px rgba(20, 52, 7, 0.14);
 }
 
@@ -9445,17 +9495,24 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   min-height: 3.1rem;
   width: fit-content;
   padding: 0.7rem 1.35rem;
+  border: 0;
   border-radius: var(--about-heritage-radius);
   background: var(--about-heritage-pink);
   color: #ffffff !important;
+  font-family: inherit;
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
   text-decoration: none;
 }
 
-.blacklight-pages-about_heritage .about-heritage-browse:hover,
-.blacklight-pages-about_heritage .about-heritage-browse:focus {
+.blacklight-pages-about_heritage .about-heritage-browse:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+.blacklight-pages-about_heritage .about-heritage-browse:not(:disabled):hover,
+.blacklight-pages-about_heritage .about-heritage-browse:not(:disabled):focus {
   background: #b70753;
   color: #ffffff !important;
   text-decoration: none;
@@ -9467,7 +9524,7 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
 
 .blacklight-pages-about_heritage .about-heritage-work__grid {
   display: grid;
-  grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1.08fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   overflow: hidden;
   border-radius: var(--about-heritage-radius);
 }
@@ -9593,6 +9650,13 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   line-height: 1.55;
 }
 
+@media (max-width: 1800px) {
+  .blacklight-pages-about_heritage .about-heritage-hero__credit {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}
+
 @media (max-width: 1100px) {
   .blacklight-pages-about_canadiana .about-canadiana-hero__layout {
     grid-template-columns: minmax(0, 1fr) minmax(240px, 330px);
@@ -9602,6 +9666,11 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   .blacklight-pages-about_heritage .about-heritage-hero__layout {
     grid-template-columns: minmax(0, 1fr) minmax(240px, 330px);
     gap: 1.5rem;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__credit {
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
 
   .blacklight-pages-about_heritage .about-heritage-hero__title {
@@ -9622,7 +9691,7 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   }
 
   .blacklight-pages-about_heritage .about-heritage-work__grid {
-    grid-template-columns: minmax(260px, 0.84fr) minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -9663,7 +9732,7 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   .blacklight-pages-about_heritage .about-heritage-hero__partner-card {
     justify-self: start;
     margin-top: 0;
-    max-width: 430px;
+    max-width: 400px;
   }
 
   .blacklight-pages-about_heritage .about-heritage-topic,
@@ -9867,6 +9936,11 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   overflow: hidden;
 }
 
+.blacklight-catalog-index .catalog-search-hero__search-form:focus-within {
+  border-color: rgba(29, 128, 139, 0.45);
+  box-shadow: 0 0 0 3px rgba(29, 128, 139, 0.12), 0 10px 24px rgba(15, 24, 33, 0.08);
+}
+
 .blacklight-catalog-index .catalog-search-hero__field,
 .blacklight-catalog-index .catalog-search-hero__input,
 .blacklight-catalog-index .catalog-search-hero__submit {
@@ -9892,6 +9966,19 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
 .blacklight-catalog-index .catalog-search-hero__input {
   width: 100%;
   padding: 0 1.15rem;
+}
+
+.blacklight-catalog-index .catalog-search-hero__field:focus,
+.blacklight-catalog-index .catalog-search-hero__field:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-right-color: rgba(22, 27, 33, 0.12) !important;
+}
+
+.blacklight-catalog-index .catalog-search-hero__input:focus,
+.blacklight-catalog-index .catalog-search-hero__input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .blacklight-catalog-index .catalog-search-hero__input::placeholder {

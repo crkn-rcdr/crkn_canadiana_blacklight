@@ -1,4 +1,4 @@
-<% content_for :page_title, "Qu’est-ce que IIIF? - #{application_name}" %>
+<% content_for :page_title, "À propos de IIIF - #{application_name}" %>
 
 <div class="blacklight-pages-api_access">
   <section class="site-section api-site-section">
@@ -8,14 +8,14 @@
           <div class="api-hero__copy">
             <h1 class="section-title">
               <span class="api-hero__eyebrow-text">Collections et infrastructure Canadiana</span>
-              <span class="api-hero__title-main">Qu’est-ce que IIIF?</span>
+              <span class="api-hero__title-main">À propos de IIIF</span>
             </h1>
             <p class="api-lede">
-              L’International Image Interoperability Framework aide les établissements à partager des objets numériques
-              entre plateformes, collections et outils. Canadiana utilise IIIF pour soutenir la consultation, la réutilisation
-              et l’interopérabilité.
+              Canadiana utilise l’International Image Interoperability Framework (IIIF) pour soutenir un partage amélioré
+              des objets numériques entre les plateformes, les collections et les outils.
             </p>
           </div>
+
           <aside class="api-hero__panel api-hero__panel--iiif" aria-hidden="true">
             <img class="api-hero__iiif-logo" src="/assets/iiif_logo.png" alt="" loading="lazy">
           </aside>
@@ -34,9 +34,8 @@
         </aside>
 
         <div class="api-content">
-          <section id="iiif-overview" class="api-card api-card--accent">
+          <section id="iiif-overview" class="api-card">
             <h2>Aperçu de IIIF</h2>
-            <p class="fw-semibold">Veuillez noter que tous les liens dans cette page Web sont disponibles uniquement en anglais, sauf ceux marqués avec « (FR disponible) ».</p>
             <p>
               L’<a href="https://iiif.io/" target="_blank" rel="noopener">International Image Interoperability Framework</a>
               (IIIF, à prononcer « trois-I-F ») est une série de standards pour le libre partage d’images, de fichiers
@@ -45,22 +44,18 @@
               des collections numériques.
             </p>
             <p>
-              IIIF a notamment le grand avantage d’être fondé sur un code source libre, ce qui signifie que divers outils
+              IIIF est fondé sur un code source libre, ce qui signifie que divers outils
               et plateformes, comme le visualiseur Mirador qu’utilise Canadiana, peuvent être conçus pour se greffer
-              à IIIF, puis être réutilisés et adaptés par d’autres établissements et développeurs. De plus, parce que les
-              établissements ayant adopté IIIF emploient un standard collectif pour afficher les objets numériques, ces
-              derniers peuvent facilement être partagés entre différentes plateformes, différentes collections et même
-              différents établissements.
+              à IIIF, puis être réutilisés et adaptés librement par d’autres établissements et développeurs. De plus,
+              parce que les établissements ayant adopté IIIF emploient un standard collectif pour afficher les objets
+              numériques, ces derniers peuvent facilement être partagés entre différentes plateformes, différentes
+              collections et même différents établissements.
             </p>
             <p>
-              IIIF est né d’une collaboration amorcée en 2011 entre la Bibliothèque nationale de France, les Bodleian Libraries,
-              la British Library, la Cornell University, la Los Alamos National Laboratory Research Library, la
-              Nasjonalbiblioteket (Bibliothèque nationale de Norvège) et la Stanford University. En 2015, le
-              <a href="https://iiif.io/community/consortium/members/" target="_blank" rel="noopener">Consortium IIIF</a>
-              a été fondé. Il réunit aujourd’hui des membres des quatre coins du monde. Le Réseau canadien de documentation
-              pour la recherche (RCDR) en est membre
+              Le <a href="https://iiif.io/community/consortium/members/" target="_blank" rel="noopener">Consortium IIIF</a>
+              compte des membres issus du monde entier. Le RCDR en est membre
               <a href="https://www.crkn-rcdr.ca/fr/le-rcdr-devient-membre-associe-du-consortium-du-iiif" target="_blank" rel="noopener">associé</a>
-              (FR disponible) depuis 2024.
+              depuis 2024.
             </p>
           </section>
 
@@ -69,7 +64,7 @@
             <p>
               Si vous avez uniquement besoin de consulter le contenu de Canadiana, vous pouvez simplement effectuer une
               recherche ou naviguer dans la collection comme d’habitude. Cependant, Canadiana offre aussi plusieurs
-              outils qui profitent de IIIF dans la section Boîte à outils sous l’afficheur d’images.
+              outils qui profitent de IIIF dans la section Boîte à outils sous la visionneuse d’images.
             </p>
             <ul class="api-list api-list--bulleted">
               <li>
@@ -91,7 +86,8 @@
               </li>
               <li>
                 <strong>Générer un PDF :</strong> L’outil PDiiif sert à générer un fichier PDF sur mesure à partir d’un objet
-                dans Canadiana.
+                dans Canadiana. Après avoir cliqué sur « Generate PDF », utilisez l'icône verte des paramètres pour régler
+                la taille de l'image, la plage de pages et les paramètres d'optimisation.
               </li>
               <li>
                 <strong>Modifier une copie du manifeste :</strong> Cet outil sert à modifier une copie du manifeste d’un objet.
@@ -108,7 +104,8 @@
               de créer des expositions, d’annoter des documents et plus encore. Consultez le site Web de IIIF pour obtenir
               une liste des
               <a href="https://iiif.io/get-started/tools/" target="_blank" rel="noopener">outils les plus populaires</a>,
-              ainsi que les
+              notamment des visionneuses d'images et de fichiers audiovisuels, des plateformes d'expositions numériques,
+              des plateformes d'annotation et des éditeurs de manifestes, ainsi que les
               <a href="https://iiif.io/get-started/training/" target="_blank" rel="noopener">ressources de formation sur IIIF</a>.
             </p>
           </section>
@@ -153,11 +150,12 @@
 
           <section id="iiif-questions" class="api-card">
             <h2>Des questions?</h2>
-            <p>Pour toute question sur la recherche dans Canadiana ou pour une assistance technique dans Canadiana, communiquez avec le RCDR à <a href="mailto:info@crkn.ca">info@crkn.ca</a>.</p>
+            <p>Pour toute question sur la recherche dans Canadiana ou pour le dépannage du site Web, communiquez avec le RCDR à <a href="mailto:info@crkn.ca">info@crkn.ca</a>.</p>
             <p>
               Si vous avez des questions pour la communauté IIIF dans son ensemble, vous pouvez vous joindre à l’
               <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGV9QSFo8i2z1R5iIMP7B2JVhS9akHqcykWF5_y4mtWqVrBA/viewform" target="_blank" rel="noopener">espace IIIF sur Slack</a>.
-              Vous y trouverez divers canaux, y compris <strong>#beginners</strong> et <strong>#canada</strong>.
+              Vous y trouverez divers canaux, y compris <strong>#beginners</strong> et <strong>#canada</strong> où vous
+              pouvez poser des questions et échanger des informations avec vos collègues canadiens.
             </p>
           </section>
         </div>

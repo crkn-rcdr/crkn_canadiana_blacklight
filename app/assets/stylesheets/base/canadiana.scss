@@ -8636,7 +8636,7 @@ html[lang="fr"] .home-page .home-hero__title {
 }
 
 html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-hero__title {
-  max-width: 12ch;
+  max-width: none;
   font-size: clamp(1.95rem, 2.7vw, 2.95rem);
   white-space: normal;
 }
@@ -8698,6 +8698,12 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
   overflow: hidden;
   border-radius: var(--about-canadiana-radius);
   align-items: stretch;
+}
+
+html[lang="fr"] .blacklight-pages-about_canadiana .canadiana-story-mosaic__grid {
+  height: clamp(550px, 35vw, 670px) !important;
+  min-height: 550px !important;
+  max-height: clamp(550px, 35vw, 670px) !important;
 }
 
 .blacklight-pages-about_canadiana .canadiana-story-mosaic__card {
@@ -9076,6 +9082,21 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
   }
 }
 
+@media (max-width: 991px) {
+  .blacklight-pages-about_canadiana .about-canadiana-page .home-hero__actions {
+    align-items: flex-start;
+  }
+
+  .blacklight-pages-about_canadiana .about-canadiana-page .home-hero__cta {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
+    min-height: 3.1rem;
+    padding: 0.75rem 0.95rem;
+    white-space: normal;
+  }
+}
+
 @media (max-width: 700px) {
   .blacklight-pages-about_canadiana .about-canadiana-hero {
     padding-bottom: 2.6rem;
@@ -9089,21 +9110,52 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
   .blacklight-pages-about_canadiana .about-canadiana-hero__credit {
     position: static;
     max-width: 100%;
+    margin-bottom: 1rem;
     margin-top: 1rem;
     text-align: left;
   }
 
   .blacklight-pages-about_canadiana .canadiana-story-mosaic__grid {
     grid-template-columns: 1fr;
+    grid-template-rows: none !important;
     grid-auto-rows: auto;
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
+  }
+
+  html[lang="fr"] .blacklight-pages-about_canadiana .canadiana-story-mosaic__grid {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
   }
 
   .blacklight-pages-about_canadiana .canadiana-story-mosaic__card {
-    min-height: 0;
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
+  }
+
+  .blacklight-pages-about_canadiana .canadiana-story-mosaic__card:nth-child(2) {
+    order: 1;
+  }
+
+  .blacklight-pages-about_canadiana .canadiana-story-mosaic__card:nth-child(1) {
+    order: 2;
+  }
+
+  .blacklight-pages-about_canadiana .canadiana-story-mosaic__card:nth-child(3) {
+    order: 3;
+  }
+
+  .blacklight-pages-about_canadiana .canadiana-story-mosaic__card:nth-child(4) {
+    order: 4;
   }
 
   .blacklight-pages-about_canadiana .canadiana-story-mosaic__card--image img {
-    min-height: 140px;
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
   }
 }
 
@@ -9257,7 +9309,7 @@ html[lang="fr"] .blacklight-pages-about_canadiana .about-canadiana-page .home-he
 }
 
 html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
-  max-width: 15ch;
+  max-width: none;
   font-size: clamp(1.95rem, 2.7vw, 2.95rem);
   white-space: normal;
 }
@@ -9664,12 +9716,12 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
 @media (max-width: 1100px) {
   .blacklight-pages-about_canadiana .about-canadiana-hero__layout {
     grid-template-columns: minmax(0, 1fr) minmax(240px, 330px);
-    gap: 1.5rem;
+    gap: 0rem;
   }
 
   .blacklight-pages-about_heritage .about-heritage-hero__layout {
     grid-template-columns: minmax(0, 1fr) minmax(240px, 330px);
-    gap: 1.5rem;
+    gap: 0rem;
   }
 
   .blacklight-pages-about_heritage .about-heritage-hero__credit {
@@ -9787,9 +9839,18 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   }
 
   .blacklight-pages-about_heritage .about-heritage-hero__partner-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 2fr;
     justify-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    max-width: 270px;
+    padding: 0.9rem 1rem;
     text-align: center;
+  }
+
+  .blacklight-pages-about_heritage .about-heritage-hero__partner-card img {
+    max-width: 120px;
   }
 
   .blacklight-pages-about_heritage .about-heritage-essentials__grid {

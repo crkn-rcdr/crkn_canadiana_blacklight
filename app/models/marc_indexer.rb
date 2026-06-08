@@ -37,6 +37,7 @@ class MarcIndexer < Blacklight::Marc::Indexer
     end
 
     # --- serial_title: nil-safe split on ':' ---
+    # Note - could stop populating this need to check if is serial
     to_field "serial_title", extract_marc('245a'), first_only do |_rec, acc|
       v = acc.first
       if v && v.include?(' : ')

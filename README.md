@@ -75,7 +75,13 @@ Required variables:
 - `RAILS_ENV` - Use `development` for local work.
 - `SECRET_KEY_BASE` - Needed for production-like use. Generate with `bin/rails secret`.
 
-Optional variables for Swift-backed download links:
+Optional variables for download links:
+
+- `DOWNLOAD_API_ENDPOINT` - Download API endpoint. Defaults to `https://beta-download.canadiana.ca/download`.
+- `DOWNLOAD_TOKEN_SECRET` - HMAC key used to sign Download API URLs.
+- `DOWNLOAD_TOKEN_TTL` - Signed URL lifetime in seconds. Defaults to `1800`.
+
+Legacy Swift-backed download variables:
 
 - `CAP_PASS` - HMAC key used to sign Swift URLs.
 - `SWIFT_AUTH_URL`

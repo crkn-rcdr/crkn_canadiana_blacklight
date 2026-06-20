@@ -95,14 +95,14 @@
                           </span>
                           <span class="download-label"><%= t('blacklight.tools.download_image_aria') %></span>
                         </a>
-                        <a id="btn-download-page" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" target="_blank" rel="noopener noreferrer" aria-disabled="true">
+                        <a id="btn-download-page" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" aria-disabled="true">
                           <span class="download-icon-group" aria-hidden="true">
                             <i class="bi bi-download fs-5" aria-hidden="true"></i>
                             <span class="download-kind">PAGE</span>
                           </span>
                           <span class="download-label"><%= t('blacklight.tools.download_page_pdf_aria') %></span>
                         </a>
-                        <a id="btn-download-full" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" target="_blank" rel="noopener noreferrer" aria-disabled="true">
+                        <a id="btn-download-full" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" aria-disabled="true">
                           <span class="download-icon-group" aria-hidden="true">
                             <i class="bi bi-download fs-5" aria-hidden="true"></i>
                             <span class="download-kind">FULL</span>
@@ -126,7 +126,14 @@
                         const full = document.getElementById('btn-download-full');
                         const page = document.getElementById('btn-download-page');
                         const pageImg = document.getElementById('btn-download-img');
-                        const invalidLinks = new Set();
+                        const status = document.getElementById('download-status');
+                        const statusText = status?.querySelector('.download-status-text');
+                        const statusSpinner = status?.querySelector('.spinner-border');
+                        const checkingText = <%= raw t('blacklight.tools.download_checking', default: 'Checking download availability...').to_json %>;
+                        const unavailableText = <%= raw t('blacklight.tools.download_unavailable', default: 'Not available for this page.').to_json %>;
+                        const loadingText = <%= raw t('blacklight.tools.download_loading', default: 'Preparing download...').to_json %>;
+                        const availabilityCache = new Map();
+                        let availabilityRun = 0;
 
                         function disableLink(el) {
                           if (!el) return;
@@ -139,6 +146,7 @@
                         function enableLink(el, href) {
                           if (!el || !href) return;
                           el.href = href;
+                          if (el.dataset.loading === 'true') return;
                           el.classList.remove('disabled');
                           el.removeAttribute('aria-disabled');
                           if (el.dataset.forceDownload === 'true') {
@@ -155,17 +163,29 @@
                           return String(docid || 'document').replace(/[^\w.-]+/g, '_');
                         }
 
-                        function inferFileNameFromUrl(_url, fallbackExt) {
+                        function sanitizeFileName(value) {
+                          return String(value || '').replace(/[\\/:*?"<>|]+/g, '_');
+                        }
+
+                        function inferFileNameFromUrl(url, fallbackExt) {
                           const ext = (fallbackExt || 'jpg').replace(/^\./, '');
-                          return `${safeDocId()}.${currentPageNum()}.${ext}`;
+                          try {
+                            const parsed = new URL(url, window.location.href);
+                            const filename = parsed.searchParams.get('filename');
+                            const slug = parsed.searchParams.get('slug');
+                            if (filename) return sanitizeFileName(filename);
+                            if (slug) return sanitizeFileName(`${slug}.${ext}`);
+                          } catch (_error) {}
+                          return sanitizeFileName(`${safeDocId()}.${currentPageNum()}.${ext}`);
                         }
 
                         async function forceFileDownload(url, fallbackExt) {
-                          const response = await fetch(url, { credentials: 'omit' });
+                          const response = await fetch(url, { credentials: 'omit', cache: 'no-store' });
                           if (!response.ok) throw new Error(`Download failed: ${response.status}`);
                           const blob = await response.blob();
                           const contentType = String(response.headers.get('content-type') || '').toLowerCase();
                           const inferredExt =
+                            contentType.includes('pdf') ? 'pdf' :
                             contentType.includes('png') ? 'png' :
                             contentType.includes('webp') ? 'webp' :
                             contentType.includes('tif') || contentType.includes('tiff') ? 'tif' :
@@ -181,60 +201,175 @@
                           setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
                         }
 
-                        // Use backend existence flags; no client-side HEAD (avoids CORS).
+                        function setStatus(message, loading) {
+                          if (statusText) statusText.textContent = message || '';
+                          if (statusSpinner) statusSpinner.hidden = !loading;
+                        }
+
+                        function setBusy(el, loading) {
+                          if (!el) return;
+                          if (loading) {
+                            el.dataset.loading = 'true';
+                            el.setAttribute('aria-busy', 'true');
+                            el.classList.add('disabled');
+                          } else {
+                            delete el.dataset.loading;
+                            el.removeAttribute('aria-busy');
+                            if (el.getAttribute('href')) {
+                              el.classList.remove('disabled');
+                              el.removeAttribute('aria-disabled');
+                            }
+                          }
+                        }
+
                         function setLinkState(el, href, exists) {
                           if (!el || !href) return disableLink(el);
-                          // Only disable when we explicitly know it does not exist.
-                          if (exists === false) return disableLink(el);
+                          if (!exists) return disableLink(el);
                           enableLink(el, href);
                         }
 
-                        // Update links based on current pageNum in the URL
-                        function updateForCurrentPage(data){
+                        function isEnabled(el) {
+                          return !!(el && el.getAttribute('href') && !el.classList.contains('disabled'));
+                        }
+
+                        function showFinalStatus() {
+                          const anyEnabled = [full, page, pageImg].some(isEnabled);
+                          setStatus(anyEnabled ? '' : unavailableText, false);
+                        }
+
+                        function currentPageIndex() {
+                          return currentPageNum() - 1;
+                        }
+
+                        function currentDownloads(data) {
+                          const idx = currentPageIndex();
+                          const listPdf = data?.canvasDownloadPdfUris || [];
+                          const listImg = data?.canvasDownloadImgUris || [];
+                          return {
+                            idx,
+                            pagePdfUri: listPdf[idx],
+                            pageImgUri: listImg[idx]
+                          };
+                        }
+
+                        function encodedArkPath() {
+                          return String(ark || '').split('/').map(encodeURIComponent).join('/');
+                        }
+
+                        function downloadDataUrl() {
+                          const params = new URLSearchParams({
+                            pageNum: String(currentPageNum()),
+                            _: String(Date.now())
+                          });
+                          return `/dl/${encodeURIComponent(docid)}/${encodedArkPath()}?${params.toString()}`;
+                        }
+
+                        async function fetchDownloadData() {
+                          const response = await fetch(downloadDataUrl(), {
+                            credentials: 'same-origin',
+                            cache: 'no-store'
+                          });
+                          if (!response.ok) throw new Error(`Download metadata failed: ${response.status}`);
+                          return response.json();
+                        }
+
+                        function checkDownloadUrl(url) {
+                          if (!url) return Promise.resolve(false);
+                          if (availabilityCache.has(url)) return availabilityCache.get(url);
+
+                          const check = fetch(url, {
+                            method: 'HEAD',
+                            credentials: 'omit',
+                            cache: 'no-store'
+                          })
+                            .then(response => response.ok)
+                            .catch(() => false);
+
+                          availabilityCache.set(url, check);
+                          return check;
+                        }
+
+                        async function updateForCurrentPage(data){
                           if (!data) return;
-                          const status = document.getElementById('download-status');
-                          const statusText = status?.querySelector('.download-status-text');
-                          const statusSpinner = status?.querySelector('.spinner-border');
-                          if (statusText) statusText.textContent = <%= raw t('blacklight.tools.download_checking', default: 'Checking availability...').to_json %>;
-                          if (statusSpinner) statusSpinner.hidden = false;
+                          const run = ++availabilityRun;
+                          const current = currentDownloads(data);
+                          const checks = [];
 
-                          // Full-document PDF (static once data is fetched)
-                          if (full) {
-                            setLinkState(full, data.docPdfUri, data.docPdfExists);
+                          setStatus(checkingText, true);
+                          disableLink(full);
+                          disableLink(page);
+                          setLinkState(pageImg, current.pageImgUri, !!current.pageImgUri);
+
+                          if (data.docPdfUri) {
+                            checks.push(checkDownloadUrl(data.docPdfUri).then(exists => {
+                              if (run === availabilityRun) setLinkState(full, data.docPdfUri, exists);
+                            }));
                           }
 
-                          const params = new URLSearchParams(window.location.search);
-                          let idx = 0;
-                          if (params.has('pageNum')) {
-                            const p = parseInt(params.get('pageNum'), 10);
-                            if (!isNaN(p) && p > 0) idx = p - 1;
+                          if (current.pagePdfUri) {
+                            checks.push(checkDownloadUrl(current.pagePdfUri).then(exists => {
+                              if (run === availabilityRun) setLinkState(page, current.pagePdfUri, exists);
+                            }));
                           }
 
-                          const listPdf = data.canvasDownloadPdfUris || [];
-                          const pdfExists = data.canvasPdfExists || [];
-                          setLinkState(page, listPdf[idx], pdfExists[idx]);
-
-                          const listImg = data.canvasDownloadImgUris || [];
-                          if (pageImg) {
-                            setLinkState(pageImg, listImg[idx], !!listImg[idx]);
+                          if (checks.length > 0) {
+                            await Promise.all(checks);
                           }
 
-                          if (status && statusText) {
-                            const anyEnabled = [full, page, pageImg].some(el => el && !el.classList.contains('disabled'));
-                            statusText.textContent = anyEnabled ? '' : <%= raw t('blacklight.tools.download_unavailable', default: 'Not available for this page.').to_json %>;
-                            if (statusSpinner) statusSpinner.hidden = true;
+                          if (run === availabilityRun) {
+                            showFinalStatus();
                           }
                         }
 
                         // Fetch once, then update on URL changes
                         let dlData = null;
-                        fetch(`/dl/${encodeURIComponent(docid)}/${ark}`)
-                          .then(r => r.json())
+                        fetchDownloadData()
                           .then(data => {
                             dlData = data;
                             updateForCurrentPage(dlData);
                           })
-                          .catch(() => {});
+                          .catch(() => {
+                            disableLink(full);
+                            disableLink(page);
+                            disableLink(pageImg);
+                            setStatus(unavailableText, false);
+                          });
+
+                        async function downloadPdf(kind, event) {
+                          event.preventDefault();
+
+                          const link = kind === 'full' ? full : page;
+                          if (!link || link.dataset.loading === 'true' || link.classList.contains('disabled')) return;
+
+                          setBusy(link, true);
+                          setStatus(loadingText, true);
+
+                          try {
+                            const freshData = await fetchDownloadData();
+                            const current = currentDownloads(freshData);
+                            const href = kind === 'full' ? freshData.docPdfUri : current.pagePdfUri;
+                            if (!href) throw new Error('Missing download URL');
+
+                            await forceFileDownload(href, 'pdf');
+                            dlData = freshData;
+                            availabilityCache.set(href, Promise.resolve(true));
+                            enableLink(link, href);
+                            setStatus('', false);
+                          } catch (_error) {
+                            disableLink(link);
+                            setStatus(unavailableText, false);
+                          } finally {
+                            setBusy(link, false);
+                          }
+                        }
+
+                        if (full) {
+                          full.addEventListener('click', (event) => downloadPdf('full', event));
+                        }
+
+                        if (page) {
+                          page.addEventListener('click', (event) => downloadPdf('page', event));
+                        }
 
                         // Force image to download instead of opening in a new tab.
                         if (pageImg) {

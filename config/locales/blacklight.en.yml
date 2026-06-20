@@ -37,6 +37,7 @@ en:
       download_full_pdf_aria: Download full PDF
       download_unavailable: Not available for this page.
       download_checking: Checking download availability...
+      download_loading: Preparing download...
       toolbox_title: Toolbox
       title: Tools
       subtitle: Export, edit, or share this item

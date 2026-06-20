@@ -37,6 +37,7 @@ fr:
       download_full_pdf_aria: Télécharger le PDF complet
       download_unavailable: Non disponible pour cette page
       download_checking: Vérification de la disponibilité des téléchargements
+      download_loading: Préparation du téléchargement
       toolbox_title: Boîte à outils
       title: Outils
       subtitle: Exporter, modifier ou partager cet item
@@ -309,7 +310,7 @@ fr:
       date_range:
         label: Période
       all_fields:
-        label: Tout
+        label: Tous
       serial_title:
         label: Titre de la série
     sort:

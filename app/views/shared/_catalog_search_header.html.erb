@@ -1,7 +1,7 @@
 <% is_fr = I18n.locale.to_s.start_with?('fr') %>
 <% search_field_options = if is_fr
   [
-    ['Tous les champs', 'all_fields'],
+    ['Tous', 'all_fields'],
     ['Titre', 'full_title_tsim'],
     ['Createur', 'author_tsim'],
     ['Sujet', 'subject_tsim'],
@@ -21,8 +21,10 @@ end %>
   <div class="canadiana-shell">
     <div class="catalog-search-hero__layout">
       <p class="catalog-search-hero__credit">
-        <%= is_fr ? 'The Canadian horticulturist : vol. 33, no 10 (oct. 1910)' : 'The Canadian horticulturist : Vol. 33, no. 10 (Oct. 1910)' %>
-        <span aria-hidden="true">↗</span>
+        <a href="https://www.canadiana.ca/view/oocihm.8_04048_394/31" target="_blank">
+          <%= is_fr ? 'The Canadian horticulturist : vol. 33, no 10 (oct. 1910)' : 'The Canadian horticulturist : Vol. 33, no. 10 (Oct. 1910)' %>
+          <span aria-hidden="true">↗</span>
+        </a>
       </p>
 
       <h1 id="catalog-search-hero-title" class="catalog-search-hero__title">
@@ -41,13 +43,12 @@ end %>
           <label class="sr-only visually-hidden" for="catalog_search_q"><%= is_fr ? 'rechercher' : 'search for' %></label>
           <input
             value="<%= params[:q].to_s %>"
-            placeholder="<%= is_fr ? 'Recherche...' : 'Sessional Papers of the Dominion of Canada' %>"
-            class="catalog-search-hero__input js-typed-placeholder"
+            placeholder="<%= is_fr ? 'Effectuer une recherche dans la collection Canadiana...' : 'Search the Canadiana collection...' %>"
+            class="catalog-search-hero__input"
             aria-label="<%= is_fr ? 'rechercher' : 'search for' %>"
             type="search"
             name="q"
-            id="catalog_search_q"
-            <% unless is_fr %>data-typed-placeholder-phrases="Sessional Papers of the Dominion of Canada|The Toronto World|&#22823;&#28450;&#20844;&#22577; (Chinese Times)|The Dawn of Tomorrow|Anne of the Island"<% end %>>
+            id="catalog_search_q">
 
           <button class="catalog-search-hero__submit" type="submit" id="catalog-search-submit">
             <span><%= is_fr ? 'Rechercher' : 'Search' %></span>

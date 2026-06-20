@@ -4,7 +4,7 @@
       <div class="home-hero__layout">
         <div class="home-hero__copy-block">
           <p class="home-hero__eyebrow">Les collections et l’infrastructure de Canadiana</p>
-          <h1 id="home-hero-title" class="home-hero__title">D&eacute;couvrez des publications num&eacute;ris&eacute;es et des documents d'archives provenant de partout au Canada.</h1>
+          <h1 id="home-hero-title" class="home-hero__title">Découvrez des publications numérisées et des documents d'archives provenant de partout au Canada.</h1>
           <p class="home-hero__copy">
             Canadiana offre l'accès à deux collections majeures : la collection Canadiana et la collection Héritage.
             Chaque collection dispose de son propre moteur de recherche indépendant et est accessible via les API de Canadiana.
@@ -23,14 +23,14 @@
                 <i class="bi bi-arrow-down"></i>
                 <i class="bi bi-search"></i>
               </span>
-              <span>Collection H&eacute;ritage</span>
+              <span>Collection Héritage</span>
             </a>
           </div>
         </div>
 
         <aside class="home-hero__stat-card" aria-label="Statistiques de la collection">
           <h2 class="home-hero__stat-value">Plus de 69 millions</h2>
-          <p class="home-hero__stat-copy">de pages num&eacute;ris&eacute;es disponibles en ligne</p>
+          <p class="home-hero__stat-copy">de pages numérisées disponibles en ligne</p>
           <p class="home-hero__stat-note">
             Contenu fourni par les
             <a href="/#members-section">bibliothèques membres du RCDR</a>
@@ -64,7 +64,7 @@
           <input type="hidden" name="lang" value="<%= I18n.locale %>">
           <label class="visually-hidden" for="canadiana-band-field">Champ de recherche</label>
           <select id="canadiana-band-field" class="home-canadiana-search__field" name="search_field">
-            <option value="all_fields">Tous les champs</option>
+            <option value="all_fields">Tous</option>
             <option value="full_title_tsim">Titre</option>
             <option value="author_tsim">Créateur</option>
             <option value="subject_tsim">Sujet</option>
@@ -179,7 +179,7 @@
           <input type="hidden" name="lang" value="<%= I18n.locale %>">
           <label class="visually-hidden" for="heritage-band-field">Champ de recherche</label>
           <select id="heritage-band-field" class="home-heritage-search__field" name="search_field">
-            <option value="all_fields">Tous les champs</option>
+            <option value="all_fields">Tous</option>
             <option value="full_title_tsim">Titre</option>
             <option value="author_tsim">Créateur</option>
             <option value="subject_tsim">Sujet</option>
@@ -213,10 +213,10 @@
               <div class="home-split-card__content">
                 <div>
                   <h3 class="home-split-card__title">Documents généalogiques</h3>
-                  <p class="home-split-card__text">Registres d’immigration, registres paroissiaux, documents fonciers, histoires familiales, papiers personnels et listes électorales.</p>
+                  <p class="home-split-card__text">Des dossiers d’immigration, des registres paroissiaux, des registres fonciers, des histoires et documents familiaux, ainsi que des listes électorales.</p>
                 </div>
                 <div class="home-split-card__actions">
-                  <a href="/catalog?lang=<%= I18n.locale %>&q=genealogie+immigration+etablissements&search_field=all_fields" class="btn btn-sm home-split-card__cta">Parcourir</a>
+                  <span class="btn btn-sm home-split-card__cta is-disabled" role="button" aria-disabled="true" title="Bientôt disponible">Parcourir</span>
                 </div>
               </div>
               <div class="home-split-card__media">
@@ -228,10 +228,10 @@
               <div class="home-split-card__content">
                 <div>
                   <h3 class="home-split-card__title">Peuples autochtones</h3>
-                  <p class="home-split-card__text">De nombreux documents relatifs aux communautés des Premières Nations, métisses et inuites au Canada.</p>
+                  <p class="home-split-card__text">Une vaste documentation sur les communautés des Premières Nations, des Métis et des Inuits au Canada.</p>
                 </div>
                 <div class="home-split-card__actions">
-                  <a href="/catalog?lang=<%= I18n.locale %>&q=histoire+autochtone+terres+education&search_field=all_fields" class="btn btn-sm home-split-card__cta">Parcourir</a>
+                  <span class="btn btn-sm home-split-card__cta is-disabled" role="button" aria-disabled="true" title="Bientôt disponible">Parcourir</span>
                 </div>
               </div>
               <div class="home-split-card__media">
@@ -242,15 +242,15 @@
             <article class="home-split-card home-split-card--green">
               <div class="home-split-card__content">
                 <div>
-                  <h3 class="home-split-card__title">Archives gouvernementales</h3>
-                  <p class="home-split-card__text">Explorez les archives des ministères, des sociétés d'État et des organismes canadiens à une époque marquée par des changements industriels, politiques et sociaux.</p>
+                  <h3 class="home-split-card__title">Services gouvernementaux</h3>
+                  <p class="home-split-card__text">Des documents anciens provenant des Affaires indiennes, de l’Immigration, de la Santé, de l’Agriculture, des Chemins de fer et Canaux, des Pêches et des Ressources naturelles.</p>
                 </div>
                 <div class="home-split-card__actions">
-                  <a href="/catalog?f%5Bcollection_tsim_str%5D%5B%5D=Government+Publications+%7C+Publications+gouvernementales&q=&search_field=all_fields&lang=<%= I18n.locale %>" class="btn btn-sm home-split-card__cta">Parcourir</a>
+                  <span class="btn btn-sm home-split-card__cta is-disabled" role="button" aria-disabled="true" title="Bientôt disponible">Parcourir</span>
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/government_documents.jpg" alt="Archives gouvernementales" loading="lazy">
+                <img src="/assets/government_documents.jpg" alt="Services gouvernementaux" loading="lazy">
               </div>
             </article>
 
@@ -258,10 +258,10 @@
               <div class="home-split-card__content">
                 <div>
                   <h3 class="home-split-card__title">Histoire militaire</h3>
-                  <p class="home-split-card__text">Trouvez des lettres, des rapports et des dossiers militaires sur l'histoire militaire du Canada. Découvrez à quoi ressemblait la vie pendant les guerres, les conflits et les périodes de paix.</p>
+                  <p class="home-split-card__text">Des documents consacrés à la Guerre de 1812, à la Première Guerre mondiale, à la Seconde Guerre mondiale et à l’administration militaire en temps de paix.</p>
                 </div>
                 <div class="home-split-card__actions">
-                  <a href="/catalog?lang=<%= I18n.locale %>&q=histoire+militaire&search_field=all_fields" class="btn btn-sm home-split-card__cta">Parcourir</a>
+                  <span class="btn btn-sm home-split-card__cta is-disabled" role="button" aria-disabled="true" title="Bientôt disponible">Parcourir</span>
                 </div>
               </div>
               <div class="home-split-card__media">
@@ -272,15 +272,15 @@
             <article class="home-split-card home-split-card--green">
               <div class="home-split-card__content">
                 <div>
-                  <h3 class="home-split-card__title">Personnes et organisations</h3>
-                  <p class="home-split-card__text">Consultez des fonds personnels de personnes et de groupes qui ont contribué à façonner le Canada. Découvrez des voix de la politique, des arts, du travail, de la justice sociale et des mouvements de femmes.</p>
+                  <h3 class="home-split-card__title">Personnalités canadiennes</h3>
+                  <p class="home-split-card__text">Des documents provenant de premiers ministres, de gouverneurs généraux, de premiers ministres provinciaux, de ministres, d’explorateurs, de scientifiques, d’écrivains et d’artistes.</p>
                 </div>
                 <div class="home-split-card__actions">
-                  <a href="/catalog?lang=<%= I18n.locale %>&q=documents+personnels&search_field=all_fields" class="btn btn-sm home-split-card__cta">Parcourir</a>
+                  <span class="btn btn-sm home-split-card__cta is-disabled" role="button" aria-disabled="true" title="Bientôt disponible">Parcourir</span>
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/landmark_papers.jpg" alt="Personnes et organisations" loading="lazy">
+                <img src="/assets/landmark_papers.jpg" alt="Personnalités canadiennes" loading="lazy">
               </div>
             </article>
 
@@ -353,7 +353,7 @@
           <div class="home-featured-showcase__exhibit-frame" data-lenis-prevent>
             <iframe
               class="home-featured-showcase__iframe"
-              src="https://preview.exhibitionviewer.org/preview/scroll?manifest=https://manifest-editor.digirati.services/api/iiif/p3/20b333402e9f72e9cbdf13edae32ec05/1774450193059"
+              src="https://preview.exhibitionviewer.org/preview/scroll?manifest=https://www-iiif-pres.canadiana.ca/manifest/69429/m2026000098126n"
               title="Explorer les publications scientifiques historiques dans la collection Canadiana"
               loading="lazy"
               allowfullscreen>
@@ -442,4 +442,3 @@
   </section>
   <%= render partial: 'shared/home_jump_top', locals: { text: 'Aller en haut', aria_label: 'Aller en haut', trigger_selector: '#search-canadiana' } %>
 </div>
-

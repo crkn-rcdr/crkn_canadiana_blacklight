@@ -480,6 +480,68 @@ function trimTrailingSlash(str = '') {
   return str.endsWith('/') ? str.slice(0, -1) : str;
 }
 
+function arrayWrap(value) {
+  if (value == null) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
+function firstString(value) {
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const str = firstString(item);
+      if (str) return str;
+    }
+  }
+  return '';
+}
+
+function serviceMarkerText(service) {
+  return [
+    service?.type,
+    service?.['@type'],
+    service?.profile,
+    service?.id,
+    service?.['@id'],
+  ]
+    .flatMap((value) => arrayWrap(value))
+    .map((value) => String(value || '').toLowerCase())
+    .join(' ');
+}
+
+function extractManifestSearchServiceUrl(manifestJson) {
+  const services = [
+    ...arrayWrap(manifestJson?.service),
+    ...arrayWrap(manifestJson?.services),
+  ];
+
+  const searchService = services.find((service) => {
+    const marker = serviceMarkerText(service);
+    return marker.includes('search') || marker.includes('contentsearchservice');
+  });
+
+  if (!searchService) return '';
+  return firstString(searchService.id) || firstString(searchService['@id']);
+}
+
+function encodeArkPathForUrl(arkPath) {
+  return String(arkPath || '')
+    .split('/')
+    .map((part) => encodeURIComponent(part))
+    .join('/');
+}
+
+function addQueryParam(url, key, value) {
+  try {
+    const parsed = new URL(url, window.location.href);
+    parsed.searchParams.set(key, value);
+    return parsed.toString();
+  } catch (_) {
+    const separator = String(url).includes('?') ? '&' : '?';
+    return `${url}${separator}${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+  }
+}
+
 function escapeHtml(str) {
   return String(str || '')
     .replace(/&/g, '&amp;')
@@ -645,19 +707,21 @@ async function hydratePageSearch(container) {
 
   const contentBase =
     trimTrailingSlash(getMetaContent('iiif-content-search-base')) ||
-    'https://crkn-iiif-content-search.azurewebsites.net/search';
+    'https://www-iiif-search.canadiana.ca/search';
   const manifestBase =
     trimTrailingSlash(getMetaContent('iiif-manifest-base')) ||
     'https://www-iiif-pres.canadiana.ca/manifest';
 
-  const searchUrl = `${contentBase}/${encodeURIComponent(arkPath)}?q=${encodeURIComponent(term)}`;
   const manifestUrl = `${manifestBase}/${arkPath}`;
+  let searchUrl = '';
 
   try {
-    const [searchJson, manifestJson] = await Promise.all([
-      fetchJsonWithTimeout(searchUrl, 6000),
-      fetchJsonWithTimeout(manifestUrl, 6000),
-    ]);
+    const manifestJson = await fetchJsonWithTimeout(manifestUrl, 6000);
+    const searchServiceUrl =
+      extractManifestSearchServiceUrl(manifestJson) ||
+      `${contentBase}/${encodeArkPathForUrl(arkPath)}`;
+    searchUrl = addQueryParam(searchServiceUrl, 'q', term);
+    const searchJson = await fetchJsonWithTimeout(searchUrl, 6000);
     const items = parseSearchItems(searchJson);
     const canvasMap = buildCanvasIndexMap(manifestJson);
     const pages = collectPageNumbers(items, canvasMap);

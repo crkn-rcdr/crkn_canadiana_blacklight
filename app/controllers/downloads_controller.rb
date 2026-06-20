@@ -1,134 +1,132 @@
+require 'cgi'
+require 'net/http'
+require 'openssl'
+require 'uri'
+
 class DownloadsController < ApplicationController
-    HEAD_TIMEOUT = 50
+  MAX_TOKEN_TTL = 30 * 60
 
-    def index
-        @documentId            = params[:id]
-        @ark                   = params[:ark]
-        key                    =  Rails.configuration.x.cap_pass
-        expires                = (Time.now.to_i + 86400).to_s
-        swift_uri              = "https://swift.canadiana.ca"
+  def index
+    document_id = params[:id].to_s
+    ark = params[:ark].to_s
 
+    canvas_pdf_download_uris = []
+    canvas_img_download_uris = []
 
-        doc_pdf_uri                = ""
-        doc_pdf_exists             = false
-        canvas_pdf_download_uris   = []
-        canvas_pdf_exists          = []
-        canvas_img_download_uris   = []
+    doc_pdf_uri = signed_item_pdf_uri(document_id, ark)
 
-        # Build signed URL for full searchable PDF (for direct download)
-        if @ark.present? && key.present?
-          expires_i             = Time.now.to_i + 86400  # expires in a day
-          path                  = File.join("/v1/AUTH_crkn/access-files", "/#{@ark}.pdf")
-          payload               = "GET\n#{expires_i}\n#{path}"
-          digest                = OpenSSL::Digest.new('sha1')
-          signature             = OpenSSL::HMAC.hexdigest(digest, key, payload)
-          uri_suffix            = "&temp_url_expires=#{expires_i}&temp_url_sig=#{signature}"
-          doc_pdf_uri           = "#{swift_uri}#{path}?filename=#{@documentId}.pdf#{uri_suffix}"
-          doc_pdf_exists        = swift_head_ok?("access-files/#{@ark}.pdf") == true
-        end
+    manifest_items(ark).each_with_index do |canvas, index|
+      canvas_noid, image_uri = canvas_download_parts(canvas)
+      next unless canvas_noid
 
-        # Fetch manifest to derive per-canvas PDF download URLs
-        begin
-          uri = URI(Rails.configuration.x.iiif_manifest_base+"/"+@ark)
-          res = Net::HTTP.get(uri)
-          result = JSON.parse(res) rescue {}
-          items = result['items'] || []
-          canvasNumber = 0
-          items.each do |canvas|
-            canvasNumber += 1
-            thumb = canvas.dig('thumbnail', 0, 'id')
-            next unless thumb
-            match = thumb.match(%r{2/(.*?)/full})
-            next unless match
-            extracted_string = match[1]
-            canvasId              = extracted_string.gsub('%2F', '/').gsub('%2f', '/')
-            expires_i             = Time.now.to_i + 86400
-            path                  = File.join("/v1/AUTH_crkn/access-files", "/#{canvasId}.pdf")
-            payload               = "GET\n#{expires_i}\n#{path}"
-            digest                = OpenSSL::Digest.new('sha1')
-            signature             = OpenSSL::HMAC.hexdigest(digest, key, payload)
-            uri_suffix            = "&temp_url_expires=#{expires_i}&temp_url_sig=#{signature}"
-            canvas_pdf_uri        = "#{swift_uri}#{path}?filename=#{@documentId}.#{canvasNumber}.pdf#{uri_suffix}"
-            canvas_img_uri        = "https://image-tor.canadiana.ca/iiif/2/#{extracted_string}/full/max/0/default.jpg"
-            canvas_pdf_download_uris << canvas_pdf_uri
-            canvas_img_download_uris << canvas_img_uri
-          end
-        rescue => e
-          Rails.logger.warn("DownloadsController manifest error: #{e.class}: #{e.message}") if defined?(Rails)
-        end
-
-        # Only check existence for the requested page (if provided)
-        current_idx = params[:pageNum].to_i - 1
-        current_idx = nil if current_idx && current_idx < 0
-        canvas_pdf_exists = Array.new(canvas_pdf_download_uris.length)
-        if current_idx && canvas_pdf_download_uris[current_idx]
-          exists_val = swift_head_ok?(canvas_pdf_download_uris[current_idx])
-          canvas_pdf_exists[current_idx] = (exists_val == true)
-        end
-        render :json => {
-          "canvasDownloadPdfUris"  => canvas_pdf_download_uris,
-          "canvasPdfExists"        => canvas_pdf_exists,
-          "docPdfUri"              => doc_pdf_uri,
-          "docPdfExists"           => doc_pdf_exists,
-          "canvasDownloadImgUris"  => canvas_img_download_uris
-        }
+      canvas_pdf_download_uris << signed_access_pdf_uri(
+        "#{canvas_noid}.pdf",
+        "#{document_id}.#{index + 1}.pdf"
+      )
+      canvas_img_download_uris << image_uri
     end
 
-    private
+    render json: {
+      "canvasDownloadPdfUris" => canvas_pdf_download_uris,
+      "docPdfUri" => doc_pdf_uri,
+      "canvasDownloadImgUris" => canvas_img_download_uris
+    }
+  end
 
-    def swift_head_ok?(object_path)
-      token, storage_url, fallback_storage = swift_auth
-      base = storage_url || fallback_storage
-      return false unless token && base
+  private
 
-      url = File.join(base, object_path)
-      uri = URI.parse(url)
-      begin
-        Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https', open_timeout: HEAD_TIMEOUT, read_timeout: HEAD_TIMEOUT) do |http|
-          req = Net::HTTP::Get.new(uri.request_uri)
-          req['X-Auth-Token'] = token
-          req['Range'] = 'bytes=0-0'
-          res = http.request(req)
-          return true if res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPPartialContent)
-        end
-      rescue Net::OpenTimeout, Net::ReadTimeout
-        Rails.logger.info("Swift HEAD timeout for #{url}") if defined?(Rails)
-      rescue => e
-        Rails.logger.info("Swift HEAD failed for #{url}: #{e.class}: #{e.message}") if defined?(Rails)
-      end
-      nil
-    end
+  def manifest_items(ark)
+    return [] if ark.blank?
 
-    def swift_auth
-      return @swift_auth if defined?(@swift_auth)
+    uri = URI("#{Rails.configuration.x.iiif_manifest_base}/#{ark}")
+    result = JSON.parse(Net::HTTP.get(uri)) rescue {}
+    result['items'] || []
+  rescue => e
+    Rails.logger.warn("DownloadsController manifest error: #{e.class}: #{e.message}") if defined?(Rails)
+    []
+  end
 
-      auth_url    = ENV['SWIFT_AUTH_URL']
-      username    = ENV['SWIFT_USERNAME']
-      password    = ENV['SWIFT_PASSWORD']
-      preauth_url = ENV['SWIFT_PREAUTH_URL']
+  def canvas_download_parts(canvas)
+    image_uri = canvas.dig('thumbnail', 0, 'id') || canvas.dig('items', 0, 'items', 0, 'body', 'id')
+    return [nil, nil] if image_uri.blank?
 
-      uri = URI.parse(auth_url)
-      token = storage_from_auth = nil
+    match = image_uri.match(%r{/iiif/2/([^/]+)/full})
+    return [nil, image_uri] unless match
 
-      Rails.logger.info("Swift auth to #{auth_url} as #{username}")
-      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https', open_timeout: HEAD_TIMEOUT, read_timeout: HEAD_TIMEOUT) do |http|
-        req = Net::HTTP::Get.new(uri.request_uri)
-        req['X-Auth-User'] = username
-        req['X-Auth-Key'] = password
-        res = http.request(req)
-        if res.is_a?(Net::HTTPSuccess)
-          token            = res['X-Auth-Token']
-          storage_from_auth = res['X-Storage-Url']
-          Rails.logger.info("Swift auth success, storage URL: #{storage_from_auth || '(none from auth)'}")
-        else
-          Rails.logger.warn("Swift auth failed: #{res.code} #{res.message}")
-        end
-      end
+    [CGI.unescape(match[1]), image_uri]
+  end
 
-      # Prefer preauth URL (AUTH_crkn) first; use auth storage as fallback.
-      @swift_auth = [token, preauth_url, storage_from_auth]
-    rescue => e
-      Rails.logger.warn("Swift auth failed: #{e.class}: #{e.message}") if defined?(Rails)
-      @swift_auth = [nil, nil, nil]
-    end
+  def signed_item_pdf_uri(slug, noid)
+    return '' if slug.blank? || noid.blank? || download_token_secret.blank?
+
+    expires = token_expires
+    query = {
+      slug: slug,
+      noid: noid,
+      type: 'PDF',
+      expires: expires,
+      sig: item_signature(slug, noid, 'PDF', [], expires)
+    }
+
+    "#{download_endpoint}?#{URI.encode_www_form(query)}"
+  end
+
+  def signed_access_pdf_uri(object_path, filename)
+    return '' if object_path.blank? || download_token_secret.blank?
+
+    expires = token_expires
+    query = {
+      expires: expires,
+      filename: filename,
+      sig: object_signature('access', object_path, filename, expires)
+    }
+
+    "#{download_endpoint}/access/#{escape_object_path(object_path)}?#{URI.encode_www_form(query)}"
+  end
+
+  def item_signature(slug, noid, file_type, canvas_noids, expires)
+    payload = ['v2', slug, noid, file_type.upcase, canvas_noids.join("\n"), expires].join("\n")
+    hmac(payload)
+  end
+
+  def object_signature(repository, object_path, filename, expires)
+    payload = ['v1', repository, object_path, filename, expires].join("\n")
+    hmac(payload)
+  end
+
+  def hmac(payload)
+    return '' if download_token_secret.blank?
+
+    OpenSSL::HMAC.hexdigest('SHA256', download_token_secret, payload)
+  end
+
+  def token_expires
+    Time.now.to_i + token_ttl
+  end
+
+  def token_ttl
+    raw_ttl = Rails.configuration.x.download_token_ttl
+    raw_ttl = ENV.fetch('DOWNLOAD_TOKEN_TTL', '1800') unless raw_ttl.is_a?(Numeric) || raw_ttl.is_a?(String)
+    ttl = raw_ttl.to_i
+    ttl = MAX_TOKEN_TTL if ttl <= 0 || ttl > MAX_TOKEN_TTL
+    ttl
+  end
+
+  def download_token_secret
+    secret = Rails.configuration.x.download_token_secret
+    secret = ENV.fetch('DOWNLOAD_TOKEN_SECRET', '') unless secret.is_a?(String)
+    secret.to_s
+  end
+
+  def download_endpoint
+    endpoint = Rails.configuration.x.download_api_endpoint
+    endpoint = ENV.fetch('DOWNLOAD_API_ENDPOINT', 'https://beta-download.canadiana.ca/download') unless endpoint.is_a?(String)
+    endpoint = 'https://beta-download.canadiana.ca/download' if endpoint.blank?
+    endpoint = endpoint.sub(%r{/\z}, '')
+    endpoint.end_with?('/download') ? endpoint : "#{endpoint}/download"
+  end
+
+  def escape_object_path(object_path)
+    object_path.split('/').map { |segment| URI.encode_www_form_component(segment).gsub('+', '%20') }.join('/')
+  end
 end

@@ -4,14 +4,14 @@ fr:
     range_limit:
       submit_limit: Appliquer
       range_list_heading: Répartition des intervalles
-      range_begin: Début de l’intervalle
-      range_end: Fin de l’intervalle
+      range_begin: Début de l'intervalle
+      range_end: Fin de l'intervalle
       range_begin_short: Début
       range_end_short: Fin
       range_html: " %{begin_value} – %{end_value}"
     members:
       title: Canadiana est rendu possible grâce aux bibliothèques membres du RCDR
-      subtitle: Le RCDR est une communauté canadienne de bibliothèques, d’archives et d’institutions d’un océan à l’autre
+      subtitle: Le RCDR est une communauté canadienne de bibliothèques, d'archives et d'institutions d'un océan à l'autre
       category_aria: Onglets de catégories de membres
       institutional: Établissements membres
       associate: Membres associés
@@ -28,8 +28,8 @@ fr:
       go_to_page_aria: "Aller à la page %{page}"
       prev_hit: Occurrence précédente
       next_hit: Occurrence suivante
-      prev_hit_aria: Aller à l’occurrence précédente
-      next_hit_aria: Aller à l’occurrence suivante
+      prev_hit_aria: Aller à l'occurrence précédente
+      next_hit_aria: Aller à l'occurrence suivante
     tools:
       download_label: Téléchargements
       download_image_aria: Télécharger l'image
@@ -41,17 +41,17 @@ fr:
       toolbox_title: Boîte à outils
       title: Outils
       subtitle: Exporter, modifier ou partager cet item
-      crop_image: Rogner l’image
-      crop_tooltip: Ouvrir l’outil de rognage dans un nouvel onglet
+      crop_image: Rogner l'image
+      crop_tooltip: Ouvrir l'outil de rognage dans un nouvel onglet
       generate_pdf: Générer un PDF
       pdf_tooltip: Créer un PDF à partir du manifeste IIIF
       edit_manifest_copy:  Modifier une copie du manifeste
-      edit_manifest_tooltip: Ouvrir une copie du manifeste IIIF dans l’éditeur
+      edit_manifest_tooltip: Ouvrir une copie du manifeste IIIF dans l'éditeur
       copy_manifest_link: Copier le lien du manifeste
-      copy_tooltip: Copier l’URL du manifeste IIIF
+      copy_tooltip: Copier l'URL du manifeste IIIF
       copied_js: Copié !
       copy_failed_js: Échec de la copie dans le presse‑papiers.
-      what_is_iiif: Qu’est‑ce que IIIF ?
+      what_is_iiif: Qu'est‑ce que IIIF ?
       librarian_view: Afficher les métadonnées détaillées
       cite: Citer
       citation: Citer

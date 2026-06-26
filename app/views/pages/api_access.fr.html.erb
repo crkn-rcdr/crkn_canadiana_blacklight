@@ -8,8 +8,8 @@
             <span class="api-hero__title-main">Accès API</span>
           </h1>
           <p class="api-lede">
-            Le RCDR offre un accès programmatique aux métadonnées de repérage via les API des Collections et de l’infrastructure de Canadiana.
-            Combinez ces points d’accès avec les paramètres de recherche, les facettes, la pagination et le tri.
+            Le RCDR offre un accès programmatique aux métadonnées de repérage via les API des Collections et de l'infrastructure de Canadiana.
+            Combinez ces points d'accès avec les paramètres de recherche, les facettes, la pagination et le tri.
           </p>
         </div>
       </div>
@@ -18,7 +18,7 @@
     <div class="api-layout">
       <aside class="api-toc" aria-label="Sur cette page">
         <h2 class="api-toc__title">Sur cette page</h2>
-        <a href="#api-json">Points d’accès API du catalogue</a>
+        <a href="#api-json">Points d'accès API du catalogue</a>
         <a href="#api-params">Paramètres de requête du catalogue</a>
         <a href="#api-structure">Structure des réponses du catalogue</a>
         <a href="#api-examples">Exemples du catalogue</a>
@@ -30,18 +30,18 @@
 
       <div class="api-content">
         <section id="api-json" class="api-card">
-          <h2>Points d’accès API du catalogue</h2>
+          <h2>Points d'accès API du catalogue</h2>
           <p>
-            Utilisez ces points d’accès du catalogue pour les recherches, les notices et les facettes.
-            Le paramètre <code>format</code> est l’option la plus fiable lorsque les identifiants
+            Utilisez ces points d'accès du catalogue pour les recherches, les notices et les facettes.
+            Le paramètre <code>format</code> est l'option la plus fiable lorsque les identifiants
             contiennent des points (par exemple <code>oocihm.N_00591</code>).
           </p>
           <div class="api-table-wrap">
             <table class="api-table">
-              <caption class="visually-hidden">Points d’accès API du catalogue</caption>
+              <caption class="visually-hidden">Points d'accès API du catalogue</caption>
               <thead>
                 <tr>
-                  <th scope="col">Point d’accès</th>
+                  <th scope="col">Point d'accès</th>
                   <th scope="col">Méthode et chemin</th>
                 </tr>
               </thead>
@@ -88,7 +88,7 @@
                 <tr>
                   <th scope="row"><code>search_field</code></th>
                   <td>enum</td>
-                  <td>Champ ciblé pour l’exécution de la requête.</td>
+                  <td>Champ ciblé pour l'exécution de la requête.</td>
                   <td><code>all_fields</code>, <code>full_title_tsim</code>, <code>author_tsim</code>, <code>subject_tsim</code>, <code>tx_gen</code></td>
                 </tr>
                 <tr>
@@ -124,7 +124,7 @@
                 <tr>
                   <th scope="row"><code>range[pub_date_ssim][begin]</code><br><code>range[pub_date_ssim][end]</code></th>
                   <td>entier</td>
-                  <td>Filtre par intervalle d’années de publication.</td>
+                  <td>Filtre par intervalle d'années de publication.</td>
                   <td>Exemple : <code>1900</code> à <code>1910</code></td>
                 </tr>
                 <tr>
@@ -212,7 +212,7 @@
 }</code></pre>
           </figure>
           <p>
-            Plusieurs valeurs <code>attributes.*.attributes.value</code> sont des fragments HTML destinés à l’affichage.
+            Plusieurs valeurs <code>attributes.*.attributes.value</code> sont des fragments HTML destinés à l'affichage.
             Pour un pipeline de données pur, prévoyez de nettoyer ou de filtrer ce balisage.
           </p>
           <h3 id="api-examples">Exemples du catalogue</h3>
@@ -299,8 +299,8 @@ journaux_response = requests.get(
 journaux_response.raise_for_status()
 journaux = journaux_response.json()</code></pre>
           </figure>
-          <h4>Exemple 4 : Intervalle d’années de publication</h4>
-          <p>Filtrez les notices par plage d’années avec le champ de facette de date.</p>
+          <h4>Exemple 4 : Intervalle d'années de publication</h4>
+          <p>Filtrez les notices par plage d'années avec le champ de facette de date.</p>
           <figure class="api-snippet api-snippet--docmost" aria-label="Exemple intervalle d'années du catalogue">
             <figcaption>
               <span class="api-snippet__label">Code</span>
@@ -325,7 +325,7 @@ response.raise_for_status()
 periode = response.json()</code></pre>
           </figure>
           <h4>Exemple 5 : Notice individuelle en plusieurs formats</h4>
-          <p>Récupérez la même notice en JSON, MARC et MARCXML depuis un seul point d’accès.</p>
+          <p>Récupérez la même notice en JSON, MARC et MARCXML depuis un seul point d'accès.</p>
           <figure class="api-snippet api-snippet--docmost" aria-label="Exemples de formats pour une notice">
             <figcaption>
               <span class="api-snippet__label">Code</span>
@@ -363,15 +363,15 @@ notice_marcxml = marcxml_response.text</code></pre>
 
         <section id="api-iiif-query" class="api-card">
           <h2>API IIIF</h2>
-          <h3 id="iiif-endpoints">Points d’accès API IIIF</h3>
+          <h3 id="iiif-endpoints">Points d'accès API IIIF</h3>
           <p>
             IIIF est un cadre commun pour publier, lier et réutiliser des objets du patrimoine numérique.
             Les ressources IIIF sont publiées comme données ouvertes liées avec
             <a href="https://json-ld.org/">JSON-LD</a>, qui est une sérialisation JSON de
             <a href="https://www.w3.org/TR/rdf11-concepts/">RDF</a>.
-            Cela permet aux clients de suivre des identifiants stables entre manifestes, canevas, annotations et services d’image.
+            Cela permet aux clients de suivre des identifiants stables entre manifestes, canevas, annotations et services d'image.
           </p>
-          <p>Les points d’accès sont regroupés dans les sections Image, Manifeste et Content Search ci-dessous.</p>
+          <p>Les points d'accès sont regroupés dans les sections Image, Manifeste et Content Search ci-dessous.</p>
           <p>
             Documentation officielle des API IIIF:
             <a href="https://iiif.io/api/">iiif.io/api</a>.
@@ -379,20 +379,20 @@ notice_marcxml = marcxml_response.text</code></pre>
           <h3 id="iiif-image">API Image IIIF</h3>
           <div class="api-table-wrap">
             <table class="api-table">
-              <caption class="visually-hidden">Points d’accès API Image IIIF</caption>
+              <caption class="visually-hidden">Points d'accès API Image IIIF</caption>
               <thead>
                 <tr>
-                  <th scope="col">Point d’accès</th>
+                  <th scope="col">Point d'accès</th>
                   <th scope="col">Chemin</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">Point d’accès info image</th>
+                  <th scope="row">Point d'accès info image</th>
                   <td><code>GET {image_service}/info.json</code></td>
                 </tr>
                 <tr>
-                  <th scope="row">Point d’accès rendu image</th>
+                  <th scope="row">Point d'accès rendu image</th>
                   <td><code>GET {image_service}/{region}/{size}/{rotation}/{quality}.{format}</code></td>
                 </tr>
               </tbody>
@@ -408,17 +408,17 @@ notice_marcxml = marcxml_response.text</code></pre>
               <caption class="visually-hidden">Formats de réponse API Image IIIF</caption>
               <thead>
                 <tr>
-                  <th scope="col">Point d’accès</th>
+                  <th scope="col">Point d'accès</th>
                   <th scope="col">Format de réponse</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">Point d’accès info image (<code>info.json</code>)</th>
+                  <th scope="row">Point d'accès info image (<code>info.json</code>)</th>
                   <td>JSON (IIIF Image API)</td>
                 </tr>
                 <tr>
-                  <th scope="row">Point d’accès rendu image</th>
+                  <th scope="row">Point d'accès rendu image</th>
                   <td>Octets binaires (par exemple <code>image/jpeg</code>)</td>
                 </tr>
               </tbody>
@@ -439,7 +439,7 @@ notice_marcxml = marcxml_response.text</code></pre>
                 <tr>
                   <th scope="row"><code>region</code></th>
                   <td>chaîne</td>
-                  <td>Région de l’image à extraire.</td>
+                  <td>Région de l'image à extraire.</td>
                   <td><code>full</code>, <code>x,y,w,h</code>, <code>pct:x,y,w,h</code></td>
                 </tr>
                 <tr>
@@ -451,7 +451,7 @@ notice_marcxml = marcxml_response.text</code></pre>
                 <tr>
                   <th scope="row"><code>rotation</code></th>
                   <td>nombre</td>
-                  <td>Angle de rotation de l’image produite.</td>
+                  <td>Angle de rotation de l'image produite.</td>
                   <td><code>0</code>, <code>90</code>, <code>180</code>, <code>270</code></td>
                 </tr>
                 <tr>
@@ -463,7 +463,7 @@ notice_marcxml = marcxml_response.text</code></pre>
                 <tr>
                   <th scope="row"><code>format</code></th>
                   <td>enum</td>
-                  <td>Format binaire retourné par le point d’accès.</td>
+                  <td>Format binaire retourné par le point d'accès.</td>
                   <td><code>jpg</code></td>
                 </tr>
               </tbody>
@@ -496,7 +496,7 @@ notice_marcxml = marcxml_response.text</code></pre>
           </figure>
           <h3 id="iiif-image-examples">Exemples API Image IIIF</h3>
           <h4>Exemple : Requêtes image IIIF</h4>
-          <p>Interrogez le service d’image pour lire les capacités et générer des dérivés courants.</p>
+          <p>Interrogez le service d'image pour lire les capacités et générer des dérivés courants.</p>
           <figure class="api-snippet api-snippet--docmost" aria-label="Requêtes API Image IIIF en Python">
             <figcaption>
               <span class="api-snippet__label">Code</span>
@@ -537,7 +537,7 @@ img_rotated = requests.get(url_image_iiif(service_id, size="500,", rotation="90"
 img_gray = requests.get(url_image_iiif(service_id, size="500,", quality="gray"), timeout=30)</code></pre>
           </figure>
           <h4>Exemple : Réponse image binaire</h4>
-          <p>Vérifiez le type MIME retourné, puis utilisez le contenu binaire de l’image.</p>
+          <p>Vérifiez le type MIME retourné, puis utilisez le contenu binaire de l'image.</p>
           <figure class="api-snippet api-snippet--docmost" aria-label="Réponse image binaire en Python">
             <figcaption>
               <span class="api-snippet__label">Code</span>
@@ -557,22 +557,22 @@ print(len(jpeg_binaire))</code></pre>
           </figure>
           <h3 id="iiif-manifest">API Presentation IIIF (manifeste)</h3>
           <p>
-            L’exemple ci-dessous est basé sur le manifeste <code>m2025000007606h</code>
-            (collection <code>69429</code>). Il s’agit d’un manifeste IIIF Presentation 3 avec
+            L'exemple ci-dessous est basé sur le manifeste <code>m2025000007606h</code>
+            (collection <code>69429</code>). Il s'agit d'un manifeste IIIF Presentation 3 avec
             <code>842</code> canevas.
           </p>
           <div class="api-table-wrap">
             <table class="api-table">
-              <caption class="visually-hidden">Point d’accès manifeste IIIF</caption>
+              <caption class="visually-hidden">Point d'accès manifeste IIIF</caption>
               <thead>
                 <tr>
-                  <th scope="col">Point d’accès</th>
+                  <th scope="col">Point d'accès</th>
                   <th scope="col">Chemin</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">Point d’accès manifeste</th>
+                  <th scope="row">Point d'accès manifeste</th>
                   <td><code>GET {presentation_service}/69429/m2025000007606h</code></td>
                 </tr>
               </tbody>
@@ -588,13 +588,13 @@ print(len(jpeg_binaire))</code></pre>
               <caption class="visually-hidden">Formats de réponse du manifeste IIIF</caption>
               <thead>
                 <tr>
-                  <th scope="col">Point d’accès</th>
+                  <th scope="col">Point d'accès</th>
                   <th scope="col">Format de réponse</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">Point d’accès manifeste</th>
+                  <th scope="row">Point d'accès manifeste</th>
                   <td>JSON (IIIF Presentation 3)</td>
                 </tr>
               </tbody>
@@ -659,20 +659,20 @@ print(len(jpeg_binaire))</code></pre>
           <h3 id="iiif-content-search">API Content Search IIIF</h3>
           <div class="api-table-wrap">
             <table class="api-table">
-              <caption class="visually-hidden">Point d’accès Content Search IIIF</caption>
+              <caption class="visually-hidden">Point d'accès Content Search IIIF</caption>
               <thead>
                 <tr>
-                  <th scope="col">Point d’accès</th>
+                  <th scope="col">Point d'accès</th>
                   <th scope="col">Chemin</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">Point d’accès Content Search (gabarit)</th>
+                  <th scope="row">Point d'accès Content Search (gabarit)</th>
                   <td><code>GET /search/{repository_id}/{manifest_id}?q={term}</code></td>
                 </tr>
                 <tr>
-                  <th scope="row">Point d’accès Content Search (exemple)</th>
+                  <th scope="row">Point d'accès Content Search (exemple)</th>
                   <td><code>GET https://www-iiif-search.canadiana.ca/search/69429/m0tt4fn16j1j?q=roi</code></td>
                 </tr>
               </tbody>
@@ -688,13 +688,13 @@ print(len(jpeg_binaire))</code></pre>
               <caption class="visually-hidden">Formats de réponse Content Search IIIF</caption>
               <thead>
                 <tr>
-                  <th scope="col">Point d’accès</th>
+                  <th scope="col">Point d'accès</th>
                   <th scope="col">Format de réponse</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">Point d’accès Content Search</th>
+                  <th scope="row">Point d'accès Content Search</th>
                   <td>JSON-LD (IIIF Search API 2.0); le <code>type</code> racine est <code>AnnotationPage</code>, <code>items</code> contient les annotations de correspondance, et <code>next</code> est présent en cas de pagination.</td>
                 </tr>
               </tbody>
@@ -717,7 +717,7 @@ print(len(jpeg_binaire))</code></pre>
                 </tr>
                 <tr>
                   <th scope="row"><code>id</code></th>
-                  <td>URL du point d’accès Content Search pour le manifeste visé.</td>
+                  <td>URL du point d'accès Content Search pour le manifeste visé.</td>
                 </tr>
                 <tr>
                   <th scope="row"><code>type</code></th>
@@ -725,7 +725,7 @@ print(len(jpeg_binaire))</code></pre>
                 </tr>
                 <tr>
                   <th scope="row"><code>items[]</code></th>
-                  <td>Tableau d’annotations de correspondance; chaque élément inclut <code>motivation</code>, <code>body.value</code>, et <code>target</code> avec un sélecteur <code>#xywh=</code>.</td>
+                  <td>Tableau d'annotations de correspondance; chaque élément inclut <code>motivation</code>, <code>body.value</code>, et <code>target</code> avec un sélecteur <code>#xywh=</code>.</td>
                 </tr>
                 <tr>
                   <th scope="row"><code>next</code></th>
@@ -760,7 +760,7 @@ print(len(jpeg_binaire))</code></pre>
 }</code></pre>
           </figure>
           <h4>Exemple : ARK vers manifeste et Content Search</h4>
-          <p>Extrayez l’ARK à partir des métadonnées du catalogue, construisez le chemin IIIF, récupérez le manifeste, puis lancez Content Search.</p>
+          <p>Extrayez l'ARK à partir des métadonnées du catalogue, construisez le chemin IIIF, récupérez le manifeste, puis lancez Content Search.</p>
           <figure class="api-snippet api-snippet--docmost" aria-label="Workflow IIIF en Python">
             <figcaption>
               <span class="api-snippet__label">Code</span>
@@ -773,7 +773,7 @@ BASE_URL = "http://localhost:3000"
 PRESENTATION_SERVICE = "{presentation_service}"
 CONTENT_SEARCH_SERVICE = "{content_search_service}"
 
-# 1) Récupérer une notice et extraire l’ARK (href) depuis la valeur HTML
+# 1) Récupérer une notice et extraire l'ARK (href) depuis la valeur HTML
 notice = requests.get(
     f"{BASE_URL}/catalog/oocihm.N_00591",
     params={"format": "json"},
@@ -805,7 +805,7 @@ print(recherche["type"], len(recherche["items"]))</code></pre>
           </figure>
           <p>
             Pour un aperçu plus général des concepts et outils IIIF, consultez
-            <a href="<%= what_is_iiif_path(lang: I18n.locale) %>">Qu’est-ce que IIIF?</a>.
+            <a href="<%= what_is_iiif_path(lang: I18n.locale) %>">Qu'est-ce que IIIF?</a>.
           </p>
         </section>
       </div>

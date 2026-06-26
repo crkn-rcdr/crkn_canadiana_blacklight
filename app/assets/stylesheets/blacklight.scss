@@ -1,12 +1,12 @@
-@import 'bootstrap';
-@import 'blacklight/blacklight';
-@import 'blacklight_marc';
+@import "bootstrap";
+@import "blacklight/blacklight";
+@import "blacklight_marc";
 
 i {
     font-family: "bootstrap-icons" !important;
 }
 .show-document {
-    width:100%;
+    width: 100%;
 }
 .main-container > .row {
     flex-direction: column !important;
@@ -42,7 +42,7 @@ i {
 .blacklight-catalog-show .collection-breadcrumbs {
     margin: 0 0 0.7rem;
     padding: 0.8rem;
-    background: linear-gradient(90deg, #1D808B 34%, #37BFCE 100%);
+    background: linear-gradient(90deg, #1d808b 34%, #37bfce 100%);
     border-radius: 3px;
 }
 
@@ -125,7 +125,8 @@ i {
     }
 }
 
-.page-sidebar[aria-label="Tools"], .page-sidebar[aria-label="Outils"] {
+.page-sidebar[aria-label="Tools"],
+.page-sidebar[aria-label="Outils"] {
     width: 100%;
     .card {
         border: none;
@@ -138,17 +139,22 @@ i {
     .card .list-group-item {
         padding: var(--bs-list-group-item-padding-y) 0;
     }
-    h2, .h2 {
-        font-size: calc(1.325rem + 0.9vw)  !important;
+    h2,
+    .h2 {
+        font-size: calc(1.325rem + 0.9vw) !important;
     }
     @media (min-width: 1200px) {
-        h2, .h2 {
+        h2,
+        .h2 {
             font-size: 2rem !important;
         }
     }
 }
 /* Hide separate sidebar Tools; links live in the Toolbox card to avoid duplication */
-.blacklight-catalog-show .page-sidebar[aria-label="Tools"],  .blacklight-catalog-show .page-sidebar[aria-label="Outils"] { display: none; }
+.blacklight-catalog-show .page-sidebar[aria-label="Tools"],
+.blacklight-catalog-show .page-sidebar[aria-label="Outils"] {
+    display: none;
+}
 
 /* Make show page content span full page width (mobile only; see block at bottom) */
 @media only screen and (max-width: 1024px) {
@@ -210,9 +216,8 @@ i {
     margin: 0 !important;
 }
 
-
-#collection-items-list .card .openseadragon-canvas+div>div:last-child>div, 
-.home-featured-grid .openseadragon-container>div:nth-child(2)>div:nth-child(2)> div {
+#collection-items-list .card .openseadragon-canvas + div > div:last-child > div,
+.home-featured-grid .openseadragon-container > div:nth-child(2) > div:nth-child(2) > div {
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -223,7 +228,8 @@ i {
 }
 
 .page-sidebar {
-    .endnote, .refworks {
+    .endnote,
+    .refworks {
         display: none; /* TODO: find how to disable in src code */
     }
 }
@@ -231,15 +237,15 @@ i {
 /* Sidebar styles */
 #toggle-menu {
     //position: sticky;
-    top: 0;                /* stick to the top of the viewport */
-    height: fit-content;   /* allow sidebar height to follow its content */
-    overflow-y: visible;   /* let nested content flow naturally */
-    transform: translateX(0); 
+    top: 0; /* stick to the top of the viewport */
+    height: fit-content; /* allow sidebar height to follow its content */
+    overflow-y: visible; /* let nested content flow naturally */
+    transform: translateX(0);
     transition: transform 0.3s ease-in-out;
     max-width: 276px;
     /*border: 1px solid rgba(0, 0, 0, 0.175);*/
     background-color: #fff; /* to cover content underneath */
-    z-index: 1020;          /* keep above main content when sliding */
+    z-index: 1020; /* keep above main content when sliding */
     padding-left: 0 !important;
     padding-top: 1rem !important;
     overflow-wrap: break-word;
@@ -275,14 +281,23 @@ button i {
     padding: 0 !important;
     position: relative;
 
-    .card { border: none; }
-    .card-img-top { margin-bottom: 0; border-bottom: none; }
-    h5 { margin-top: 0; }
-    .openseadragon-container { border-radius: 3px; }
+    .card {
+        border: none;
+    }
+    .card-img-top {
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+    h5 {
+        margin-top: 0;
+    }
+    .openseadragon-container {
+        border-radius: 3px;
+    }
 }
 
-#doc-main #collection-items-list { 
-    margin-left:0.5rem;
+#doc-main #collection-items-list {
+    margin-left: 0.5rem;
 }
 
 @media (min-width: 900px) {
@@ -311,16 +326,23 @@ button i {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  /* Make show page take full width on mobile */
-  .blacklight-catalog-show #main-container.container {
-    max-width: 100% !important;
-    width: 100% !important;
-    padding-left: .75rem; padding-right: .75rem;
-  }
-  .blacklight-catalog-show .document-main-section { max-width: 100% !important; }
+    /* Make show page take full width on mobile */
+    .blacklight-catalog-show #main-container.container {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    .blacklight-catalog-show .document-main-section {
+        max-width: 100% !important;
+    }
     /* Reflow details + viewer vertically on mobile */
-    #document-togglable-content .row { flex-wrap: wrap !important; }
-    #document-togglable-content .row.flex-nowrap { flex-wrap: wrap !important; }
+    #document-togglable-content .row {
+        flex-wrap: wrap !important;
+    }
+    #document-togglable-content .row.flex-nowrap {
+        flex-wrap: wrap !important;
+    }
     /* Each section (details + viewer) should consume full row */
     #document-togglable-content #toggle-menu,
     #document-togglable-content #doc-main {
@@ -328,32 +350,55 @@ button i {
         max-width: 100% !important;
     }
     /* Show viewer first, then details */
-    #document-togglable-content #doc-main { order: 1 !important; }
-    #document-togglable-content #toggle-menu { order: 2 !important; }
+    #document-togglable-content #doc-main {
+        order: 1 !important;
+    }
+    #document-togglable-content #toggle-menu {
+        order: 2 !important;
+    }
     #toggle-menu {
         position: relative !important;
-        top: auto; height: auto; transform: none !important;
-        width: 100%; min-width: auto; max-width: none;
+        top: auto;
+        height: auto;
+        transform: none !important;
+        width: 100%;
+        min-width: auto;
+        max-width: none;
         z-index: 1; /* sit under any floating viewer UI */
-        box-shadow: 0 4px 16px rgba(0,0,0,.06);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
         border-radius: 8px;
-        margin-bottom: .75rem;
+        margin-bottom: 0.75rem;
         overflow: visible !important; /* remove inner scrolling on mobile */
     }
-    #doc-main { margin: 0 !important; padding: 0 !important; width: 100%; }
+    #doc-main {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+    }
     /* viewer height on small screens */
-    #doc-main #my-mirador, .mirador-osd-container { min-height: 60vh; width: 100% !important; }
-    /* ensure inner mirador wrappers stretch full width */
-    #doc-main .mirador-viewer, #doc-main .viewer-wrap, #doc-main .mirador-mosaic, #doc-main .mosaic-root {
+    #doc-main #my-mirador,
+    .mirador-osd-container {
+        min-height: 60vh;
         width: 100% !important;
     }
-
+    /* ensure inner mirador wrappers stretch full width */
+    #doc-main .mirador-viewer,
+    #doc-main .viewer-wrap,
+    #doc-main .mirador-mosaic,
+    #doc-main .mosaic-root {
+        width: 100% !important;
+    }
 }
 
 /* Strong mobile overrides placed at end to beat earlier rules */
 @media (max-width: 768px) {
-  #document-togglable-content #toggle-menu { height: auto !important; overflow: visible !important; }
-  .blacklight-catalog-show .document-main-section { max-width: 100% !important; }
+    #document-togglable-content #toggle-menu {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .blacklight-catalog-show .document-main-section {
+        max-width: 100% !important;
+    }
 }
 #download-toolbar {
     margin-bottom: 0.5rem;
@@ -540,14 +585,14 @@ button i {
 #toggle-menu {
     .document-metadata dt,
     .document-metadata dd {
-    display: block;   /* stack instead of inline/grid */
-    width: 100%;      /* full width */
-    margin: 0;        /* reset Bootstrap spacing */
+        display: block; /* stack instead of inline/grid */
+        width: 100%; /* full width */
+        margin: 0; /* reset Bootstrap spacing */
     }
 
     .document-metadata dt {
-    font-weight: bold; /* optional, to keep label distinct */
-    margin-top: 1em;   /* add spacing before each section */
+        font-weight: bold; /* optional, to keep label distinct */
+        margin-top: 1em; /* add spacing before each section */
     }
 }
 
@@ -706,7 +751,8 @@ button i {
     color: #00695c !important;
 }
 
-.card, .card-img-top {
+.card,
+.card-img-top {
     div[title="Zoom in"] img,
     div[title="Zoom out"] img,
     div[title="Go home"] img,
@@ -736,7 +782,11 @@ button i {
         background-color: rgba(255, 255, 255, 0.98);
         border: 1px solid rgba(0, 0, 0, 0.08);
         box-shadow: none;
-        transition: background-color .12s ease, box-shadow .12s ease, transform .06s ease, color .12s ease;
+        transition:
+            background-color 0.12s ease,
+            box-shadow 0.12s ease,
+            transform 0.06s ease,
+            color 0.12s ease;
 
         &::before {
             content: "";
@@ -756,9 +806,13 @@ button i {
             background-color: #ffffff;
             box-shadow: none;
         }
-        &:active { transform: translateY(1px); }
+        &:active {
+            transform: translateY(1px);
+        }
         &:focus-visible {
-            box-shadow: 0 0 0 3px rgba(0, 95, 204, 0.35), 0 6px 18px rgba(0, 0, 0, 0.2);
+            box-shadow:
+                0 0 0 3px rgba(0, 95, 204, 0.35),
+                0 6px 18px rgba(0, 0, 0, 0.2);
         }
     }
 
@@ -788,7 +842,8 @@ button i {
     }
 
     // Fullscreen override icon
-    .card-img-top.fullpage div[title="Toggle full page"]::before, .mirador-osd-container.fullpage div[title="Toggle full page"]::before {
+    .card-img-top.fullpage div[title="Toggle full page"]::before,
+    .mirador-osd-container.fullpage div[title="Toggle full page"]::before {
         content: "\f149";
     }
 
@@ -804,10 +859,10 @@ button i {
         gap: 10px;
         align-items: center;
         /* drop shadow to lift from the image */
-        filter: drop-shadow(0 6px 18px rgba(0,0,0,.18));
+        filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.18));
         > div:last-child {
             background-color: rgba(255, 255, 255, 0.98) !important;
-            border: 1px solid rgba(0,0,0,.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: var(--site-radius) !important;
             padding: 6px !important;
             display: flex !important;
@@ -820,7 +875,7 @@ button i {
     /* Tablet: slightly smaller controls and tighter layout */
     @media (max-width: 1024px) {
         .openseadragon-canvas + div {
-            top: auto !important;           /* anchor using bottom for stability */
+            top: auto !important; /* anchor using bottom for stability */
             bottom: 10px !important;
             margin: 0.35rem !important;
             gap: 8px;
@@ -834,9 +889,15 @@ button i {
             height: 31px;
             width: 35px;
             margin: 2px; /* reduce outer spacing */
-            &::before { width: 24px; height: 24px; font-size: 20px; }
+            &::before {
+                width: 24px;
+                height: 24px;
+                font-size: 20px;
+            }
         }
-        .openseadragon-canvas + div > div { padding: 4px !important; }
+        .openseadragon-canvas + div > div {
+            padding: 4px !important;
+        }
     }
 
     /* Mobile: compact controls to avoid wrapping/overlap */
@@ -855,9 +916,15 @@ button i {
             height: 31px;
             width: 35px;
             margin: 2px;
-            &::before { width: 24px; height: 24px; font-size: 18px; }
+            &::before {
+                width: 24px;
+                height: 24px;
+                font-size: 18px;
+            }
         }
-        .openseadragon-canvas + div > div { padding: 3px !important; }
+        .openseadragon-canvas + div > div {
+            padding: 3px !important;
+        }
     }
 
     // Make disabled nav (often inline-styled with low opacity) clearly disabled
@@ -877,7 +944,11 @@ button i {
         div[title="Next page"] {
             height: 31px;
             width: 35px;
-            &::before { width: 24px; height: 24px; font-size: 24px; }
+            &::before {
+                width: 24px;
+                height: 24px;
+                font-size: 24px;
+            }
         }
     }
 }
@@ -907,6 +978,8 @@ button i {
     margin: 0 !important;
 }
 
-#my-mirador div.MuiToggleButtonGroup-root.MuiToggleButtonGroup-horizontal.mui-lbxqhe-MuiToggleButtonGroup-root > button.MuiButtonBase-root.MuiToggleButtonGroup-grouped.MuiToggleButtonGroup-groupedHorizontal.MuiToggleButton-root.MuiToggleButton-sizeSmall.MuiToggleButton-standard.MuiToggleButtonGroup-grouped.MuiToggleButtonGroup-groupedHorizontal.MuiToggleButtonGroup-middleButton.mui-1hfzhaz-MuiButtonBase-root-MuiToggleButton-root {
+#my-mirador
+    div.MuiToggleButtonGroup-root.MuiToggleButtonGroup-horizontal.mui-lbxqhe-MuiToggleButtonGroup-root
+    > button.MuiButtonBase-root.MuiToggleButtonGroup-grouped.MuiToggleButtonGroup-groupedHorizontal.MuiToggleButton-root.MuiToggleButton-sizeSmall.MuiToggleButton-standard.MuiToggleButtonGroup-grouped.MuiToggleButtonGroup-groupedHorizontal.MuiToggleButtonGroup-middleButton.mui-1hfzhaz-MuiButtonBase-root-MuiToggleButton-root {
     display: none;
 }

@@ -52,7 +52,7 @@
     font-weight: 600;
     min-width: 2ch;
     line-height: 1;
-    font-size: .95rem;
+    font-size: 0.95rem;
   }
 
   ul {
@@ -70,7 +70,6 @@
   }
 }
 
-
 .toggle-handle {
   background: none;
   border: 0;
@@ -82,7 +81,9 @@
   color: inherit;
   cursor: pointer;
   border-radius: 0.45rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
   min-width: 1.75rem;
   min-height: 1.75rem;
 }
@@ -102,11 +103,11 @@
   position: relative;
 }
 .toggle-icon.closed {
-    display: none;
+  display: none;
 }
 
 .toggle-icon::before {
-  content: '';
+  content: "";
   display: block;
   width: 0.45rem;
   height: 0.45rem;
@@ -116,7 +117,7 @@
   transition: transform 0.2s ease;
 }
 
-.toggle-handle[aria-expanded='true'] .toggle-icon::before,
-.toggle-handle[aria-expanded='true'] .toggle-icon.opened::before {
+.toggle-handle[aria-expanded="true"] .toggle-icon::before,
+.toggle-handle[aria-expanded="true"] .toggle-icon.opened::before {
   transform: rotate(45deg);
 }

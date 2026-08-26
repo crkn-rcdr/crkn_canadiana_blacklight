@@ -80,6 +80,10 @@ Optional variables for download links:
 - `DOWNLOAD_API_ENDPOINT` - Download API endpoint. Defaults to `https://beta-download.canadiana.ca/download`.
 - `DOWNLOAD_TOKEN_SECRET` - HMAC key used to sign Download API URLs.
 - `DOWNLOAD_TOKEN_TTL` - Signed URL lifetime in seconds. Defaults to `1800`.
+- `DOWNLOAD_CACHE_REDIS_URL` - Redis URL for precomputed download metadata. Defaults to `redis://redis:6379/0`.
+- `DOWNLOAD_CACHE_REDIS_POOL_SIZE` - Redis connection pool size for download metadata. Defaults to `5`.
+- `DOWNLOAD_CACHE_REDIS_TIMEOUT` - Redis connection/read/write timeout in seconds. Defaults to `1`.
+- `IIIF_IMAGE_BASE` - IIIF Image API base used to derive full-size JPG download links. Defaults to `https://image-tor.canadiana.ca/iiif/2`.
 
 Legacy Swift-backed download variables:
 

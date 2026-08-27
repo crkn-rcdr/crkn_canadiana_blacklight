@@ -286,7 +286,7 @@ fr:
       material_language:
         label: Langue du document
       depositor:
-        label: Établissement d'origine
+        label: Institution source
       notes:
         label: Notes
       original_version_note:
@@ -306,7 +306,7 @@ fr:
       date_added:
         label: Date d'ajout/mise à jour
       language:
-        label: Langue
+        label: Langue du document
       collection:
         label: Collection
       description:
@@ -316,7 +316,17 @@ fr:
       all_fields:
         label: Tous
       serial_title:
-        label: Titre de la série
+        label: Titre du périodique ou journal
+      resource_type:
+        label: Type de ressource
+        values:
+          book: Livre
+          journal: Revue
+          newspaper: Journal
+          musical_score: Partition musicale
+          map: Carte
+      include_issues:
+        label: Inclure les résultats des numéros individuels
     sort:
       relevance:
         label: Pertinence

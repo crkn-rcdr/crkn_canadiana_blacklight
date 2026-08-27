@@ -303,7 +303,7 @@ en:
       material:
         label: Material
       material_language:
-        label: Language of material
+        label: Language of Material
       depositor:
         label: Source Institution
       notes:
@@ -325,7 +325,7 @@ en:
       date_added:
         label: Date Added/Updated
       language:
-        label: Language
+        label: Language of Material
       collection:
         label: Collection
       description:
@@ -335,7 +335,17 @@ en:
       all_fields:
         label: All Fields
       serial_title:
-        label: Serial Title
+        label: Periodical / Newspaper Title
+      resource_type:
+        label: Resource Type
+        values:
+          book: Book
+          journal: Journal
+          newspaper: Newspaper
+          musical_score: Musical Score
+          map: Map
+      include_issues:
+        label: Include results from individual issues
     sort:
       relevance:
         label: Relevance

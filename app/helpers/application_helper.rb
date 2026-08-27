@@ -125,7 +125,10 @@ module ApplicationHelper
   end
 
   def format_rights_statement_text(args)
-    values = Array(args[:document][args[:field]]).compact_blank
+    field = args[:field]
+    values = Array(args[:document][field]).compact_blank
+    values = Array(args[:document]['rights_stat_tsim']).compact_blank if values.blank? && field.to_s != 'rights_stat_tsim'
+    values = Array(args[:document]['rights_statement_ssim_str']).compact_blank if values.blank?
     return ''.html_safe if values.blank?
 
     rendered_values = values.map do |value|
@@ -145,33 +148,35 @@ module ApplicationHelper
     safe_join(values.map do |value|
       format_key = value.to_s.parameterize
       format_key = if value.to_s.include?('Serial')
-                     document[:id].to_s.include?('N') ? 'newspaper-issue' : 'journal-issue'
+                     document[:id].to_s.include?('N') ? 'newspaper' : 'journal'
                    else
                      format_key
                    end
-      format_label = {
+      normalized_key = {
         'ebook' => 'book',
         'software' => 'book',
         'newspaper-issue' => 'newspaper',
         'journal-issue' => 'journal'
-      }.fetch(format_key, format_key).tr('-', ' ').upcase
+      }.fetch(format_key, format_key)
+
+      format_label = normalized_key.tr('-', ' ').titleize
+
       tag.span(class: 'result-chip result-chip--format') do
-        safe_join([
-          tag.span('', class: "result-chip__icon icon-#{format_key}", aria: { hidden: true }),
-          tag.span(format_label, class: 'result-chip__label')
-        ])
+        tag.span(format_label, class: 'result-chip__label')
       end
     end, ' ')
   end
 
   def result_rights_statement_chips(document)
-    values = rights_statement_labels(document, 'rights_stat_tsim')
+    values = Array(document['rights_statement_ssim_str']).compact_blank
+    values = rights_statement_labels(document, 'rights_stat_tsim') if values.blank?
     values = rights_statement_labels(document, 'rights_statement_ssim') if values.blank?
     safe_join(values.map { |value| rights_statement_badge(value) }, ' ')
   end
 
   def rights_statement_present?(_field_config, document)
-    rights_statement_labels(document, 'rights_stat_tsim').present? ||
+    document['rights_statement_ssim_str'].present? ||
+      rights_statement_labels(document, 'rights_stat_tsim').present? ||
       rights_statement_labels(document, 'rights_statement_ssim').present?
   end
 
@@ -185,6 +190,7 @@ module ApplicationHelper
     value_str.sub!(/<br\/>$/, '')
     content_tag :p, "#{value_str}".html_safe, dir: 'ltr'
   end
+
   def format_facet(args)
     field_name = args[:field].to_s
     facet_param = facet_param_name(field_name)
@@ -199,8 +205,21 @@ module ApplicationHelper
     value_str.sub!(/<br\/>$/, '')
     content_tag :p, value_str.html_safe, dir: 'ltr'
   end
+
+  def format_resource_type_label(value)
+    key = case value.to_s
+          when /Book|Monograph|eBook|Software/i then 'book'
+          when /Journal/i then 'journal'
+          when /Newspaper/i then 'newspaper'
+          when /Musical|Score/i then 'musical_score'
+          when /Map/i then 'map'
+          else value.to_s.parameterize.underscore
+          end
+    I18n.t("blacklight.metadata.resource_type.values.#{key}", default: value.to_s.titleize)
+  end
+
   def rights_statement_badge(value)
-    label = value.to_s
+    label = RightsStatementLabeler.labels_for_text(value.to_s).first || value.to_s
     category = RightsStatementLabeler.category_for_label(label)
     url = RightsStatementLabeler.canonical_url_for_label(label)
     icon = rights_statement_icon(category)
@@ -218,11 +237,17 @@ module ApplicationHelper
   end
 
   def rights_statement_labels(document, field)
-    Array(document[field]).compact_blank.flat_map do |value|
-      if RightsStatementLabeler.statement_for_label(value)
-        value.to_s
+    raw_values = Array(document[field]).compact_blank
+    raw_values = Array(document['rights_stat_tsim']).compact_blank if raw_values.blank? && field.to_s != 'rights_stat_tsim'
+    raw_values = Array(document['rights_statement_ssim_str']).compact_blank if raw_values.blank?
+
+    raw_values.flat_map do |value|
+      val_str = value.to_s.strip
+      if RightsStatementLabeler.statement_for_label(val_str)
+        val_str
       else
-        RightsStatementLabeler.labels_for_text(value)
+        labels = RightsStatementLabeler.labels_for_text(val_str)
+        labels.presence || [val_str]
       end
     end.uniq
   end

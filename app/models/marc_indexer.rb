@@ -37,16 +37,24 @@ class MarcIndexer < Blacklight::Marc::Indexer
       end
     end
 
-    # --- serial_title: nil-safe split on ':' ---
-    # Note - could stop populating this need to check if is serial
-    to_field "serial_title", extract_marc('245a'), first_only do |_rec, acc|
-      v = acc.first
-      if v && v.include?(' : ')
-        acc.replace([v.split(' : ', 2).first.strip])
-      elsif v && v.include?(':')
-        acc.replace([v.split(':', 2).first.strip])
+    # --- serial_title: only for series/serials and individual issues ---
+    to_field "serial_title", extract_marc('245a'), first_only do |rec, acc|
+      v901 = rec["901"]&.value&.strip
+      is_ser = v901&.casecmp("Is series")&.zero?
+      is_iss = v901&.casecmp("Is issue")&.zero?
+      has_serial_key = rec["902"]&.subfields&.any? { |sf| sf.code == 'b' && !sf.value.to_s.strip.empty? }
+
+      if is_ser || is_iss || has_serial_key
+        v = acc.first
+        if v && v.include?(' : ')
+          acc.replace([v.split(' : ', 2).first.strip])
+        elsif v && v.include?(':')
+          acc.replace([v.split(':', 2).first.strip])
+        else
+          acc.replace(v ? [v.strip] : [])
+        end
       else
-        acc.replace(v ? [v.strip] : [])
+        acc.clear
       end
     end
 
@@ -54,6 +62,11 @@ class MarcIndexer < Blacklight::Marc::Indexer
     to_field "is_serial" do |record, accumulator|
       v = record["901"]&.value&.strip
       accumulator.replace [ (v&.casecmp("Is series")&.zero?) ? "Yes" : "No" ]
+    end
+
+    # --- resource_type_ssim: consolidated content/resource type facet ---
+    to_field "resource_type_ssim" do |record, accumulator|
+      accumulator.replace resource_type_facet_values(record)
     end
 
     to_field 'marc_ss', get_xml
@@ -390,6 +403,28 @@ class MarcIndexer < Blacklight::Marc::Indexer
       field.find_all { |subfield| subfield.code == 'u' }
            .filter_map { |subfield| RightsStatementLabeler.label_for_url(subfield.value) }
     end.uniq
+  end
+
+  def resource_type_facet_values(record)
+    formats = Array(get_format.call(record, nil)).compact_blank
+    v901 = record['901']&.value&.strip
+    is_serial_val = v901&.casecmp('Is series')&.zero? || v901&.casecmp('Is serial')&.zero?
+    is_issue_val = v901&.casecmp('Is issue')&.zero? || record['902']&.subfields&.any? { |s| s.code == 'b' }
+    record_id = (record['001']&.value || '').to_s
+
+    is_newspaper = formats.any? { |f| f.to_s =~ /newspaper/i } || (record_id.include?('N') && (is_serial_val || is_issue_val || formats.any? { |f| f.to_s =~ /serial/i }))
+
+    if is_newspaper
+      ['Newspaper']
+    elsif is_serial_val || is_issue_val || formats.any? { |f| f.to_s =~ /serial|journal/i }
+      ['Journal']
+    elsif formats.any? { |f| f.to_s =~ /score|musical/i }
+      ['Musical Score']
+    elsif formats.any? { |f| f.to_s =~ /map/i }
+      ['Map']
+    else
+      ['Book']
+    end
   end
 
   def collection_paths_by_language(record)

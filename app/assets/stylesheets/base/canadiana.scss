@@ -1704,7 +1704,7 @@ summary:focus-visible,
   justify-content: space-between;
   column-gap: 0.5rem;
   padding: 0.4rem 0.5rem;
-  border-radius: 8px;
+  border-radius: var(--site-radius, 2px);
 }
 .facet-values li:hover {
   background: #f7f9fb;
@@ -1712,18 +1712,21 @@ summary:focus-visible,
 .facet-values .facet-label {
   flex: 1 1 auto;
   min-width: 0;
+  font-size: 0.92rem;
 }
 .facet-values .facet-label a {
   text-decoration: none;
   color: #0f172a;
   width: 100%;
   display: block;
+  font-size: 0.92rem;
 }
 .facet-values .facet-count {
   background: #eef2f7;
   color: #374151;
-  border-radius: 999px;
-  padding: 0.15rem 0.5rem;
+  border-radius: var(--site-radius, 2px);
+  padding: 0.15rem 0.45rem;
+  font-size: 0.82rem;
   font-weight: 600;
   min-width: 2ch;
   text-align: center;
@@ -1756,7 +1759,7 @@ summary:focus-visible,
   width: 100%;
   margin: 0;
   padding: 0.4rem 0.5rem;
-  border-radius: 8px;
+  border-radius: var(--site-radius, 2px);
   cursor: pointer;
 }
 
@@ -1771,6 +1774,7 @@ summary:focus-visible,
 .checkbox-facet-label {
   min-width: 0;
   color: #0f172a;
+  font-size: 0.92rem;
   line-height: 1.25;
   overflow-wrap: anywhere;
 }
@@ -1782,8 +1786,10 @@ summary:focus-visible,
   gap: 0.5rem;
 }
 
-.checkbox-facet-more {
+.checkbox-facet-more,
+.more_facets {
   margin-top: -0.1rem;
+  font-size: 0.875rem;
 }
 
 .checkbox-facet-modal-pagination {
@@ -1792,7 +1798,7 @@ summary:focus-visible,
 
 .checkbox-facet-apply,
 .checkbox-facet-clear {
-  border-radius: 6px;
+  border-radius: var(--site-radius, 2px);
   font-weight: 700;
 }
 
@@ -1840,7 +1846,6 @@ summary:focus-visible,
 .result-chip--format {
   background: #e5f3fb;
   color: #007da3;
-  text-transform: uppercase;
 }
 
 .result-chip__icon {
@@ -1860,33 +1865,31 @@ summary:focus-visible,
 .result-chip__icon.icon-ebook,
 .result-chip__icon.icon-book,
 .result-chip__icon.icon-software {
-  mask-image: url(/assets/icon-book.png);
-  -webkit-mask-image: url(/assets/icon-book.png);
+  mask-image: url(/assets/icon-book.svg);
+  -webkit-mask-image: url(/assets/icon-book.svg);
 }
 
-.result-chip__icon.icon-newspaper-issue {
-  mask-image: url(/assets/icon-newspaper-issue.png);
-  -webkit-mask-image: url(/assets/icon-newspaper-issue.png);
-}
-
-.result-chip__icon.icon-journal-issue {
-  mask-image: url(/assets/icon-journal-issue.png);
-  -webkit-mask-image: url(/assets/icon-journal-issue.png);
-}
-
-.result-chip__icon.icon-journal {
-  mask-image: url(/assets/icon-journal.png);
-  -webkit-mask-image: url(/assets/icon-journal.png);
-}
-
+.result-chip__icon.icon-newspaper-issue,
 .result-chip__icon.icon-newspaper {
-  mask-image: url(/assets/icon-newspaper.png);
-  -webkit-mask-image: url(/assets/icon-newspaper.png);
+  mask-image: url(/assets/icon-newspaper.svg);
+  -webkit-mask-image: url(/assets/icon-newspaper.svg);
 }
 
-.result-chip__icon.icon-musicalscore {
-  mask-image: url(/assets/icon-musicalscore.png);
-  -webkit-mask-image: url(/assets/icon-musicalscore.png);
+.result-chip__icon.icon-journal-issue,
+.result-chip__icon.icon-journal {
+  mask-image: url(/assets/icon-journal.svg);
+  -webkit-mask-image: url(/assets/icon-journal.svg);
+}
+
+.result-chip__icon.icon-musicalscore,
+.result-chip__icon.icon-musical-score {
+  mask-image: url(/assets/icon-musicalscore.svg);
+  -webkit-mask-image: url(/assets/icon-musicalscore.svg);
+}
+
+.result-chip__icon.icon-map {
+  mask-image: url(/assets/icon-map.svg);
+  -webkit-mask-image: url(/assets/icon-map.svg);
 }
 
 .result-chip__icon.icon-electronic {

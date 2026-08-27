@@ -34,19 +34,19 @@ Rails.application.routes.draw do
   end
 
   # Legacy/redirect routes for /catalog -> /catalogue
-  get '/catalog', to: redirect(path: ->(_params, req) {
+  get '/catalog', to: redirect(->(_params, req) {
     req.query_string.present? ? "/catalogue?#{req.query_string}" : "/catalogue"
   })
-  get '/catalog/:id', to: redirect(path: ->(params, req) {
+  get '/catalog/:id', to: redirect(->(params, req) {
     req.query_string.present? ? "/catalogue/#{params[:id]}?#{req.query_string}" : "/catalogue/#{params[:id]}"
   }), constraints: { id: /[^\/]+/ }
-  get '/catalog/:id/citation', to: redirect(path: ->(params, req) {
+  get '/catalog/:id/citation', to: redirect(->(params, req) {
     req.query_string.present? ? "/catalogue/#{params[:id]}/citation?#{req.query_string}" : "/catalogue/#{params[:id]}/citation"
   }), constraints: { id: /[^\/]+/ }
-  get '/catalog/:id/librarian_view', to: redirect(path: ->(params, req) {
+  get '/catalog/:id/librarian_view', to: redirect(->(params, req) {
     req.query_string.present? ? "/catalogue/#{params[:id]}/librarian_view?#{req.query_string}" : "/catalogue/#{params[:id]}/librarian_view"
   }), constraints: { id: /[^\/]+/ }
-  get '/catalog/facet/:id', to: redirect(path: ->(params, req) {
+  get '/catalog/facet/:id', to: redirect(->(params, req) {
     req.query_string.present? ? "/catalogue/facet/#{params[:id]}?#{req.query_string}" : "/catalogue/facet/#{params[:id]}"
   })
 

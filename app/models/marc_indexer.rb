@@ -406,7 +406,9 @@ class MarcIndexer < Blacklight::Marc::Indexer
   end
 
   def resource_type_facet_values(record)
-    formats = Array(get_format.call(record, nil)).compact_blank
+    formats = []
+    get_format.call(record, formats, nil)
+    formats.compact_blank!
     v901 = record['901']&.value&.strip
     is_serial_val = v901&.casecmp('Is series')&.zero? || v901&.casecmp('Is serial')&.zero?
     is_issue_val = v901&.casecmp('Is issue')&.zero? || record['902']&.subfields&.any? { |s| s.code == 'b' }

@@ -45,7 +45,7 @@ class FeaturedItemsComponent < ViewComponent::Base
   end
 
   def record_link(record)
-    ark_url_for(record) || "/catalogue/#{record['id']}?lang=#{I18n.locale}"
+    ark_url_for(record) || "/catalog/#{record['id']}?lang=#{I18n.locale}"
   end
 
   def viewer_id_for(record)

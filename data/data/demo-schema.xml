@@ -513,7 +513,6 @@
   <field name="pub_date_ssim" type="plongs"/>
   <field name="published_ssm" type="text_general"/>
   <field name="rights_stat_tsim" type="text_general"/>
-  <field name="rights_statement_ssim" type="text_general"/>
   <field name="serial_key" type="text_general"/>
   <field name="serial_title" type="text_general"/>
   <field name="source_of_description_tsim" type="text_general"/>
@@ -656,7 +655,6 @@
   <copyField source="depositor_tsim" dest="depositor_tsim_str" maxChars="256"/>
   <copyField source="access_note_tsim" dest="access_note_tsim_str" maxChars="256"/>
   <copyField source="rights_stat_tsim" dest="rights_stat_tsim_str" maxChars="256"/>
-  <copyField source="rights_statement_ssim" dest="rights_statement_ssim_str" maxChars="256"/>
   <copyField source="url_suppl_ssm" dest="url_suppl_ssm_str" maxChars="256"/>
   <copyField source="source_of_description_tsim" dest="source_of_description_tsim_str" maxChars="256"/>
   <copyField source="full_title_ssm" dest="full_title_ssm_str" maxChars="256"/>

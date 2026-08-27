@@ -167,8 +167,10 @@ depending on how `902$b` and `245$a` are catalogued.
 | --- | --- | --- | --- |
 | `published_ssm` | `260abcefg`, `264abc` roman only | Search-result metadata; show-page metadata | If missing, the publication statement line disappears. |
 | `published_vern_ssm` | `260abcefg`, `264abc` alternate script only | Stored only | No current visible effect. |
-| `pub_date_si` | Derived by `extract_original_publication_year` | Sort helper | If parsing fails, date sorting is unreliable or empty. Prioritizes original publication year over digitization date. |
-| `pub_date_ssim` | Derived by `extract_original_publication_year` | Search-result metadata; show-page metadata; date range facet; year sorts | If parsing fails, the year may vanish from display and the record will not behave properly in year facets/sorts. Prioritizes original publication year over digitization date. |
+| `pub_date_si` | Derived by `marc_publication_date` | Sort helper | If parsing fails, date sorting is unreliable or empty. |
+| `pub_date_ssim` | Derived by `marc_publication_date` | Search-result metadata; show-page metadata; date range facet; year sorts | If parsing fails, the year may vanish from display and the record will not behave properly in year facets/sorts. |
+| `language_ssim` | `008[35-37]`, `041$a`, `041$d` | Search-result metadata; show-page metadata; language facet source; semantic language field | If missing or unparseable, the language facet and metadata line disappear or become less accurate. |
+| `format` | Derived by Blacklight MARC format logic | Search-result icon/label; semantic format field | If wrong, the icon and format label are wrong. For serial-like formats, the helper further guesses issue icon style from the record id. |
 | `material_type_ssm` | `300$a` | Indexed/stored only; not wired into current index/show metadata config | No current visible effect. |
 
 ## Collection and local metadata fields

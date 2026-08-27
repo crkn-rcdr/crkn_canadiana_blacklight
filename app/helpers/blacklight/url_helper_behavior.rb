@@ -28,18 +28,10 @@ module Blacklight::UrlHelperBehavior
               field_or_opts
             end
 
-    # Build href explicitly so it always carries q/lang and search_id if available
-    doc_params = {
-      lang: params[:lang].presence,
-      q: params[:q].presence
-    }
-    if respond_to?(:current_search_session) && current_search_session&.id.present?
-      doc_params[:search_id] = current_search_session.id
-    elsif respond_to?(:search_session) && search_session['id'].present?
-      doc_params[:search_id] = search_session['id']
-    end
-
-    href = solr_document_path(doc, doc_params.compact)
+    # Build href explicitly so it always carries q/lang
+    href = solr_document_path(doc,
+                              lang: params[:lang].presence,
+                              q: params[:q].presence)
 
     link_to label, href, document_link_params(doc, opts)
   end
@@ -54,13 +46,40 @@ module Blacklight::UrlHelperBehavior
     if params[:q].present? && params_hash.dig(:data, :context_href).present?
       href = params_hash[:data][:context_href]
       sep = href.include?('?') ? '&' : '?'
+      # Debug logging
+      begin
+        Rails.logger.debug("[BL document_link_params] q=#{params[:q].inspect} href_before=#{href}")
+      rescue StandardError
+        # no-op if logger not available
+      end
+      begin
+        puts "[BL document_link_params] q=#{params[:q].inspect} href_before=#{href}"
+      rescue StandardError
+      end
+      # Only append if q is not already present
       has_q = begin
         URI.parse(href).query.to_s.include?('q=')
       rescue URI::InvalidURIError
         href.include?('q=')
       end
+      begin
+        Rails.logger.debug("[BL document_link_params] has_q=#{has_q}")
+      rescue StandardError
+      end
+      begin
+        puts "[BL document_link_params] has_q=#{has_q}"
+      rescue StandardError
+      end
       unless has_q
         params_hash[:data][:context_href] = href + sep + "q=#{ERB::Util.url_encode(params[:q])}"
+        begin
+          Rails.logger.debug("[BL document_link_params] href_after=#{params_hash[:data][:context_href]}")
+        rescue StandardError
+        end
+        begin
+          puts "[BL document_link_params] href_after=#{params_hash[:data][:context_href]}"
+        rescue StandardError
+        end
       end
     end
 
@@ -112,18 +131,15 @@ module Blacklight::UrlHelperBehavior
   # link based helpers ->
   #
 
-  # Constructs the URL to return to the catalog search results with all search filters,
-  # facets, search fields, and pagination preserved from the active search session.
-  def back_to_search_url
-    query_params = if respond_to?(:current_search_session) && current_search_session.try(:query_params).present?
-                     search_state.reset(current_search_session.query_params).to_hash
-                   else
-                     request.query_parameters.except('pageNum', 'id').to_h
-                   end
+  # Create a link back to the index screen, keeping the user's facet, query and paging choices intact by using session.
+  # @example
+  #   link_back_to_catalog(label: 'Back to Search')
+  #   link_back_to_catalog(label: 'Back to Search', route_set: my_engine)
+  def link_back_to_catalog(opts = { label: nil })
+    scope = opts.delete(:route_set) || self
+    query_params = search_state.reset(current_search_session.try(:query_params)).to_hash
 
-    query_params = query_params.with_indifferent_access
-
-    if respond_to?(:search_session) && search_session['counter']
+    if search_session['counter']
       per_page = (search_session['per_page'] || blacklight_config.default_per_page).to_i
       counter = search_session['counter'].to_i
 
@@ -131,29 +147,11 @@ module Blacklight::UrlHelperBehavior
       query_params[:page] = ((counter - 1) / per_page) + 1
     end
 
-    query_params.delete(:id)
-    query_params.delete(:pageNum)
-    query_params.delete(:utf8)
-    query_params.delete(:commit)
-
-    lang = respond_to?(:current_ui_language_param) ? current_ui_language_param : (params[:lang].presence || I18n.locale.to_s)
-    query_params[:lang] ||= lang if lang.present?
-
-    clean_params = query_params.except(:controller, :action, :only_path)
-    if clean_params.except(:lang).empty? && clean_params[:q].blank?
-      search_action_path(only_path: true, lang: query_params[:lang])
-    else
-      search_action_path(clean_params.merge(only_path: true))
-    end
-  end
-
-  # Create a link back to the index screen, keeping the user's facet, query and paging choices intact by using session.
-  # @example
-  #   link_back_to_catalog(label: 'Back to Search')
-  #   link_back_to_catalog(label: 'Back to Search', route_set: my_engine)
-  def link_back_to_catalog(opts = { label: nil })
-    scope = opts.delete(:route_set) || self
-    link_url = back_to_search_url
+    link_url = if query_params.empty?
+                 search_action_path(only_path: true)
+               else
+                 scope.url_for(query_params)
+               end
     label = opts.delete(:label)
 
     if link_url =~ /bookmarks/

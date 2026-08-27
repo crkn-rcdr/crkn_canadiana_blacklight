@@ -48,19 +48,19 @@
               <tbody>
                 <tr>
                   <th scope="row">Recherche</th>
-                  <td><code>GET /catalogue?search_field=all_fields&amp;q=&amp;format=json</code></td>
+                  <td><code>GET /catalog?search_field=all_fields&amp;q=&amp;format=json</code></td>
                 </tr>
                 <tr>
                   <th scope="row">Notice individuelle</th>
-                  <td><code>GET /catalogue/:id?format=json</code></td>
+                  <td><code>GET /catalog/:id?format=json</code></td>
                 </tr>
                 <tr>
                   <th scope="row">Facette</th>
-                  <td><code>GET /catalogue/facet/:facet_id?search_field=all_fields&amp;q=&amp;format=json</code></td>
+                  <td><code>GET /catalog/facet/:facet_id?search_field=all_fields&amp;q=&amp;format=json</code></td>
                 </tr>
                 <tr>
                   <th scope="row">Export de notice</th>
-                  <td><code>GET /catalogue/:id?format=marc|marcxml|xml</code></td>
+                  <td><code>GET /catalog/:id?format=marc|marcxml|xml</code></td>
                 </tr>
               </tbody>
             </table>
@@ -139,7 +139,7 @@
           <h3 id="api-structure">Structure des réponses du catalogue</h3>
           <p>
             Une requête de recherche comme
-            <code>/catalogue?search_field=all_fields&amp;q=&amp;format=json</code>
+            <code>/catalog?search_field=all_fields&amp;q=&amp;format=json</code>
             retourne:
           </p>
           <div class="api-table-wrap">
@@ -171,9 +171,9 @@
               </tbody>
             </table>
           </div>
-          <figure class="api-snippet api-snippet--docmost" aria-label="Structure JSON d'une réponse de catalogue">
+          <figure class="api-snippet api-snippet--docmost" aria-label="Structure de réponse catalogue en JSON">
             <figcaption>
-              <span class="api-snippet__label">Réponse</span>
+              <span class="api-snippet__label">Response</span>
               <span class="api-snippet__lang">JSON</span>
             </figcaption>
             <pre class="api-code api-code--docmost"><code>{
@@ -201,7 +201,7 @@
                     "attributes": {"label": "Language", "value": "..."}
                 }
             },
-            "links": {"self": "http://localhost:3000/catalogue/oocihm.N_00591?lang=fr"}
+            "links": {"self": "http://localhost:3000/catalog/oocihm.N_00591?lang=en"}
         }
     ],
     "included": [
@@ -228,7 +228,7 @@
 BASE_URL = "http://localhost:3000"
 
 response = requests.get(
-    f"{BASE_URL}/catalogue",
+    f"{BASE_URL}/catalog",
     params={"search_field": "all_fields", "q": "", "format": "json"},
     timeout=30,
 )
@@ -248,7 +248,7 @@ print(catalogue["meta"]["pages"]["total_count"])</code></pre>
 BASE_URL = "http://localhost:3000"
 
 response = requests.get(
-    f"{BASE_URL}/catalogue",
+    f"{BASE_URL}/catalog",
     params={
         "q": "cartes",
         "search_field": "all_fields",
@@ -274,7 +274,7 @@ cartes = response.json()</code></pre>
 BASE_URL = "http://localhost:3000"
 
 anglais_response = requests.get(
-    f"{BASE_URL}/catalogue",
+    f"{BASE_URL}/catalog",
     params={
         "q": "",
         "search_field": "all_fields",
@@ -287,7 +287,7 @@ anglais_response.raise_for_status()
 anglais = anglais_response.json()
 
 journaux_response = requests.get(
-    f"{BASE_URL}/catalogue",
+    f"{BASE_URL}/catalog",
     params={
         "q": "",
         "search_field": "all_fields",
@@ -311,7 +311,7 @@ journaux = journaux_response.json()</code></pre>
 BASE_URL = "http://localhost:3000"
 
 response = requests.get(
-    f"{BASE_URL}/catalogue",
+    f"{BASE_URL}/catalog",
     params={
         "q": "",
         "search_field": "all_fields",
@@ -336,7 +336,7 @@ periode = response.json()</code></pre>
 BASE_URL = "http://localhost:3000"
 
 json_response = requests.get(
-    f"{BASE_URL}/catalogue/oocihm.N_00591",
+    f"{BASE_URL}/catalog/oocihm.N_00591",
     params={"format": "json"},
     timeout=30,
 )
@@ -344,7 +344,7 @@ json_response.raise_for_status()
 notice_json = json_response.json()
 
 marc_response = requests.get(
-    f"{BASE_URL}/catalogue/oocihm.N_00591",
+    f"{BASE_URL}/catalog/oocihm.N_00591",
     params={"format": "marc"},
     timeout=30,
 )
@@ -352,7 +352,7 @@ marc_response.raise_for_status()
 notice_marc = marc_response.text
 
 marcxml_response = requests.get(
-    f"{BASE_URL}/catalogue/oocihm.N_00591",
+    f"{BASE_URL}/catalog/oocihm.N_00591",
     params={"format": "marcxml"},
     timeout=30,
 )
@@ -773,9 +773,9 @@ BASE_URL = "http://localhost:3000"
 PRESENTATION_SERVICE = "{presentation_service}"
 CONTENT_SEARCH_SERVICE = "{content_search_service}"
 
-# 1) Obtenir une notice et extraire le lien ARK depuis le HTML
-record = requests.get(
-    f"{BASE_URL}/catalogue/oocihm.N_00591",
+# 1) Récupérer une notice et extraire l'ARK (href) depuis la valeur HTML
+notice = requests.get(
+    f"{BASE_URL}/catalog/oocihm.N_00591",
     params={"format": "json"},
     timeout=30,
 ).json()

@@ -3,24 +3,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - redis
     environment:
       RAILS_SERVE_STATIC_FILES: "true"
-      DOWNLOAD_CACHE_REDIS_URL: "${DOWNLOAD_CACHE_REDIS_URL:-redis://redis:6379/0}"
-      DOWNLOAD_CACHE_REDIS_POOL_SIZE: "${DOWNLOAD_CACHE_REDIS_POOL_SIZE:-5}"
-      DOWNLOAD_CACHE_REDIS_TIMEOUT: "${DOWNLOAD_CACHE_REDIS_TIMEOUT:-1}"
-      IIIF_IMAGE_BASE: "${IIIF_IMAGE_BASE:-https://image-tor.canadiana.ca/iiif/2}"
     ports:
       - "3000:3000"
     env_file:
       - .env
-
-  redis:
-    image: redis:7-alpine
-    command: ["redis-server", "--appendonly", "yes"]
-    volumes:
-      - redis_data:/data
-
-volumes:
-  redis_data:

@@ -30,7 +30,7 @@ services:
       - |
         set -e
         bundle check
-        if [ -f package.json ] && [ ! -d node_modules ]; then yarn install --immutable; fi
+        if [ -f package.json ] && [ ! -d node_modules/vite ]; then yarn install --immutable; fi
         rm -f tmp/pids/server.pid
         bundle exec rails db:prepare
         yarn vite --host 0.0.0.0 --port 3036 &

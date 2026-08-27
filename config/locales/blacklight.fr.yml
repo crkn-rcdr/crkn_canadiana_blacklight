@@ -21,7 +21,7 @@ fr:
       blurb_html: "Les collections et l'infrastructure Canadiana existent grâce à l'engagement commun et au soutien financier des 88 bibliothèques membres du RCDR à travers le pays. Ensemble, elles permettent à chacun d'explorer, de découvrir et de se connecter au patrimoine documentaire du Canada. <a href='https://www.crkn-rcdr.ca/fr/a-propos-du-rcdr' target='blank'>En savoir plus sur le RCDR.</a>"
       visit_site_aria: "Visiter le site de %{name}"
     page_search:
-      matching_pages_for_html: "Pages correspondantes pour <strong>%{term}</strong>"
+      matching_pages_for_html: "Résultats de la recherche en texte intégral pour <strong>%{term}</strong>"
       no_results_html: "Aucun résultat dans cet élément"
       show_more: Afficher plus
       show_less: Afficher moins
@@ -52,8 +52,9 @@ fr:
       copied_js: Copié !
       copy_failed_js: Échec de la copie dans le presse‑papiers.
       what_is_iiif: Qu'est‑ce que IIIF ?
-      librarian_view: Afficher les métadonnées détaillées
-      cite: Citer
+      librarian_view: Métadonnées de bibliothèque
+      citation_label: Generer une citation
+      cite: "Citer : MLA / APA / Chicago"
       citation: Citer
       clear: Effacer
       email: Envoyer
@@ -143,6 +144,7 @@ fr:
         invalid_solr_id: Vous avez demandé une notice qui n'existe pas.
       facets:
         all: Tout
+        apply: Appliquer
         clear: Effacer
         count: "%{number}"
         group:
@@ -274,15 +276,17 @@ fr:
       published:
         label: Adresse bibliographique
       date:
-        label: Date
+        label: Date de numérisation
       id:
         label: Identificateur
       subject:
         label: Sujet
       material:
         label: Matériel
+      material_language:
+        label: Langue du document
       depositor:
-        label: Fournisseur
+        label: Établissement d'origine
       notes:
         label: Notes
       original_version_note:
@@ -294,13 +298,13 @@ fr:
       right_statements:
         label: Droits
       persistent_url:
-        label: URL pérenne
+        label: URL stable
       serial_msg:
         label: Est-ce une publication en série
       issue_msg:
         label: Est un numéro d'une publication en série
       date_added:
-        label: Date d'ajout
+        label: Date d'ajout/mise à jour
       language:
         label: Langue
       collection:
@@ -364,14 +368,14 @@ fr:
     L_LAC: Bibliothèque et Archives Canada
     L_NEW : Quoi de neuf
     L_READ_MORE: Lire la suite
-    L_RECORD: Détails
-    L_SERIAL_RECORD: Détails
+    L_RECORD: À propos de cet article
+    L_SERIAL_RECORD: À propos de cette série
     L_SEARCH_BREADCRUMB: Recherche dans la collection
     L_ALL_ISSUES: Liste des numéros
     L_VIEW_ISSUE: Voir le numéro
     L_NO_ISSUES_MSG: Aucun problème dans cette série
     L_TERMS: Conditions de service
-    L_MATCHING_PAGES_PRE: Pages correspondantes pour
+    L_MATCHING_PAGES_PRE: Résultats de la recherche en texte intégral pour
     L_MATCHING_PAGES_SUF: dans cet élément
   links:
     URL_ABOUT: "https://www.crkn-rcdr.ca/fr/canadiana"
@@ -380,7 +384,7 @@ fr:
     URL_CARL: "http://www.carl-abrc.ca/fr/"
     URL_CNDHI: "https://www.cndhi-ipnpc.ca/fr"
     URL_CONTACT: "https://www.crkn-rcdr.ca/fr/nous-joindre"
-    URL_NEW: "/catalog?lang=en&q=&search_field=all_fields&sort=date-added-desc"
+    URL_NEW: "/catalogue?lang=fr&q=&search_field=all_fields&sort=date-added-desc"
     URL_CRKN: "https://www.crkn-rcdr.ca/fr"
     URL_GAC: "https://www.international.gc.ca/global-affairs-affaires-mondiales/home-accueil.aspx?lang=fra"
     URL_GAC_LIBRARY: "https://www.international.gc.ca/gac-amc/programs-programmes/jll-bjl/index.aspx?lang=fra"

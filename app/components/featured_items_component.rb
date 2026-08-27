@@ -45,8 +45,7 @@ class FeaturedItemsComponent < ViewComponent::Base
   end
 
   def record_link(record)
-    ark_url_for(record) || "/catalog/#{record['id']}?lang=#{I18n.locale}"
-  end
+    ark_url_for(record) || "/catalogue/#{record['id']}?lang=#{I18n.locale}"
 
   def viewer_id_for(record)
     "featured-osd-#{record['id'].to_s.gsub(/[^a-zA-Z0-9_-]/, '-')}"

@@ -21,7 +21,7 @@ en:
       blurb_html: "The Canadiana Collections and Infrastructure exist because of the shared commitment and financial support of CRKN's 88 member libraries from across the country. Together, they make it possible for everyone to explore, discover, and connect with Canada's documentary heritage. <a href='https://www.crkn-rcdr.ca/en/about-crkn' target='blank'>Learn more about CRKN.</a>"
       visit_site_aria: "Visit %{name} website"
     page_search:
-      matching_pages_for_html: "Matching pages for <strong>%{term}</strong>"
+      matching_pages_for_html: "Full text search hits for <strong>%{term}</strong>"
       no_results_html: "No results in this item"
       show_more: Show more
       show_less: Show less
@@ -52,8 +52,9 @@ en:
       copied_js: Copied!
       copy_failed_js: Failed to copy to clipboard.
       what_is_iiif: What is IIIF?
-      librarian_view: View Detailed Metadata
-      cite: Cite
+      librarian_view: Library Metadata
+      citation_label: Generate citation
+      cite: "Cite: MLA / APA / Chicago"
       citation: Cite
       clear: Clear
       email: Email
@@ -162,6 +163,7 @@ en:
         invalid_solr_id: Sorry, you have requested a record that doesn't exist.
       facets:
         all: All
+        apply: Apply
         clear: Clear Filter
         count: "%{number}"
         group:
@@ -293,15 +295,17 @@ en:
       published:
         label: Published
       date:
-        label: Date
+        label: Digitization Date
       id:
         label: Identifier
       subject:
         label: Subject
       material:
         label: Material
+      material_language:
+        label: Language of material
       depositor:
-        label: Depositor
+        label: Source Institution
       notes:
         label: Notes
       original_version_note:
@@ -313,13 +317,13 @@ en:
       right_statements:
         label: Rights Statement
       persistent_url:
-        label: Persistent URL
+        label: Stable Link
       serial_msg:
         label: Is a Serial Publication
       issue_msg:
         label: Is an Issue of a Serial Publication
       date_added:
-        label: Date Added
+        label: Date Added/Updated
       language:
         label: Language
       collection:
@@ -327,7 +331,7 @@ en:
       description:
         label: Description
       date_range:
-        label: Date Range
+        label: Publication Date
       all_fields:
         label: All Fields
       serial_title:
@@ -383,14 +387,14 @@ en:
     L_LAC: Libraries and Archives Canada
     L_NEW : "What's New"
     L_READ_MORE: Read more
-    L_RECORD: Details
-    L_SERIAL_RECORD: Details
+    L_RECORD: About this Item
+    L_SERIAL_RECORD: About this Serial
     L_SEARCH_BREADCRUMB: Collection search
     L_ALL_ISSUES: List of Issues
     L_VIEW_ISSUE: View Details
     L_NO_ISSUES_MSG: No issues in this serial
     L_TERMS: Terms of Service
-    L_MATCHING_PAGES_PRE: Matching pages for
+    L_MATCHING_PAGES_PRE: Full text search hits for
     L_MATCHING_PAGES_SUF: in this item
   links:
     URL_ABOUT: "https://www.crkn-rcdr.ca/en/canadiana"
@@ -399,7 +403,7 @@ en:
     URL_CARL: "http://www.carl-abrc.ca/"
     URL_CNDHI: "https://www.cndhi-ipnpc.ca/en"
     URL_CONTACT: "https://www.crkn-rcdr.ca/en/contact-us"
-    URL_NEW: "/catalog?lang=en&q=&search_field=all_fields&sort=date-added-desc"
+    URL_NEW: "/catalogue?lang=en&q=&search_field=all_fields&sort=date-added-desc"
     URL_CRKN: "https://www.crkn-rcdr.ca/en"
     URL_GAC: "https://www.international.gc.ca/global-affairs-affaires-mondiales/home-accueil.aspx?lang=eng"
     URL_GAC_LIBRARY: "https://www.international.gc.ca/gac-amc/programs-programmes/jll-bjl/index.aspx?lang=eng"

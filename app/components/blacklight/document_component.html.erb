@@ -2,7 +2,10 @@
   id: @id,
   data: {
     'document-id': @document.id.to_s.parameterize,
-    'document-counter': @counter
+    'document-counter': @counter,
+    'is-issue': @document._source['is_issue']&.first == 'Yes',
+    'parent-serial-id': @document._source['serial_key']&.first,
+    'serial-title': @document._source['serial_title']&.first
   },
   itemscope: true,
   itemtype: @document.itemtype,
@@ -17,12 +20,13 @@
 
       <% if @component.to_s == 'div' %>
         <% breadcrumb_paths = helpers.collection_breadcrumb_paths(@document) %>
-        <% root_breadcrumb_label = I18n.locale.to_s.start_with?('fr') ? 'Collection Canadiana' : 'Canadiana Collection' %>
-        <% if breadcrumb_paths.present? %>
-          <nav class="collection-breadcrumbs mb-3" aria-label="<%= t('breadcrumbs.collections', default: 'Collections') %>">
+        <% root_breadcrumb_label = I18n.locale.to_s.start_with?('fr') ? 'Collection Canadiana - Résultats de recherche' : 'Canadiana Collection - Search Results' %>
+        <% root_breadcrumb_url = helpers.back_to_search_url %>
+        <nav class="collection-breadcrumbs mb-3" aria-label="<%= t('breadcrumbs.collections', default: 'Collections') %>">
+          <% if breadcrumb_paths.present? %>
             <% breadcrumb_paths.each do |path| %>
               <ol class="breadcrumb mb-1">
-                <li class="breadcrumb-item collection-breadcrumbs__root"><a href="/catalog"><%= root_breadcrumb_label %></a></li>
+                <li class="breadcrumb-item collection-breadcrumbs__root"><%= link_to root_breadcrumb_label, root_breadcrumb_url %></li>
                 <% path.each_with_index do |segment, idx| %>
                   <% active = (idx == path.length - 1) %>
                   <li class="breadcrumb-item <%= 'active' if active %>">
@@ -33,13 +37,17 @@
                 <% end %>
                 <% if @document._source['is_issue']&.first == "Yes" && @document._source['serial_title'] %>
                   <li class="breadcrumb-item">
-                    <a href="/catalog/<%= @document._source['serial_key'][0] %>"><%= @document._source['serial_title'][0] %></a>
+                    <a href="/catalogue/<%= @document._source['serial_key'][0] %>"><%= @document._source['serial_title'][0] %></a>
                   </li> 
                 <% end %>
               </ol>
             <% end %>
-          </nav>
-        <% end %>
+          <% else %>
+            <ol class="breadcrumb mb-1">
+              <li class="breadcrumb-item collection-breadcrumbs__root"><%= link_to root_breadcrumb_label, root_breadcrumb_url %></li>
+            </ol>
+          <% end %>
+        </nav>
       <% end %>
 
       <% if @component == :div %>
@@ -62,19 +70,17 @@
             <!-- Sidebar -->
             <aside id="toggle-menu" class="col" aria-labelledby="details-heading">
               <div class="document-sidebar-header">
-                <h3 id="details-heading" class="h3 mb-0"><%= t('labels.L_SERIAL_RECORD') %></h3>
+                <h3 id="details-heading" class="h3 mb-0"><%= t(@document._source["is_serial"]&.first == "Yes" ? 'labels.L_SERIAL_RECORD' : 'labels.L_RECORD') %></h3>
               </div>
               <div>  
                
-                <ul class="list-unstyled mb-0" style="margin-top: 1rem;">
-                  <li class="mb-1">
-                    <a href="/catalog/<%= params[:id] %>/librarian_view" data-blacklight-modal="trigger" data-turbo="false">
-                      <i class="bi bi-journal-text me-1" aria-hidden="true"></i>
-                      <%= t('blacklight.tools.librarian_view') %>
-                    </a>
-                  </li>
+                <p class="download-toolbar-title citation-toolbar-title"><%= t('blacklight.tools.citation_label', default: 'Generate citation') %>:</p>
+                <ul class="list-unstyled mb-0">
                   <li>
-                    <a href="/catalog/<%= params[:id] %>/citation" data-blacklight-modal="trigger" data-turbo="false">
+                    <a class="btn btn-outline-custom btn-sm sidebar-cite-btn"
+                       href="/catalogue/<%= params[:id] %>/citation"
+                       data-blacklight-modal="trigger"
+                       data-turbo="false">
                       <i class="bi bi-quote me-1" aria-hidden="true"></i>
                       <%= t('blacklight.tools.cite') %>
                     </a>
@@ -250,6 +256,15 @@
                 <% metadata_sections.each do |section| %>
                   <%= section %>
                 <% end %>
+
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="/catalogue/<%= params[:id] %>/librarian_view" data-blacklight-modal="trigger" data-turbo="false">
+                      <i class="bi bi-journal-text me-1" aria-hidden="true"></i>
+                      <%= t('blacklight.tools.librarian_view') %>
+                    </a>
+                  </li>
+                </ul>
 
               </div>
             </aside>

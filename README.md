@@ -85,6 +85,38 @@ Optional variables for download links:
 - `DOWNLOAD_CACHE_REDIS_TIMEOUT` - Redis connection/read/write timeout in seconds. Defaults to `1`.
 - `IIIF_IMAGE_BASE` - IIIF Image API base used to derive full-size JPG download links. Defaults to `https://image-tor.canadiana.ca/iiif/2`.
 
+Seed the local development download cache:
+
+```bash
+docker compose -f docker-compose.dev.yml up -d redis
+docker compose -f docker-compose.dev.yml run --rm --no-deps web ruby script/seed_download_cache.rb --sample
+```
+
+Seed a full portal cache into the dev Redis:
+
+```bash
+docker compose -f docker-compose.dev.yml run --rm --no-deps web ruby script/seed_download_cache.rb --portal canadiana --full
+```
+
+Seed another portal by passing the portal name and either setting its Solr env var or passing `--solr-urls`:
+
+```bash
+docker compose -f docker-compose.dev.yml run --rm --no-deps \
+  -e DOWNLOAD_CACHE_SOLR_URLS_HERITAGE=http://solr-host:8983/solr/blacklight_marc \
+  web ruby script/seed_download_cache.rb --portal heritage --sample --clear
+```
+
+```bash
+docker compose -f docker-compose.dev.yml run --rm --no-deps web ruby script/seed_download_cache.rb \
+  --portal gac \
+  --solr-urls http://solr-host:8983/solr/blacklight_marc \
+  --full
+```
+
+Supported portal names are `canadiana`, `heritage`, `gac`, `nrcan`, `pub`, `sve`, `parl`, and `mcgillarchives`. Run `docker compose -f docker-compose.dev.yml run --rm --no-deps web ruby script/seed_download_cache.rb --list-portals` to print the portal map and env var names.
+
+The seed script reads non-secret defaults from `.env.dev`. Set `COUCH_USERNAME` and `COUCH_PASSWORD` there if `copresentation2` requires authentication. The Redis keys are not portal-namespaced, matching production where each portal gets its own Redis, so use `--clear` when switching a single local Redis between portals.
+
 Legacy Swift-backed download variables:
 
 - `CAP_PASS` - HMAC key used to sign Swift URLs.
@@ -113,8 +145,8 @@ rake solr:marc:index MARC_FILE=marc-file-name-here.mrc
 Clear the Solr index:
 
 ```bash
-curl -X POST -H "Content-Type: application/json" "http://username:password@host/solr/blacklight_marc_demo/update?commit=true" -d '{ "delete": {"query":"*:*"} }'
-curl -X POST -H "Content-Type: application/json" "http://localhost:8983/solr/blacklight_marc_demo/update?commit=true" -d '{ "delete": {"query":"*:*"} }'
+curl -X POST -H "Content-Type: application/json" "http://username:password@host/solr/blacklight_marc/update?commit=true" -d '{ "delete": {"query":"*:*"} }'
+curl -X POST -H "Content-Type: application/json" "http://localhost:8983/solr/blacklight_marc/update?commit=true" -d '{ "delete": {"query":"*:*"} }'
 ```
 
 ### Production Solr Setup (CRKN)

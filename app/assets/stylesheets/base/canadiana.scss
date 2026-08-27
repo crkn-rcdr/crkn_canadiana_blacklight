@@ -5,7 +5,7 @@
   --bs-dark-rgb: var(--theme-bg);
   --bs-link-hover-color: var(--theme-primary);
   --bs-link-color: var(--theme-primary);
-  --site-radius: 3px !important;
+  --site-radius: 2px !important;
   --bs-border-radius: var(--site-radius);
   --bs-border-radius-sm: var(--site-radius);
   --bs-border-radius-lg: var(--site-radius);
@@ -283,6 +283,63 @@ summary:focus-visible,
 .sort-pagination,
 .pagination-search-widgets {
   border-bottom: none;
+  padding-bottom: 0 !important;
+
+  &:empty,
+  &:not(:has(a, button, .page-links, .search-context)) {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+    border: none !important;
+  }
+}
+
+/* Border for outline/secondary buttons, search widgets (sort/per-page), and catalog action links */
+.btn-outline-secondary,
+.btn-outline-custom,
+.view-all-issues-link,
+.search-widgets .btn,
+.search-widgets .dropdown-toggle,
+#sortAndPerPage .btn,
+#sortAndPerPage .dropdown-toggle,
+#sortAndPerPage .btn-outline-secondary,
+#sort-dropdown .btn,
+#sort-dropdown .dropdown-toggle,
+#per_page-dropdown .btn,
+#per_page-dropdown .dropdown-toggle,
+.pagination-search-widgets .btn,
+.pagination-search-widgets .btn-outline-secondary,
+.catalog-show-breadcrumb-row .view-all-issues-link,
+.catalog-show-breadcrumb-row .btn {
+  --bs-btn-border-color: #bec7d2;
+  border: 1px solid #bec7d2 !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:active,
+.btn-outline-secondary:focus,
+.btn-outline-secondary.active,
+.btn-outline-secondary.show,
+.btn-outline-secondary.dropdown-toggle.show,
+.search-widgets .btn:hover,
+.search-widgets .btn:active,
+.search-widgets .btn:focus,
+.search-widgets .dropdown-toggle:hover,
+.search-widgets .dropdown-toggle:active,
+.search-widgets .dropdown-toggle:focus,
+.search-widgets .dropdown-toggle.show,
+#sortAndPerPage .btn:hover,
+#sortAndPerPage .btn:active,
+#sortAndPerPage .btn:focus,
+#sortAndPerPage .dropdown-toggle:hover,
+#sortAndPerPage .dropdown-toggle:active,
+#sortAndPerPage .dropdown-toggle:focus,
+#sortAndPerPage .dropdown-toggle.show,
+.view-all-issues-link:hover,
+.view-all-issues-link:active,
+.view-all-issues-link:focus {
+  border-color: #bec7d2 !important;
 }
 
 .blacklight-catalog-index .catalog-search-hero {
@@ -1328,7 +1385,7 @@ summary:focus-visible,
   margin-bottom: 0.5rem;
 }
 .blacklight-catalog-index .documents-list .document-metadata dt {
-  margin-top: 0.5rem;
+  margin-top: 0.23rem;
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -1393,32 +1450,14 @@ summary:focus-visible,
   vertical-align: middle;
 }
 
+.blacklight-catalog-show .pagination-search-widgets,
 .blacklight-catalog-show #appliedParams + .pagination-search-widgets {
-  float: right;
-  margin: 0;
-  padding-top: 0.15rem;
-}
-
-.blacklight-catalog-show #appliedParams + .pagination-search-widgets .search-context.page-links {
-  margin: 0;
-  white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-  .blacklight-catalog-show #appliedParams {
-    display: flex;
-  }
-
-  .blacklight-catalog-show #appliedParams + .pagination-search-widgets {
-    float: none;
-    display: block;
-    margin-top: 0.55rem;
-    padding-top: 0;
-  }
-
-  .blacklight-catalog-show #appliedParams + .pagination-search-widgets .search-context.page-links {
-    white-space: normal;
-  }
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  border: none !important;
+  visibility: hidden !important;
 }
 /* Unified tools styling (IIIF + sidebar Tools) */
 .show-tools.card,
@@ -1696,6 +1735,238 @@ summary:focus-visible,
   overflow-wrap: normal;
   flex: 0 0 auto;
   line-height: 1;
+}
+
+.checkbox-facet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.checkbox-facet-values li {
+  display: block;
+  padding: 0;
+}
+
+.checkbox-facet-option {
+  display: grid;
+  grid-template-columns: 1rem minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.45rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.checkbox-facet-option:hover {
+  background: #f7f9fb;
+}
+
+.checkbox-facet-input {
+  margin-top: 0.22rem;
+}
+
+.checkbox-facet-label {
+  min-width: 0;
+  color: #0f172a;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.checkbox-facet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-facet-more {
+  margin-top: -0.1rem;
+}
+
+.checkbox-facet-modal-pagination {
+  padding-top: 0.25rem;
+}
+
+.checkbox-facet-apply,
+.checkbox-facet-clear {
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.metadata-identifier {
+  font-family: inherit;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.rights-statement-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.1rem 0;
+}
+
+.document-result-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.35rem 0 0.75rem;
+}
+
+.result-chip,
+.rights-statement-badge {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 36px;
+  padding: 0.28rem 0.6rem;
+  border: 0;
+  border-radius: 2px;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.result-chip {
+  background: #e8f4f5;
+  color: #1d808b;
+}
+
+.result-chip--format {
+  background: #e5f3fb;
+  color: #007da3;
+  text-transform: uppercase;
+}
+
+.result-chip__icon {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.35rem;
+  background-color: currentColor;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.result-chip__icon.icon-ebook,
+.result-chip__icon.icon-book,
+.result-chip__icon.icon-software {
+  mask-image: url(/assets/icon-book.png);
+  -webkit-mask-image: url(/assets/icon-book.png);
+}
+
+.result-chip__icon.icon-newspaper-issue {
+  mask-image: url(/assets/icon-newspaper-issue.png);
+  -webkit-mask-image: url(/assets/icon-newspaper-issue.png);
+}
+
+.result-chip__icon.icon-journal-issue {
+  mask-image: url(/assets/icon-journal-issue.png);
+  -webkit-mask-image: url(/assets/icon-journal-issue.png);
+}
+
+.result-chip__icon.icon-journal {
+  mask-image: url(/assets/icon-journal.png);
+  -webkit-mask-image: url(/assets/icon-journal.png);
+}
+
+.result-chip__icon.icon-newspaper {
+  mask-image: url(/assets/icon-newspaper.png);
+  -webkit-mask-image: url(/assets/icon-newspaper.png);
+}
+
+.result-chip__icon.icon-musicalscore {
+  mask-image: url(/assets/icon-musicalscore.png);
+  -webkit-mask-image: url(/assets/icon-musicalscore.png);
+}
+
+.result-chip__icon.icon-electronic {
+  mask-image: url(/assets/icon-electronic.svg);
+  -webkit-mask-image: url(/assets/icon-electronic.svg);
+}
+
+.result-chip--full-text {
+  background: #eef8e8;
+  color: #338500;
+}
+
+.rights-statement-badge {
+  max-width: 100%;
+  gap: 0.45rem;
+  background: #e8f4f5;
+  color: #1d808b;
+}
+
+.rights-statement-badge--in_copyright {
+  background: #fdebed;
+  color: #e71328;
+}
+
+.rights-statement-badge--no_copyright {
+  background: #eef8e8;
+  color: #338500;
+}
+
+.rights-statement-badge--other {
+  background: #e8f4f5;
+  color: #1d808b;
+}
+
+.rights-statement-badge__icon {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  background-color: currentColor;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.rights-statement-badge__icon--in_copyright {
+  mask-image: url(/assets/rightsstatements/inc.svg);
+  -webkit-mask-image: url(/assets/rightsstatements/inc.svg);
+}
+
+.rights-statement-badge__icon--no_copyright {
+  mask-image: url(/assets/rightsstatements/noc.svg);
+  -webkit-mask-image: url(/assets/rightsstatements/noc.svg);
+}
+
+.rights-statement-badge__icon--other {
+  mask-image: url(/assets/rightsstatements/other.svg);
+  -webkit-mask-image: url(/assets/rightsstatements/other.svg);
+}
+
+.rights-statement-badge__link {
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.rights-statement-badge__link:hover,
+.rights-statement-badge__link:focus-visible {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.blacklight-catalog-index .documents-list .blacklight-rights_stat_tsim {
+  margin-top: 0.25rem;
 }
 
 /* Details/summary (Range List) */
@@ -2931,10 +3202,30 @@ summary:focus-visible,
 }
 
 .topbar-language-switch {
+  box-sizing: border-box;
+  height: 24px;
+  display: flex;
+  align-items: center;
   line-height: 1.2;
   color: #2d4f53;
   font-size: var(--topbar-nav-font-size);
   letter-spacing: 0.01em;
+  white-space: nowrap;
+  padding-left: 0.62rem;
+  margin-left: 0.1rem;
+  border-left: 1px solid rgba(29, 43, 58, 0.18);
+}
+
+.topbar-language-switch .topbar-language-switch-pipe {
+  margin: 0 0.3rem;
+}
+
+.topbar-language-switch > span:first-of-type {
+  margin-right:0.5rem;
+}
+
+.topbar-terms-link {
+  line-height: 1.2;
   white-space: nowrap;
 }
 
@@ -2956,6 +3247,8 @@ summary:focus-visible,
 }
 
 .topbar-socials {
+  box-sizing: border-box;
+  height: 24px;
   display: flex;
   align-items: center;
   gap: 0.38rem;
@@ -3320,8 +3613,9 @@ summary:focus-visible,
   }
 
   .topbar-socials {
-    padding-left: 0.55rem;
-    border-left: 0;
+    padding-left: 0.62rem;
+    margin-left: 0.1rem;
+    border-left: 1px solid rgba(29, 43, 58, 0.18);
   }
 
   .topbar-main {
@@ -10627,8 +10921,11 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-content: start;
-  min-height: clamp(290px, 22vw, 360px);
+  //min-height: clamp(290px, 22vw, 360px);
   padding: clamp(1.4rem, 2.3vw, 1.95rem) clamp(2.45rem, 4.8vw, 5.3rem) 0;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: clamp(1.4rem, 2.3vw, 1.95rem);
 }
 
 .blacklight-catalog-index .catalog-search-hero__credit {
@@ -10751,7 +11048,7 @@ html[lang="fr"] .blacklight-pages-about_heritage .about-heritage-hero__title {
 
 .blacklight-catalog-index .catalog-search-hero__applied-shell > .canadiana-shell {
   max-width: 1220px;
-  margin-inline: auto;
+  margin-inline: 0;
   padding-left: clamp(20px, 2.6vw, 46px);
   padding-right: clamp(20px, 2.6vw, 46px);
 }

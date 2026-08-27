@@ -43,3 +43,9 @@ config/master.key
 .env.*.local
 .env.example
 .env.dev
+
+.yarn/*
+.yarn/install-state.gz
+script
+
+docs/*

@@ -39,8 +39,31 @@ require 'socket'
 require 'time'
 require 'uri'
 
-DEFAULT_REDIS_URL = 'redis://127.0.0.1:7001/0'
-DEFAULT_COUCH_URL = 'http://trepat.tor.c7a.ca:5984'
+def load_env_defaults!
+  root_dir = File.expand_path('..', __dir__)
+  ['.env.dev', '.env'].each do |filename|
+    path = File.join(root_dir, filename)
+    next unless File.file?(path)
+
+    File.foreach(path) do |line|
+      line = line.strip
+      next if line.empty? || line.start_with?('#')
+
+      key, val = line.split('=', 2)
+      next if key.nil? || val.nil?
+
+      key = key.strip
+      val = val.strip
+      val = val[1..-2] if (val.start_with?('"') && val.end_with?('"')) || (val.start_with?("'") && val.end_with?("'"))
+      ENV[key] ||= val unless key.empty?
+    end
+  end
+end
+
+load_env_defaults!
+
+DEFAULT_REDIS_URL = ENV['DOWNLOAD_CACHE_REDIS_URL'] || "redis://127.0.0.1:#{ENV.fetch('DOWNLOAD_CACHE_REDIS_PORT', '7001')}/0"
+DEFAULT_COUCH_URL = ENV['COUCH_BASE_URL'] || ENV['COUCHDB_URL'] || 'http://trepat.tor.c7a.ca:5984'
 DEFAULT_SAMPLE_SLUGS = ['oocihm.13566'].freeze
 DEFAULT_BATCH_SIZE = 500
 DEFAULT_REDIS_PIPELINE_SIZE = 100
@@ -54,13 +77,13 @@ PORTAL_CONFIGS = {
     host: 'www',
     blacklight_core: 'blacklight_marc',
     solr_urls: [
-      'http://10.202.1.33:8983/solr/blacklight_marc',
+      ENV['SOLR_URL'] || 'http://10.202.1.33:8983/solr/blacklight_marc',
       'http://10.202.1.32:8983/solr/blacklight_marc'
-    ],
-    access_db: 'access',
-    canvas_db: 'canvas',
-    presentation_db: 'copresentation2',
-    sample_id_prefix: 'oocihm.135',
+    ].compact.uniq,
+    access_db: ENV['COUCH_ACCESS_DB'] || 'access',
+    canvas_db: ENV['COUCH_CANVAS_DB'] || 'canvas',
+    presentation_db: ENV['COUCH_PRESENTATION_DB'] || 'copresentation2',
+    sample_id_prefix: ENV['DOWNLOAD_CACHE_ID_PREFIX'] || 'oocihm.135',
     sample_slugs: DEFAULT_SAMPLE_SLUGS
   },
   'heritage' => {
@@ -941,6 +964,7 @@ def solr_urls_for_portal(options, config, portal)
   configured_value(options[:solr_urls]) ||
     portal_env('DOWNLOAD_CACHE_SOLR_URLS', portal) ||
     configured_value(ENV['DOWNLOAD_CACHE_SOLR_URLS']) ||
+    configured_value(ENV['SOLR_URL']) ||
     default_solr_urls(options, config)
 end
 

@@ -10,6 +10,32 @@
  */
 
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+function loadEnvDefaults() {
+  const rootDir = path.resolve(__dirname, '..');
+  ['.env.dev', '.env'].forEach(filename => {
+    const filePath = path.join(rootDir, filename);
+    if (!fs.existsSync(filePath)) return;
+    const lines = fs.readFileSync(filePath, 'utf8').split('\n');
+    lines.forEach(line => {
+      line = line.trim();
+      if (!line || line.startsWith('#')) return;
+      const idx = line.indexOf('=');
+      if (idx === -1) return;
+      const key = line.slice(0, idx).trim();
+      let val = line.slice(idx + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      if (key && process.env[key] === undefined) {
+        process.env[key] = val;
+      }
+    });
+  });
+}
+loadEnvDefaults();
 
 const SOLR_URL = process.env.SOLR_URL || 'http://10.202.1.33:8983/solr/blacklight_marc';
 const BATCH_SIZE = parseInt(process.env.BATCH_SIZE || '5000', 10);

@@ -3,7 +3,33 @@
 
 const http = require('http');
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
 const { URL } = require('url');
+
+function loadEnvDefaults() {
+  const rootDir = path.resolve(__dirname, '..');
+  ['.env.dev', '.env'].forEach(filename => {
+    const filePath = path.join(rootDir, filename);
+    if (!fs.existsSync(filePath)) return;
+    const lines = fs.readFileSync(filePath, 'utf8').split('\n');
+    lines.forEach(line => {
+      line = line.trim();
+      if (!line || line.startsWith('#')) return;
+      const idx = line.indexOf('=');
+      if (idx === -1) return;
+      const key = line.slice(0, idx).trim();
+      let val = line.slice(idx + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      if (key && process.env[key] === undefined) {
+        process.env[key] = val;
+      }
+    });
+  });
+}
+loadEnvDefaults();
 
 const args = process.argv.slice(2);
 const options = {

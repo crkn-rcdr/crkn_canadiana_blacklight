@@ -5,9 +5,32 @@ require 'json'
 require 'uri'
 require 'time'
 
+def load_env_defaults!
+  root_dir = File.expand_path('..', __dir__)
+  ['.env.dev', '.env'].each do |filename|
+    path = File.join(root_dir, filename)
+    next unless File.file?(path)
+
+    File.foreach(path) do |line|
+      line = line.strip
+      next if line.empty? || line.start_with?('#')
+
+      key, val = line.split('=', 2)
+      next if key.nil? || val.nil?
+
+      key = key.strip
+      val = val.strip
+      val = val[1..-2] if (val.start_with?('"') && val.end_with?('"')) || (val.start_with?("'") && val.end_with?("'"))
+      ENV[key] ||= val unless key.empty?
+    end
+  end
+end
+
+load_env_defaults!
+
 # script/backfill_resource_types.rb
 # Backfills resource_type_ssim_str and cleans up serial_title for all documents
-# in Solr (http://10.202.1.33:8983/solr/blacklight_marc).
+# in Solr.
 
 SOLR_URL = ENV.fetch('SOLR_URL', 'http://10.202.1.33:8983/solr/blacklight_marc')
 BATCH_SIZE = ENV.fetch('BATCH_SIZE', '2000').to_i

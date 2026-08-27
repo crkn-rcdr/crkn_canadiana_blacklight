@@ -16,6 +16,29 @@ require 'rexml/document'
 require 'rsolr'
 require_relative '../lib/rights_statement_labeler'
 
+def load_env_defaults!
+  root_dir = File.expand_path('..', __dir__)
+  ['.env.dev', '.env'].each do |filename|
+    path = File.join(root_dir, filename)
+    next unless File.file?(path)
+
+    File.foreach(path) do |line|
+      line = line.strip
+      next if line.empty? || line.start_with?('#')
+
+      key, val = line.split('=', 2)
+      next if key.nil? || val.nil?
+
+      key = key.strip
+      val = val.strip
+      val = val[1..-2] if (val.start_with?('"') && val.end_with?('"')) || (val.start_with?("'") && val.end_with?("'"))
+      ENV[key] ||= val unless key.empty?
+    end
+  end
+end
+
+load_env_defaults!
+
 options = {
   solr_url: ENV.fetch('SOLR_URL', nil),
   query: 'rights_stat_tsim:*',

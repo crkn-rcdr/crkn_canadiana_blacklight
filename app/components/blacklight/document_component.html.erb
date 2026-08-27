@@ -72,6 +72,20 @@
               <div class="document-sidebar-header">
                 <h3 id="details-heading" class="h3 mb-0"><%= t(@document._source["is_serial"]&.first == "Yes" ? 'labels.L_SERIAL_RECORD' : 'labels.L_RECORD') %></h3>
               </div>
+              <% if @document._source["is_serial"]&.first != "Yes" %>
+                <% has_ocr = Array(@document['notes_tsim']).any? { |n| n.to_s.match?(/OCR|optical character|ROC|reconnaissance optique/i) } || @document['all_text_timv'].present? %>
+                <div class="sidebar-full-text-status mt-2 mb-2">
+                  <% if has_ocr %>
+                    <!--span class="result-chip result-chip--full-text" title="<%= t('blacklight.tools.full_text_available_tooltip') %>">
+                      <%= t('blacklight.tools.full_text_available') %>
+                    </span-->
+                  <% else %>
+                    <!-span class="result-chip result-chip--full-text-unavailable" title="<%= t('blacklight.tools.full_text_unavailable_tooltip') %>">
+                      <%= t('blacklight.tools.full_text_unavailable') %>
+                    </span-->
+                  <% end %>
+                </div>
+              <% end %>
               <div>  
                
                 <p class="download-toolbar-title citation-toolbar-title"><%= t('blacklight.tools.citation_label', default: 'Generate citation') %>:</p>
@@ -94,21 +108,21 @@
                          data-arkpath="<%= @document._source['ark'].to_s.gsub('https://n2t.net/ark:/','') %>">
                       <p class="download-toolbar-title"><%= t('blacklight.tools.download_label', default: 'Downloads') %>:</p>
                       <div class="download-actions">
-                        <a id="btn-download-img" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" aria-disabled="true">
+                        <a id="btn-download-img" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" aria-disabled="true" title="<%= t('blacklight.tools.img_disabled_tooltip') %>">
                           <span class="download-icon-group" aria-hidden="true">
                             <i class="bi bi-download fs-5" aria-hidden="true"></i>
                             <span class="download-kind">IMG</span>
                           </span>
                           <span class="download-label"><%= t('blacklight.tools.download_image_aria') %></span>
                         </a>
-                        <a id="btn-download-page" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" aria-disabled="true">
+                        <a id="btn-download-page" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" aria-disabled="true" title="<%= t('blacklight.tools.pdf_disabled_tooltip') %>">
                           <span class="download-icon-group" aria-hidden="true">
                             <i class="bi bi-download fs-5" aria-hidden="true"></i>
                             <span class="download-kind">PAGE</span>
                           </span>
                           <span class="download-label"><%= t('blacklight.tools.download_page_pdf_aria') %></span>
                         </a>
-                        <a id="btn-download-full" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" aria-disabled="true">
+                        <a id="btn-download-full" class="btn btn-outline-custom btn-sm sidebar-download-btn disabled" aria-disabled="true" title="<%= t('blacklight.tools.pdf_disabled_tooltip') %>">
                           <span class="download-icon-group" aria-hidden="true">
                             <i class="bi bi-download fs-5" aria-hidden="true"></i>
                             <span class="download-kind">FULL</span>
@@ -137,14 +151,21 @@
                         const statusSpinner = status?.querySelector('.spinner-border');
                         const checkingText = <%= raw t('blacklight.tools.download_checking', default: 'Checking download availability...').to_json %>;
                         const unavailableText = <%= raw t('blacklight.tools.download_unavailable', default: 'Not available for this page.').to_json %>;
+                        const pdfDisabledTooltip = <%= raw t('blacklight.tools.pdf_disabled_tooltip', default: 'Searchable PDFs and text search are unavailable when no OCR (machine-readable text) exists.').to_json %>;
+                        const imgDisabledTooltip = <%= raw t('blacklight.tools.img_disabled_tooltip', default: 'Image download is unavailable for this page.').to_json %>;
                         let availabilityRun = 0;
 
-                        function disableLink(el) {
+                        function disableLink(el, tooltip) {
                           if (!el) return;
                           el.classList.add('disabled');
                           el.setAttribute('aria-disabled', 'true');
                           el.removeAttribute('href');
                           el.removeAttribute('download');
+                          if (tooltip) {
+                            el.setAttribute('title', tooltip);
+                            const label = el.querySelector('.download-label')?.textContent || '';
+                            el.setAttribute('aria-label', `${label}: ${tooltip}`.trim());
+                          }
                         }
 
                         function enableLink(el, href) {
@@ -152,6 +173,8 @@
                           el.href = href;
                           el.classList.remove('disabled');
                           el.removeAttribute('aria-disabled');
+                          el.removeAttribute('title');
+                          el.removeAttribute('aria-label');
                         }
 
                         function currentPageNum() {
@@ -164,8 +187,8 @@
                           if (statusSpinner) statusSpinner.hidden = !loading;
                         }
 
-                        function setLinkState(el, href) {
-                          if (!el || !href) return disableLink(el);
+                        function setLinkState(el, href, tooltip) {
+                          if (!el || !href) return disableLink(el, tooltip);
                           enableLink(el, href);
                         }
 
@@ -203,23 +226,23 @@
                           const run = ++availabilityRun;
 
                           setStatus(checkingText, true);
-                          disableLink(full);
-                          disableLink(page);
-                          disableLink(pageImg);
+                          disableLink(full, pdfDisabledTooltip);
+                          disableLink(page, pdfDisabledTooltip);
+                          disableLink(pageImg, imgDisabledTooltip);
 
                           try {
                             const data = await fetchDownloadData();
                             if (run !== availabilityRun) return;
 
-                            setLinkState(full, data?.docPdfUri);
-                            setLinkState(page, data?.pagePdfUri);
-                            setLinkState(pageImg, data?.pageImgUri);
+                            setLinkState(full, data?.docPdfUri, pdfDisabledTooltip);
+                            setLinkState(page, data?.pagePdfUri, pdfDisabledTooltip);
+                            setLinkState(pageImg, data?.pageImgUri, imgDisabledTooltip);
                             showFinalStatus();
                           } catch (_error) {
                             if (run !== availabilityRun) return;
-                            disableLink(full);
-                            disableLink(page);
-                            disableLink(pageImg);
+                            disableLink(full, pdfDisabledTooltip);
+                            disableLink(page, pdfDisabledTooltip);
+                            disableLink(pageImg, imgDisabledTooltip);
                             setStatus(unavailableText, false);
                           }
                         }

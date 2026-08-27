@@ -38,6 +38,12 @@ fr:
       download_unavailable: Non disponible pour cette page
       download_checking: Vérification de la disponibilité des téléchargements
       download_loading: Préparation du téléchargement
+      full_text_available: Texte intégral disponible
+      full_text_unavailable: Texte intégral non disponible
+      full_text_available_tooltip: Le texte intégral lisible par machine (ROC) est disponible pour ce document.
+      full_text_unavailable_tooltip: Les fichiers PDF interrogeables et la recherche de texte ne sont pas disponibles lorsqu'il n'y a pas de texte lisible par machine (ROC).
+      pdf_disabled_tooltip: Les fichiers PDF interrogeables et la recherche de texte ne sont pas disponibles lorsqu'il n'y a pas de texte lisible par machine (ROC).
+      img_disabled_tooltip: Le téléchargement de l'image n'est pas disponible pour cette page.
       toolbox_title: Boîte à outils
       title: Outils
       subtitle: Exporter, modifier ou partager cet item

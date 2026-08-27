@@ -38,6 +38,12 @@ en:
       download_unavailable: Not available for this page.
       download_checking: Checking download availability...
       download_loading: Preparing download...
+      full_text_available: Full text available
+      full_text_unavailable: Full text unavailable
+      full_text_available_tooltip: Machine-readable full text (OCR) is available for this item.
+      full_text_unavailable_tooltip: Searchable PDFs and text search are unavailable when no OCR (machine-readable text) exists.
+      pdf_disabled_tooltip: Searchable PDFs and text search are unavailable when no OCR (machine-readable text) exists.
+      img_disabled_tooltip: Image download is unavailable for this page.
       toolbox_title: Toolbox
       title: Tools
       subtitle: Export, edit, or share this item

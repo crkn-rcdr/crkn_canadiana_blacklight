@@ -1899,7 +1899,26 @@ summary:focus-visible,
 
 .result-chip--full-text {
   background: #eef8e8;
-  color: #338500;
+  color: #2e6800;
+  border-radius: var(--site-radius, 2px);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.result-chip--full-text-unavailable {
+  background: #f4f5f7;
+  color: #64748b;
+  border-radius: var(--site-radius, 2px);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
 }
 
 .rights-statement-badge {

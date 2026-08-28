@@ -41,9 +41,9 @@ i {
 
 .blacklight-catalog-show .collection-breadcrumbs {
     margin: 0 0 0.7rem;
-    padding: 0.8rem;
-    background: linear-gradient(90deg, #1d808b 34%, #37bfce 100%);
-    border-radius: 3px;
+    padding: 0.8rem 0 0.65rem;
+    background: transparent;
+    border-bottom: 3px solid #f3f3f3;
 }
 
 .blacklight-catalog-show .collection-breadcrumbs .breadcrumb {
@@ -54,18 +54,18 @@ i {
     padding: 0;
     margin: 0 !important;
     background: transparent;
-    font-size: 1rem;
+    font-size: 1.05rem;
     line-height: 1.35;
 }
 
 .blacklight-catalog-show .collection-breadcrumbs .breadcrumb-item {
     margin: 0;
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--brand-teal);
 }
 
 .blacklight-catalog-show .collection-breadcrumbs .breadcrumb-item + .breadcrumb-item::before {
     padding-right: 0.7rem;
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--brand-teal);
 }
 
 .blacklight-catalog-show .collection-breadcrumbs .collection-breadcrumbs__root {
@@ -73,13 +73,13 @@ i {
 }
 
 .blacklight-catalog-show .collection-breadcrumbs a {
-    color: #ffffff;
+    color: var(--brand-teal);
     text-decoration: none;
 }
 
 .blacklight-catalog-show .collection-breadcrumbs a:hover,
 .blacklight-catalog-show .collection-breadcrumbs a:focus-visible {
-    color: #ffffff;
+    color: var(--brand-teal-search-hover);
     text-decoration: underline;
 }
 
@@ -100,29 +100,17 @@ i {
     margin: 0 0 1rem;
 }
 
-.blacklight-catalog-show .catalog-show-breadcrumb-row .pagination-search-widgets {
-    margin: 0 0 0 auto;
-    padding-top: 0;
-    float: none;
-}
-
-.blacklight-catalog-show .catalog-show-breadcrumb-row .pagination-search-widgets .search-context.page-links {
-    margin: 0;
-    white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-    .blacklight-catalog-show .catalog-show-breadcrumb-row {
-        display: block;
-    }
-
-    .blacklight-catalog-show .catalog-show-breadcrumb-row .pagination-search-widgets {
-        margin-top: 0.55rem;
-    }
-
-    .blacklight-catalog-show .catalog-show-breadcrumb-row .pagination-search-widgets .search-context.page-links {
-        white-space: normal;
-    }
+/* Hide prev/next item pagination on item and serial display pages */
+.blacklight-catalog-show .pagination-search-widgets,
+.blacklight-catalog-show #previousNextDocument,
+.blacklight-catalog-show .search-context.page-links,
+.blacklight-catalog-show .catalog-show-pagination-before-breadcrumb {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+    border: none !important;
+    visibility: hidden !important;
 }
 
 .page-sidebar[aria-label="Tools"],
@@ -154,6 +142,43 @@ i {
 .blacklight-catalog-show .page-sidebar[aria-label="Tools"],
 .blacklight-catalog-show .page-sidebar[aria-label="Outils"] {
     display: none;
+}
+
+.catalog-show-breadcrumb-row .view-all-issues-link,
+.view-all-issues-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.62rem !important;
+    font-size: 0.93rem !important;
+    font-weight: 600 !important;
+    line-height: 1.24;
+    color: #25303a !important;
+    background-color: #fff !important;
+    border: 1px solid #bec7d2 !important;
+    border-radius: var(--site-radius, 3px);
+    padding: 0.5rem 0.75rem !important;
+    min-height: 2.8rem;
+    margin-bottom: 1rem;
+    text-decoration: none !important;
+    white-space: normal;
+    text-align: left;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+
+    .bi,
+    i {
+        color: #3b4450 !important;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+        background-color: #f6f9fc !important;
+        border-color: #a5b2c2 !important;
+        color: #25303a !important;
+        text-decoration: none !important;
+    }
 }
 
 /* Make show page content span full page width (mobile only; see block at bottom) */
@@ -498,6 +523,46 @@ button i {
     white-space: normal;
 }
 
+#toggle-menu .sidebar-cite-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.93rem;
+    font-weight: 600;
+    justify-content: flex-start;
+    gap: 0.62rem !important;
+    min-height: 2.9rem;
+    padding: 0.5rem 0.72rem;
+    border-radius: 999px;
+    border: 1px solid #bec7d2 !important;
+    background: #fff;
+    color: #25303a;
+    line-height: 1.24;
+    text-align: left;
+    white-space: normal;
+}
+
+#toggle-menu .citation-toolbar-title {
+    margin: 1rem 0 0.45rem;
+    color: var(--bl-field-name-color);
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: normal;
+    line-height: 1.5;
+}
+
+
+#toggle-menu .sidebar-cite-btn .bi::before {
+    color: #3b4450 !important;
+}
+
+#toggle-menu .sidebar-cite-btn:hover,
+#toggle-menu .sidebar-cite-btn:focus {
+    background-color: #f6f9fc !important;
+    border-color: #a5b2c2 !important;
+    text-decoration: none !important;
+}
+
 #toggle-menu #download-toolbar .sidebar-download-btn:hover,
 #toggle-menu #download-toolbar .sidebar-download-btn:focus {
     background-color: #f6f9fc !important;
@@ -609,20 +674,21 @@ button i {
 }
 
 .btn-outline-custom {
-    border: 1px solid rgba(0, 0, 0, 0.175);
+    border: 1px solid #bec7d2;
 }
 .btn-outline-custom:hover {
-    background-color: rgba(0, 0, 0, 0.175);
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
 /* Catalog show: keep toolbox/download controls visually consistent */
 .blacklight-catalog-show {
-    --catalog-btn-outline: #bfc5cc;
+    --catalog-btn-outline: #bec7d2;
 }
 
 .blacklight-catalog-show .btn-outline-custom,
-.blacklight-catalog-show .copy-link-btn {
-    border: 1px solid var(--catalog-btn-outline) !important;
+.blacklight-catalog-show .copy-link-btn,
+.blacklight-catalog-show .view-all-issues-link {
+    border: 1px solid #bec7d2 !important;
 }
 
 .blacklight-catalog-show .toolbox-card .toolbox-actions .btn {
@@ -988,4 +1054,38 @@ button i {
     div.MuiToggleButtonGroup-root.MuiToggleButtonGroup-horizontal.mui-lbxqhe-MuiToggleButtonGroup-root
     > button.MuiButtonBase-root.MuiToggleButtonGroup-grouped.MuiToggleButtonGroup-groupedHorizontal.MuiToggleButton-root.MuiToggleButton-sizeSmall.MuiToggleButton-standard.MuiToggleButtonGroup-grouped.MuiToggleButtonGroup-groupedHorizontal.MuiToggleButtonGroup-middleButton.mui-1hfzhaz-MuiButtonBase-root-MuiToggleButton-root {
     display: none;
+}
+
+.catalog-search-hero__applied-shell {
+    .mx-1, .search-widgets > *, .applied-filter {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+
+    .applied-filter.btn-group,
+    .applied-filter,
+    .btn-group.constraint {
+        border-radius: 0 !important;
+
+        > .constraint-value,
+        > .btn:first-child:not(:last-child),
+        > :first-child:not(:last-child) {
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+        }
+
+        > .remove,
+        > .btn:last-child:not(:first-child),
+        > :last-child:not(:first-child) {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            margin-left: -1px !important;
+        }
+
+        > .btn:not(:first-child):not(:last-child),
+        > :not(:first-child):not(:last-child) {
+            border-radius: 0 !important;
+            margin-left: -1px !important;
+        }
+    }
 }

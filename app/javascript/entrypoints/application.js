@@ -627,7 +627,7 @@ function renderPageSearchResults(container, pages, term, docId) {
   const nextHitAria = escapeHtml(container.dataset.nextHitAria || '');
 
   const hrefFor = (pageNum) =>
-    `/catalog/${encodeURIComponent(docId)}?pageNum=${pageNum}&q=${encodeURIComponent(term)}`;
+    `/catalogue/${encodeURIComponent(docId)}?pageNum=${pageNum}&q=${encodeURIComponent(term)}`;
 
   const chips = pages.map((page) => {
     const isCurrent = currentPage === page;
@@ -751,6 +751,34 @@ function initPageSearch() {
 }
 
 document.addEventListener('DOMContentLoaded', initPageSearch);
+
+async function hydrateDownloadChip(container) {
+  const docid = container.dataset.docid;
+  const arkpath = container.dataset.arkpath;
+  const chip = container.querySelector('[data-full-text-chip]');
+  if (!docid || !arkpath || !chip) return;
+
+  const encodedArkPath = arkpath.split('/').map(encodeURIComponent).join('/');
+  const url = `/dl/${encodeURIComponent(docid)}/${encodedArkPath}?pageNum=1`;
+
+  try {
+    const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store' });
+    if (!response.ok) return;
+    const data = await response.json();
+    if (data?.docPdfUri) chip.hidden = false;
+  } catch (_error) {}
+}
+
+function initDownloadChips() {
+  document.querySelectorAll('[data-download-chip]').forEach((container) => {
+    if (container.dataset.downloadChipHydrated === '1') return;
+    container.dataset.downloadChipHydrated = '1';
+    hydrateDownloadChip(container);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initDownloadChips);
+document.addEventListener('turbo:load', initDownloadChips);
 
 // Page search chips: toggle show more/less
 document.addEventListener('click', (e) => {
@@ -1203,8 +1231,13 @@ function adjustCatalogShowBreadcrumbActions() {
   const breadcrumb = document.querySelector('.blacklight-catalog-show .collection-breadcrumbs');
   const appliedParams = document.querySelector('.blacklight-catalog-show #appliedParams');
   const paginationWidgets = document.querySelector('.blacklight-catalog-show .pagination-search-widgets');
+  const documentElement = document.querySelector('.blacklight-catalog-show #document');
 
-  if (!breadcrumb || !appliedParams) return;
+  if (!breadcrumb) return;
+
+  const isIssue = documentElement?.dataset.isIssue === 'true';
+  const parentSerialId = documentElement?.dataset.parentSerialId;
+  const serialTitle = documentElement?.dataset.serialTitle?.replace(/\s*\/\s*$/, '').trim();
 
   let actionRow = document.querySelector('.blacklight-catalog-show .catalog-show-breadcrumb-row');
   if (!actionRow) {
@@ -1213,15 +1246,15 @@ function adjustCatalogShowBreadcrumbActions() {
     breadcrumb.insertAdjacentElement('afterend', actionRow);
   }
 
-  if (appliedParams.parentElement !== actionRow) {
+  if (appliedParams && appliedParams.parentElement !== actionRow) {
     actionRow.appendChild(appliedParams);
   }
 
-  if (paginationWidgets && paginationWidgets.parentElement !== actionRow) {
-    actionRow.appendChild(paginationWidgets);
+  if (paginationWidgets) {
+    paginationWidgets.remove();
   }
 
-  appliedParams.classList.add('catalog-show-breadcrumb-actions');
+  if (appliedParams) appliedParams.classList.add('catalog-show-breadcrumb-actions');
 
   const lang = document.documentElement.lang || 'en';
   const isFr = lang.startsWith('fr');
@@ -1229,25 +1262,221 @@ function adjustCatalogShowBreadcrumbActions() {
   const backToSearchText = isFr ? 'Retour à la recherche' : 'Back to Search';
   const backToResultsText = isFr ? 'Retour aux résultats de recherche' : 'Back to Search Results';
 
-  appliedParams.querySelectorAll('a, button, .btn').forEach((control) => {
+  appliedParams?.querySelectorAll('a, button, .btn').forEach((control) => {
     const label = control.textContent.replace(/\s+/g, ' ').trim();
+    const isBackToResultsControl = label === backToSearchText ||
+      label === backToResultsText ||
+      label.startsWith(isFr ? 'Retour aux résultats' : 'Back to Search');
 
-    if (label === startOverText) {
+    if (label === startOverText || (isFr && label === 'Accueil')) {
       control.remove();
       return;
     }
 
-    if (label === backToSearchText) {
-      control.textContent = backToResultsText;
+    if (isBackToResultsControl) {
+      control.remove();
     }
   });
 
-  if (!appliedParams.children.length) {
+  if (isIssue && parentSerialId && !actionRow.querySelector('.view-all-issues-link')) {
+    const viewAllIssues = document.createElement('a');
+    viewAllIssues.className = 'btn btn-outline-secondary btn-sm view-all-issues-link';
+    viewAllIssues.href = `/catalogue/${encodeURIComponent(parentSerialId)}?lang=${encodeURIComponent(lang)}`;
+    const viewAllIssuesIcon = document.createElement('i');
+    viewAllIssuesIcon.className = 'bi bi-arrow-90deg-up me-1';
+    viewAllIssuesIcon.setAttribute('aria-hidden', 'true');
+    const viewAllIssuesLabel = document.createElement('span');
+    viewAllIssuesLabel.textContent = isFr
+      ? `Voir le catalogue complet de "${serialTitle || 'ce titre de périodique'}"`
+      : `View full catalogue of "${serialTitle || 'this serial title'}"`;
+    viewAllIssues.append(viewAllIssuesIcon, viewAllIssuesLabel);
+    actionRow.insertBefore(viewAllIssues, actionRow.firstChild);
+  }
+
+  if (appliedParams && !appliedParams.children.length) {
     appliedParams.remove();
   }
+}
+
+function syncCheckboxFacetMoreLink(link) {
+  const form = link.closest('form.checkbox-facet-form');
+  if (!form) return;
+
+  const url = new URL(link.getAttribute('href'), window.location.href);
+  const checkboxes = Array.from(form.querySelectorAll('input[type="checkbox"][name^="f_inclusive["]'));
+  const facetKeys = Array.from(new Set(checkboxes.map((checkbox) => {
+    const match = checkbox.name.match(/^f_inclusive\[([^\]]+)\]\[\]$/);
+    return match && match[1];
+  }).filter(Boolean)));
+
+  facetKeys.forEach((facetKey) => {
+    url.searchParams.delete(`f[${facetKey}][]`);
+    url.searchParams.delete(`f_inclusive[${facetKey}][]`);
+    url.searchParams.delete(`checkbox_facet_selections[${facetKey}][]`);
+  });
+
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked && !checkbox.disabled) {
+      const match = checkbox.name.match(/^f_inclusive\[([^\]]+)\]\[\]$/);
+      const facetKey = match && match[1];
+      if (facetKey) {
+        url.searchParams.append(`checkbox_facet_selections[${facetKey}][]`, checkbox.value);
+      }
+    }
+  });
+
+  link.setAttribute('href', `${url.pathname}${url.search}${url.hash}`);
+}
+
+function syncSingleCheckboxToSidebar(modalCheckbox) {
+  if (!modalCheckbox || !modalCheckbox.name) return;
+
+  const sidebarForms = Array.from(document.querySelectorAll('form.checkbox-facet-form')).filter((f) => !f.closest('.modal'));
+  const sidebarForm = sidebarForms.find((f) => f.querySelector(`input[name="${CSS.escape(modalCheckbox.name)}"]`) ||
+    f.querySelector(`input[name^="f_inclusive["]`)?.name === modalCheckbox.name);
+
+  if (!sidebarForm) return;
+
+  const sidebarCheckbox = Array.from(sidebarForm.querySelectorAll(`input[name="${CSS.escape(modalCheckbox.name)}"]`))
+    .find((cb) => cb.value === modalCheckbox.value);
+
+  if (sidebarCheckbox) {
+    sidebarCheckbox.checked = modalCheckbox.checked;
+  } else if (modalCheckbox.checked) {
+    const ul = sidebarForm.querySelector('ul.checkbox-facet-values');
+    if (ul && !ul.querySelector(`input[name="${CSS.escape(modalCheckbox.name)}"][value="${CSS.escape(modalCheckbox.value)}"]`)) {
+      const li = document.createElement('li');
+      li.className = 'dynamically-synced-facet-option';
+      li.dataset.syncedValue = modalCheckbox.value;
+
+      const label = document.createElement('label');
+      label.className = 'checkbox-facet-option';
+
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.name = modalCheckbox.name;
+      input.value = modalCheckbox.value;
+      input.checked = true;
+      input.className = 'form-check-input checkbox-facet-input';
+
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'checkbox-facet-label';
+      const modalLabel = modalCheckbox.closest('label')?.querySelector('.checkbox-facet-label');
+      labelSpan.textContent = modalLabel ? modalLabel.textContent.trim() : modalCheckbox.value;
+
+      label.appendChild(input);
+      label.appendChild(labelSpan);
+
+      const modalCount = modalCheckbox.closest('label')?.querySelector('.facet-count');
+      if (modalCount) {
+        const countSpan = document.createElement('span');
+        countSpan.className = 'facet-count';
+        countSpan.textContent = modalCount.textContent.trim();
+        label.appendChild(countSpan);
+      }
+
+      li.appendChild(label);
+      ul.insertBefore(li, ul.firstChild);
+    }
+  } else if (!modalCheckbox.checked) {
+    const dynamicLi = sidebarForm.querySelector(`li.dynamically-synced-facet-option[data-synced-value="${CSS.escape(modalCheckbox.value)}"]`);
+    if (dynamicLi) {
+      dynamicLi.remove();
+    }
+  }
+}
+
+function syncSingleCheckboxToModal(sidebarCheckbox) {
+  if (!sidebarCheckbox || !sidebarCheckbox.name) return;
+
+  const modalCheckboxes = Array.from(document.querySelectorAll('.modal form.checkbox-facet-form input[type="checkbox"][name^="f_inclusive["]'));
+  const modalCheckbox = modalCheckboxes.find((cb) => cb.name === sidebarCheckbox.name && cb.value === sidebarCheckbox.value);
+  if (modalCheckbox) {
+    modalCheckbox.checked = sidebarCheckbox.checked;
+  }
+}
+
+function handleCheckboxFacetChange(event) {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement) || target.type !== 'checkbox' || !target.name.startsWith('f_inclusive[')) {
+    return;
+  }
+
+  if (target.closest('.modal')) {
+    syncSingleCheckboxToSidebar(target);
+  } else {
+    syncSingleCheckboxToModal(target);
+  }
+}
+
+function syncAllSidebarToCheckboxesInModal(modalContainer) {
+  const container = modalContainer || document.querySelector('.modal');
+  if (!container) return;
+
+  const sidebarCheckboxes = Array.from(document.querySelectorAll('form.checkbox-facet-form:not(.modal form) input[type="checkbox"][name^="f_inclusive["]'));
+  const modalCheckboxes = Array.from(container.querySelectorAll('form.checkbox-facet-form input[type="checkbox"][name^="f_inclusive["]'));
+
+  sidebarCheckboxes.forEach((sidebarCb) => {
+    const matchingModalCb = modalCheckboxes.find((mCb) => mCb.name === sidebarCb.name && mCb.value === sidebarCb.value);
+    if (matchingModalCb) {
+      matchingModalCb.checked = sidebarCb.checked;
+    }
+  });
+}
+
+function syncAllModalToCheckboxesInSidebar(modalContainer) {
+  const container = modalContainer || document.querySelector('.modal');
+  if (!container) return;
+
+  const modalCheckboxes = Array.from(container.querySelectorAll('form.checkbox-facet-form input[type="checkbox"][name^="f_inclusive["]'));
+  modalCheckboxes.forEach((modalCb) => {
+    syncSingleCheckboxToSidebar(modalCb);
+  });
+}
+
+function handleCheckboxFacetMoreActivation(event) {
+  if (!(event.target instanceof Element)) return;
+
+  const link = event.target.closest('a[data-checkbox-facet-more]');
+  if (!link) return;
+
+  if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
+
+  syncCheckboxFacetMoreLink(link);
+}
+
+function observeModalDomChanges() {
+  const modal = document.querySelector('#blacklight-modal, .modal');
+  if (!modal) return;
+
+  const observer = new MutationObserver((mutations) => {
+    let hasAddedNodes = false;
+    for (const mutation of mutations) {
+      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+        hasAddedNodes = true;
+        break;
+      }
+    }
+    if (hasAddedNodes) {
+      syncAllSidebarToCheckboxesInModal(modal);
+    }
+  });
+
+  observer.observe(modal, { childList: true, subtree: true });
 }
 
 document.addEventListener('DOMContentLoaded', moveCatalogAppliedParams);
 document.addEventListener('turbo:load', moveCatalogAppliedParams);
 document.addEventListener('DOMContentLoaded', adjustCatalogShowBreadcrumbActions);
 document.addEventListener('turbo:load', adjustCatalogShowBreadcrumbActions);
+document.addEventListener('DOMContentLoaded', observeModalDomChanges);
+document.addEventListener('turbo:load', observeModalDomChanges);
+document.addEventListener('pointerdown', handleCheckboxFacetMoreActivation, true);
+document.addEventListener('mousedown', handleCheckboxFacetMoreActivation, true);
+document.addEventListener('click', handleCheckboxFacetMoreActivation, true);
+document.addEventListener('keydown', handleCheckboxFacetMoreActivation, true);
+document.addEventListener('change', handleCheckboxFacetChange, true);
+document.addEventListener('shown.bs.modal', (e) => syncAllSidebarToCheckboxesInModal(e.target));
+document.addEventListener('loaded.blacklight.blacklight-modal', (e) => syncAllSidebarToCheckboxesInModal(e.target));
+document.addEventListener('hidden.bs.modal', (e) => syncAllModalToCheckboxesInSidebar(e.target));
+document.addEventListener('hide.bs.modal', (e) => syncAllModalToCheckboxesInSidebar(e.target));

@@ -1,6 +1,5 @@
 # See: https://github.com/pulibrary/orangelight/blob/main/app/helpers/application_helper.rb
 require 'cgi'  # For URL escaping
-require Rails.root.join('lib/rights_statement_labeler').to_s
 
 module ApplicationHelper
   # Ensure document links carry current search query, language, and search session ID by default.

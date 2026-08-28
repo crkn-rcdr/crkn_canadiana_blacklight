@@ -29,7 +29,142 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 // Example: Import a stylesheet in app/frontend/index.css
 // import '~/index.css'
 //import "../javascript/application"
-console.log("mirador", Mirador)
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      if (existing.getAttribute('data-loaded') === 'true' || window.Mirador) {
+        return resolve();
+      }
+      existing.addEventListener('load', () => resolve());
+      existing.addEventListener('error', reject);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = () => {
+      script.setAttribute('data-loaded', 'true');
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+async function initMiradorViewer() {
+  const pageViewer = document.getElementById("my-mirador");
+  if (!pageViewer) return;
+
+  if (typeof window.Mirador === 'undefined') {
+    try {
+      await loadScript('/assets/mirador.min.js');
+    } catch (err) {
+      console.error('Failed to load Mirador viewer:', err);
+      return;
+    }
+  }
+  if (typeof window.Mirador === 'undefined') return;
+
+  pageViewer.setAttribute('data-lenis-prevent', 'true');
+  let language = document.documentElement.lang || "en";
+  const workspaceLabel = language.startsWith('fr') ? 'Espace de travail' : 'Workspace';
+
+  const demoteMiradorMainLandmark = () => {
+    const nestedMain = pageViewer.querySelector('main.mirador-viewer');
+    if (!nestedMain) return;
+
+    const replacement = document.createElement('div');
+    Array.from(nestedMain.attributes).forEach(({ name, value }) => {
+      replacement.setAttribute(name, value);
+    });
+
+    replacement.removeAttribute('role');
+    replacement.setAttribute('role', 'region');
+    if (!replacement.hasAttribute('aria-label') && !replacement.hasAttribute('aria-labelledby')) {
+      replacement.setAttribute('aria-label', workspaceLabel);
+    }
+
+    while (nestedMain.firstChild) {
+      replacement.appendChild(nestedMain.firstChild);
+    }
+    nestedMain.replaceWith(replacement);
+  };
+
+  const documentId = pageViewer.getAttribute("data-docid");
+  if (!documentId) return;
+
+  let contentSearch = {};
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("q")) contentSearch = { query: params.get("q") };
+  const manifestBase = document.querySelector('meta[name="iiif-manifest-base"]')?.content || "https://www-iiif-pres.canadiana.ca/manifest";
+  let normalizedBase = manifestBase.endsWith('/') ? manifestBase : manifestBase + '/';
+  let manifest = documentId.replace("https://n2t.net/ark:/", normalizedBase);
+  const manifestList = {};
+  manifestList[manifest] = { "provider": "Canadian Research Knowledge Network" };
+
+  let mconfig = {
+    id: "my-mirador",
+    manifests: manifestList,
+    windows: [
+      {
+        manifestId: manifest,
+        contentSearch
+      }
+    ],
+    view: "catalogueView",
+    selectedTheme: 'light',
+    language,
+    theme: {
+      palette: {
+        type: 'light',
+        primary: {
+          main: '#0c5660',
+        },
+        secondary: {
+          main: '#0c5660',
+        },
+        shades: {
+          dark: '#0c5660',
+          main: '#ffffff',
+          light: '#f5f5f5',
+        },
+      },
+    },
+    translations: {
+      en: {
+        openWindows: 'Display Canvas',
+      },
+      fr: {
+        openWindows: 'Afficher le canevas',
+      },
+    },
+    workspace: {
+      type: 'single',
+      layout: 'vertical',
+      viewportPosition: {
+        x: 0,
+        y: 0
+      },
+      width: 5000
+    },
+    workspaceControlPanel: {
+      enabled: false
+    },
+  };
+
+  let miradorViewer = window.Mirador.viewer(mconfig);
+
+  demoteMiradorMainLandmark();
+  const miradorLandmarkObserver = new MutationObserver(() => {
+    demoteMiradorMainLandmark();
+  });
+  miradorLandmarkObserver.observe(pageViewer, { childList: true, subtree: true });
+  window.addEventListener('beforeunload', () => miradorLandmarkObserver.disconnect(), { once: true });
+}
+
+document.addEventListener('DOMContentLoaded', initMiradorViewer);
+document.addEventListener('turbo:load', initMiradorViewer);
 
 let lenisInstance = null
 let lenisRafStarted = false
@@ -76,196 +211,6 @@ const initLenis = () => {
 document.addEventListener('DOMContentLoaded', initLenis)
 document.addEventListener('turbo:load', initLenis)
 
-let pageViewer = document.getElementById("my-mirador")
-if(pageViewer) {
-    pageViewer.setAttribute('data-lenis-prevent', 'true')
-    let language = document.documentElement.lang || "en";
-    const workspaceLabel = language.startsWith('fr') ? 'Espace de travail' : 'Workspace';
-
-    const demoteMiradorMainLandmark = () => {
-      const nestedMain = pageViewer.querySelector('main.mirador-viewer');
-      if (!nestedMain) return;
-
-      const replacement = document.createElement('div');
-      Array.from(nestedMain.attributes).forEach(({ name, value }) => {
-        replacement.setAttribute(name, value);
-      });
-
-      replacement.removeAttribute('role');
-      replacement.setAttribute('role', 'region');
-      if (!replacement.hasAttribute('aria-label') && !replacement.hasAttribute('aria-labelledby')) {
-        replacement.setAttribute('aria-label', workspaceLabel);
-      }
-
-      while (nestedMain.firstChild) {
-        replacement.appendChild(nestedMain.firstChild);
-      }
-      nestedMain.replaceWith(replacement);
-    };
-
-    const documentId = pageViewer.getAttribute("data-docid")
-    let contentSearch = {}
-    //let canvasIndex = 0
-    const params = new URLSearchParams(window.location.search)
-    //if(params.has("pageNum")) canvasIndex = parseInt(params.get("pageNum")-1)
-    if(params.has("q")) contentSearch = {  query: params.get("q") }
-    const manifestBase = document.querySelector('meta[name="iiif-manifest-base"]')?.content || "https://www-iiif-pres.canadiana.ca/manifest";
-    let normalizedBase = manifestBase.endsWith('/') ? manifestBase : manifestBase + '/';
-    let manifest = documentId.replace("https://n2t.net/ark:/", normalizedBase)
-    const manifestList = {} 
-    manifestList[manifest] = { "provider": "Canadian Research Knowledge Network" }
-    console.log("Mirador", Mirador)
-    let mconfig = {
-        id: "my-mirador",
-        manifests: manifestList,
-        windows: [
-        {
-            manifestId: manifest,
-            //view: 'single',
-            //canvasIndex,
-            contentSearch
-        }],
-        view: "catalogueView",
-        selectedTheme: 'light', // light | dark
-        language,
-        window: {
-
-            imageToolsOpen: false,
-    
-            //global window defaults
-    
-            allowClose: false, // Configure if windows can be closed or not
-    
-            allowFullscreen: true, // Configure to show a "fullscreen" button in the WindowTopBar
-    
-            allowMaximize: false, // Configure if windows can be maximized or not
-    
-            allowTopMenuButton: true, // Configure if window view and thumbnail display menu are visible or not
-    
-            allowWindowSideBar: false, // Configure if side bar menu is visible or not
-    
-            authNewWindowCenter: "parent", // Configure how to center a new window created by the authentication flow. Options: parent, screen
-    
-            sideBarPanel: "info", // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
-    
-            defaultSidebarPanelHeight: 201, // Configure default sidebar height in pixels
-    
-            defaultSidebarPanelWidth: 235, // Configure default sidebar width in pixels
-    
-            defaultView: "single", // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
-    
-            forceDrawAnnotations: true,
-    
-            hideWindowTitle: true, // Configure if the window title is shown in the window title bar or not
-    
-            highlightAllAnnotations: false, // Configure whether to display annotations on the canvas by default
-    
-            showLocalePicker: false, // Configure locale picker for multi-lingual metadata
-    
-            sideBarOpen:  false, // Configure if the sidebar (and its content panel) is open by default
-    
-            switchCanvasOnSearch: true, // Configure if Mirador should automatically switch to the canvas of the first search result
-    
-            panels: {
-    
-              // Configure which panels are visible in WindowSideBarButtons
-    
-              info: true,
-    
-              attribution: false,
-    
-              canvas: true, // table of contents
-    
-              annotations: false,
-    
-              search: false,
-    
-              layers: false
-    
-            },
-    
-            views: [
-    
-              { key: "single", behaviors: ["individuals"] },
-    
-              { key: "book", behaviors: ["paged"] },
-    
-              { key: "scroll", behaviors: ["continuous"] }
-    
-            ],
-    
-            elastic: {
-    
-              height: 400,
-    
-              width: 480
-    
-            }
-    
-          },
-          osdConfig: {
-            prefixUrl: "/assets/",
-            // Default config used for OpenSeadragon
-            showNavigationControl: 1,
-            /**
-             * fullpage_rest.png:1   GET http://localhost:3000/images/fullpage_rest.png 404 (Not Found)
-                fullpage_pressed.png:1   GET http://localhost:3000/images/fullpage_pressed.png 404 (Not Found)
-                fullpage_grouphover.png:1   GET http://localhost:3000/images/fullpage_grouphover.png 404 (Not Found)
-            zoomin
-            zoomout
-            home
-                */
-          },
-          workspace: {
-    
-            draggingEnabled: false,
-    
-            allowNewWindows: true,
-    
-            isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
-    
-            exposeModeOn: false, // unused?
-    
-            height: 5000, // height of the elastic mode's virtual canvas
-    
-            showZoomControls: false, // Configure if zoom controls should be displayed by default
-    
-            type: "mosaic", // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no worksapce type will be used.
-    
-            viewportPosition: {
-    
-              // center coordinates for the elastic mode workspace
-    
-              x: 0,
-    
-              y: 0
-    
-            },
-    
-            width: 5000 // width of the elastic mode's virtual canvas
-    
-          },
-    
-          workspaceControlPanel: {
-    
-            enabled: false // Configure if the control panel should be rendered.  Useful if you want to lock the viewer down to only the configured manifests
-    
-          },
-    }
-    let miradorViewer = Mirador.viewer(mconfig);
-    console.log("miradorViewer", miradorViewer)
-
-    demoteMiradorMainLandmark();
-    const miradorLandmarkObserver = new MutationObserver(() => {
-      demoteMiradorMainLandmark();
-    });
-    miradorLandmarkObserver.observe(pageViewer, { childList: true, subtree: true });
-    window.addEventListener('beforeunload', () => miradorLandmarkObserver.disconnect(), { once: true });
-
-    miradorViewer.store.subscribe((e) => {
-      console.log("m?", e)
-    })
-}
 import "bootstrap-icons/font/bootstrap-icons.css";
 import BlacklightRangeLimit from 'blacklight-range-limit';
 //Blacklight.onLoad(() => {});

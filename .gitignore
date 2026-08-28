@@ -52,3 +52,5 @@ config/master.key
 .env.*.local
 .env.example
 .env.dev
+
+scans

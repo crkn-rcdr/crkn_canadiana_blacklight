@@ -1,3 +1,7 @@
+<% content_for(:head) do %>
+  <link rel="preload" as="image" href="/assets/oocihm.12020.87.webp" type="image/webp" fetchpriority="high">
+<% end %>
+
 <div id="home-page-top" class="col-12 p-0 home-page">
   <section class="home-hero" aria-labelledby="home-hero-title">
     <div class="canadiana-shell">
@@ -49,7 +53,7 @@
           <h2 class="home-canadiana-search__title">Rechercher dans la collection Canadiana</h2>
           <p class="home-canadiana-search__lede">
             Environ 31,7 millions de pages de publications qui illustrent comment les connaissances, les récits et les informations ont été partagés au fil du temps. Cette collection comprend des livres, des journaux, des magazines, des documents gouvernementaux, des cartes et d'autres documents datant d'environ 1500 à nos jours. Le contenu de Canadiana provient en grande partie de la série de microfiches de l'Institut canadien de microreproductions historiques (ICMH).
-            <a class="home-inline-link home-inline-link--arrow home-canadiana-search__link" href="<%= about_canadiana_path(lang: I18n.locale) %>">
+            <a class="home-inline-link home-inline-link--arrow home-canadiana-search__link" href="<%= about_canadiana_path(lang: I18n.locale) %>" aria-label="En savoir plus sur la collection Canadiana">
               En savoir plus
               <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
             </a>
@@ -98,7 +102,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/monog.jpg" alt="Livres et publications" loading="lazy">
+                <img src="/assets/monog.webp" alt="Livres et publications" width="320" height="240" loading="lazy">
               </div>
             </article>
 
@@ -113,7 +117,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/serials.jpg" alt="Journaux et magazines" loading="lazy">
+                <img src="/assets/serials.webp" alt="Journaux et magazines" width="320" height="240" loading="lazy">
               </div>
             </article>
 
@@ -128,7 +132,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/govpubs.jpg" alt="Publications gouvernementales" loading="lazy">
+                <img src="/assets/govpubs.webp" alt="Publications gouvernementales" width="320" height="240" loading="lazy">
               </div>
             </article>
 
@@ -143,7 +147,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/maps.jpg" alt="Cartes" loading="lazy">
+                <img src="/assets/maps.webp" alt="Cartes" width="320" height="240" loading="lazy">
               </div>
             </article>
           </div>
@@ -164,7 +168,7 @@
             La collection Héritage est le résultat d'un partenariat avec
             <a href="https://library-archives.canada.ca" target="_blank" rel="noopener">Bibliothèque et Archives Canada</a>
             (BAC) visant à numériser et à rendre accessibles les riches ressources des microfilms d'archives détenus par BAC. Avec plus de 37,8 millions de pages de documents de première main, Héritage retrace l'histoire du Canada et de ses peuples d'environ 1500 aux années 1980. Héritage est une ressource inégalée qui soutient les chercheurs et les communautés à travers le Canada.
-            <a class="home-inline-link home-inline-link--arrow home-heritage-search__link" href="<%= about_heritage_path(lang: I18n.locale) %>">
+            <a class="home-inline-link home-inline-link--arrow home-heritage-search__link" href="<%= about_heritage_path(lang: I18n.locale) %>" aria-label="En savoir plus sur la collection Héritage">
               En savoir plus
               <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
             </a>
@@ -186,14 +190,14 @@
             <option value="tx_gen">Texte intégral</option>
           </select>
           <label class="visually-hidden" for="heritage-band-q">Rechercher dans la collection Héritage</label>
-          <input id="heritage-band-q" class="home-heritage-search__input js-typed-placeholder" type="search" name="q" placeholder="Registres paroissiaux" data-typed-placeholder-phrases="Concessions de terres du Bas-Canada|Journaux de guerre, 1939-1945|Listes de passagers|Dossiers d'immigration chinoise|Registres paroissiaux : Nouveau-Brunswick">
+          <input id="heritage-band-q" class="home-heritage-search__input js-typed-placeholder" type="search" name="q" placeholder="Parish registers" data-typed-placeholder-phrases="Lower Canada Land Grants|War Diaries, 1939-1945|Passenger Lists|Chinese immigration records|Parish registers: New Brunswick">
           <button
             type="submit"
             class="home-heritage-search__submit"
             disabled
             aria-disabled="true"
-            title="Bientôt disponible : la recherche Héritage n'est pas encore accessible.">
-            Rechercher (bientôt disponible)
+            title="Bientôt disponible : La recherche dans Héritage n'est pas encore disponible.">
+            Rechercher (Bientôt disponible)
           </button>
         </form>
       </div>
@@ -220,7 +224,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/genealogy.jpg" alt="Documents généalogiques" loading="lazy">
+                <img src="/assets/genealogy.webp" alt="Documents généalogiques" width="320" height="240" loading="lazy">
               </div>
             </article>
 
@@ -235,7 +239,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/indigenous_history.jpg" alt="Peuples autochtones" loading="lazy">
+                <img src="/assets/indigenous_history.webp" alt="Peuples autochtones" width="320" height="240" loading="lazy">
               </div>
             </article>
 
@@ -250,7 +254,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/government_documents.jpg" alt="Services gouvernementaux" loading="lazy">
+                <img src="/assets/government_documents.webp" alt="Services gouvernementaux" width="320" height="240" loading="lazy">
               </div>
             </article>
 
@@ -265,7 +269,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/military_history.jpg" alt="Histoire militaire" loading="lazy">
+                <img src="/assets/military_history.webp" alt="Histoire militaire" width="320" height="240" loading="lazy">
               </div>
             </article>
 
@@ -280,7 +284,7 @@
                 </div>
               </div>
               <div class="home-split-card__media">
-                <img src="/assets/landmark_papers.jpg" alt="Personnalités canadiennes" loading="lazy">
+                <img src="/assets/landmark_papers.webp" alt="Personnalités canadiennes" width="320" height="240" loading="lazy">
               </div>
             </article>
 
@@ -377,7 +381,7 @@
           </div>
           <h3>Comparer les collections</h3>
           <p>Le RCDR donne acces a deux grandes collections numeriques du patrimoine : Canadiana et Heritage.</p>
-          <a class="home-resource-card__cta" href="<%= compare_collections_path(lang: I18n.locale) %>">En savoir plus</a>
+          <a class="home-resource-card__cta" href="<%= compare_collections_path(lang: I18n.locale) %>" aria-label="En savoir plus sur la comparaison des collections Canadiana et Héritage">En savoir plus</a>
         </article>
 
         <article class="home-resource-card">
@@ -386,7 +390,7 @@
           </div>
           <h3>Parcourir les collections</h3>
           <p>Parcourez, recherchez et explorez plus facilement les collections Canadiana grace a ces conseils.</p>
-          <a class="home-resource-card__cta" href="<%= navigating_collections_path(lang: I18n.locale) %>">En savoir plus</a>
+          <a class="home-resource-card__cta" href="<%= navigating_collections_path(lang: I18n.locale) %>" aria-label="En savoir plus sur l'exploration des collections Canadiana">En savoir plus</a>
         </article>
 
         <article class="home-resource-card">
@@ -395,7 +399,7 @@
           </div>
           <h3>Guide de citation</h3>
           <p>Decouvrez comment citer facilement les documents de la collection Canadiana.</p>
-          <a class="home-resource-card__cta" href="<%= citation_guide_path(lang: I18n.locale) %>">En savoir plus</a>
+          <a class="home-resource-card__cta" href="<%= citation_guide_path(lang: I18n.locale) %>" aria-label="En savoir plus sur la façon de citer les documents de Canadiana">En savoir plus</a>
         </article>
 
         <article class="home-resource-card" hidden>
@@ -404,7 +408,7 @@
           </div>
           <h3>Acces aux API</h3>
           <p>Le RCDR offre un acces programmatique aux metadonnees de decouverte par l'entremise des API Canadiana.</p>
-          <a class="home-resource-card__cta" href="<%= api_access_path(lang: I18n.locale) %>">En savoir plus</a>
+          <a class="home-resource-card__cta" href="<%= api_access_path(lang: I18n.locale) %>" aria-label="En savoir plus sur l'accès aux API Canadiana">En savoir plus</a>
         </article>
 
       </div>

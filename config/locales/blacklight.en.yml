@@ -176,6 +176,7 @@ en:
           close: Hide facets
           open: Show facets
         missing: "[Missing]"
+        no_matches: "No matching items found."
         more_html: more <span class="visually-hidden">%{field_name}</span> »
         pivot:
           hide: Hide

@@ -1560,7 +1560,73 @@ document.addEventListener('pointerdown', handleCheckboxFacetMoreActivation, true
 document.addEventListener('mousedown', handleCheckboxFacetMoreActivation, true);
 document.addEventListener('click', handleCheckboxFacetMoreActivation, true);
 document.addEventListener('keydown', handleCheckboxFacetMoreActivation, true);
+function initFacetSuggestHandler() {
+  let debounceTimeout = null;
+  let activeAbortController = null;
+
+  document.addEventListener('input', (e) => {
+    const target = e.target;
+    if (!target || !target.matches('.facet-suggest')) return;
+
+    clearTimeout(debounceTimeout);
+    if (activeAbortController) {
+      activeAbortController.abort();
+      activeAbortController = null;
+    }
+
+    debounceTimeout = setTimeout(async () => {
+      const queryFragment = target.value ? target.value.trim() : '';
+      const facetField = target.dataset.facetField;
+      const modal = target.closest('#blacklight-modal, .modal, dialog') || document.querySelector('#blacklight-modal, .modal');
+      const facetArea = modal ? modal.querySelector('.facet-extended-list') : document.querySelector('.facet-extended-list');
+      const prevNextLinks = modal ? modal.querySelectorAll('.prev_next_links') : document.querySelectorAll('.prev_next_links');
+      if (!facetField || !facetArea) return;
+
+      const facetSearchContext = target.dataset.facetSearchContext || '';
+      let facetSearchParams = '';
+      try {
+        const url = new URL(facetSearchContext, window.location.origin);
+        url.searchParams.delete('facet.page');
+        facetSearchParams = url.searchParams.toString();
+      } catch (_err) {
+        facetSearchParams = window.location.search.replace(/^\?/, '');
+      }
+
+      const urlToFetch = queryFragment
+        ? `/catalogue/facet_suggest/${encodeURIComponent(facetField)}/${encodeURIComponent(queryFragment)}?${facetSearchParams}`
+        : `/catalogue/facet_suggest/${encodeURIComponent(facetField)}?${facetSearchParams}`;
+
+      activeAbortController = new AbortController();
+      try {
+        const response = await fetch(urlToFetch, {
+          signal: activeAbortController.signal,
+          headers: { 'Accept': 'text/html' }
+        });
+        if (response.ok) {
+          const text = await response.text();
+          if (facetArea) {
+            facetArea.innerHTML = text;
+            if (modal) syncAllSidebarToCheckboxesInModal(modal);
+          }
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.warn('Facet suggest error:', err);
+        }
+      } finally {
+        activeAbortController = null;
+      }
+
+      prevNextLinks.forEach((el) => {
+        el.classList.toggle('invisible', Boolean(queryFragment));
+      });
+      facetArea.classList.toggle('facet-suggestions', Boolean(queryFragment));
+    }, 180);
+  }, true);
+}
+
 document.addEventListener('change', handleCheckboxFacetChange, true);
+initFacetSuggestHandler();
 document.addEventListener('shown.bs.modal', (e) => syncAllSidebarToCheckboxesInModal(e.target));
 document.addEventListener('loaded.blacklight.blacklight-modal', (e) => syncAllSidebarToCheckboxesInModal(e.target));
 document.addEventListener('hidden.bs.modal', (e) => syncAllModalToCheckboxesInSidebar(e.target));

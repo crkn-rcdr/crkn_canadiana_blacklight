@@ -495,6 +495,28 @@ class CatalogController < ApplicationController
     redirect_to search_catalog_path(query_params) if defaults_added
   end
 
+  def facet
+    @facet = blacklight_config.facet_fields[params[:id]]
+    raise ActionController::RoutingError, 'Not Found' unless @facet
+
+    @response = if params[:query_fragment].present?
+                  search_service.facet_suggest_response(@facet.key, params[:query_fragment])
+                else
+                  search_service.facet_field_response(@facet.key)
+                end
+    @display_facet = @response.aggregations[@facet.field]
+
+    @presenter = @facet.presenter.new(@facet, @display_facet, view_context)
+    @pagination = @presenter.paginator
+    respond_to do |format|
+      format.html do
+        return render 'facet_values', layout: false if params[:only_values]
+        return render layout: false if request.xhr?
+      end
+      format.json
+    end
+  end
+
   def self.language_code_for(context)
     lang =
       if context.respond_to?(:content_lang) && context.content_lang.present?

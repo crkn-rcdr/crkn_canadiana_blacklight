@@ -49,6 +49,8 @@ Rails.application.routes.draw do
   get '/catalog/facet/:id', to: redirect(->(params, req) {
     req.query_string.present? ? "/catalogue/facet/#{params[:id]}?#{req.query_string}" : "/catalogue/facet/#{params[:id]}"
   })
+  get '/catalog/facet_suggest/:id(/:query_fragment)', to: 'catalog#facet', defaults: { only_values: true }, constraints: { id: /[^\/]+/ }
+  get '/catalogue/facet_suggest/:id(/:query_fragment)', to: 'catalog#facet', defaults: { only_values: true }, constraints: { id: /[^\/]+/ }
 
   resources :bookmarks, only: [:index, :update, :create, :destroy] do
     concerns :exportable

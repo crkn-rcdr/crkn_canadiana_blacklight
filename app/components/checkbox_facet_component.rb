@@ -9,6 +9,8 @@ class CheckboxFacetComponent < Blacklight::Component
   end
 
   def render?
+    return true if @facet_field.in_modal?
+
     rows.any?
   end
 

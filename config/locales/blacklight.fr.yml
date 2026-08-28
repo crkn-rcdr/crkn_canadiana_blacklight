@@ -157,6 +157,7 @@ fr:
           close: Masquer les facettes
           open: Afficher les facettes
         missing: "[manquante]"
+        no_matches: "Aucun élément correspondant trouvé."
         more_html: plus <span class="visually-hidden">%{field_name}</span> »
         pivot:
           hide: Fermer

@@ -7,24 +7,28 @@
     <%= form_tag form_action, method: :get, class: 'checkbox-facet-form' do %>
       <%= hidden_fields %>
 
-      <ul class="facet-values list-unstyled checkbox-facet-values">
-        <% rows.each_with_index do |row, index| %>
-          <% id = checkbox_id(index) %>
-          <li>
-            <%= label_tag id, class: 'checkbox-facet-option' do %>
-              <%= check_box_tag "f_inclusive[#{@facet_field.key}][]",
-                                row.value,
-                                row.selected,
-                                id: id,
-                                class: 'form-check-input checkbox-facet-input' %>
-              <span class="checkbox-facet-label"><%= row.label %></span>
-              <% if row.hits.present? %>
-                <span class="facet-count"><%= t('blacklight.search.facets.count', number: number_with_delimiter(row.hits)) %></span>
+      <% if rows.any? %>
+        <ul class="facet-values list-unstyled checkbox-facet-values">
+          <% rows.each_with_index do |row, index| %>
+            <% id = checkbox_id(index) %>
+            <li>
+              <%= label_tag id, class: 'checkbox-facet-option' do %>
+                <%= check_box_tag "f_inclusive[#{@facet_field.key}][]",
+                                  row.value,
+                                  row.selected,
+                                  id: id,
+                                  class: 'form-check-input checkbox-facet-input' %>
+                <span class="checkbox-facet-label"><%= row.label %></span>
+                <% if row.hits.present? %>
+                  <span class="facet-count"><%= t('blacklight.search.facets.count', number: number_with_delimiter(row.hits)) %></span>
+                <% end %>
               <% end %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-muted py-3 mb-0"><%= t('blacklight.search.facets.no_matches', default: 'No matching items found.') %></p>
+      <% end %>
 
       <% if more_path.present? %>
         <div class="more_facets checkbox-facet-more">

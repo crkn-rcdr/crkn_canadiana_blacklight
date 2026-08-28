@@ -702,19 +702,22 @@ button i {
     gap: 0.45rem !important;
 }
 
-/* Hover treatment requested: white background + underlined text */
+/* Hover treatment: clean background without underlines */
 .blacklight-catalog-show .btn-outline-custom:hover,
-.blacklight-catalog-show .copy-link-btn:hover {
+.blacklight-catalog-show .copy-link-btn:hover,
+.blacklight-catalog-show .toolbox-actions .btn:hover,
+.blacklight-catalog-show .toolbox-actions a:hover {
     background-color: #fff !important;
     border-color: var(--catalog-btn-outline) !important;
     border-style: solid !important;
+    text-decoration: none !important;
 }
 
-.blacklight-catalog-show .btn-outline-custom:hover,
-.blacklight-catalog-show .copy-link-btn:hover,
-.blacklight-catalog-show .btn-outline-custom:hover span,
-.blacklight-catalog-show .copy-link-btn:hover span {
-    text-decoration: underline !important;
+.blacklight-catalog-show .btn-outline-custom:hover *,
+.blacklight-catalog-show .copy-link-btn:hover *,
+.blacklight-catalog-show .toolbox-actions .btn:hover *,
+.blacklight-catalog-show .toolbox-actions a:hover * {
+    text-decoration: none !important;
 }
 
 .blacklight-catalog-show .btn-outline-custom:focus-visible,

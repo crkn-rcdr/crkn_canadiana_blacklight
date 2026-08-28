@@ -1397,7 +1397,7 @@ summary:focus-visible,
 .blacklight-catalog-index #sortAndPerPage {
   border-bottom: none;
   padding-top: 0.75rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
 }
 @media only screen and (max-width: 1024px) {
   .home-cards {
@@ -1476,6 +1476,12 @@ summary:focus-visible,
 }
 .toolbox-card .toolbox-actions .btn {
   border-radius: 999px;
+  text-decoration: none !important;
+
+  &:hover,
+  &:focus {
+    text-decoration: none !important;
+  }
 }
 .toolbox-card .toolbox-header img {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));

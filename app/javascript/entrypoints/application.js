@@ -29,49 +29,10 @@ console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify
 // Example: Import a stylesheet in app/frontend/index.css
 // import '~/index.css'
 //import "../javascript/application"
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const existing = document.querySelector(`script[src="${src}"]`);
-    if (existing) {
-      if (existing.getAttribute('data-loaded') === 'true' || window.Mirador) {
-        return resolve();
-      }
-      existing.addEventListener('load', () => resolve());
-      existing.addEventListener('error', reject);
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = src;
-    script.async = true;
-    script.onload = () => {
-      script.setAttribute('data-loaded', 'true');
-      resolve();
-    };
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-async function initMiradorViewer() {
+function initMiradorViewer() {
   const pageViewer = document.getElementById("my-mirador");
   if (!pageViewer) return;
-
-  if (typeof window.OpenSeadragon === 'undefined' || typeof window.Mirador === 'undefined') {
-    try {
-      if (typeof window.OpenSeadragon === 'undefined') {
-        await loadScript('/assets/openseadragon.min.js').catch(() =>
-          loadScript('https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js')
-        );
-      }
-      if (typeof window.Mirador === 'undefined') {
-        await loadScript('/assets/mirador.min.js');
-      }
-    } catch (err) {
-      console.error('Failed to load Mirador viewer or OpenSeadragon:', err);
-      return;
-    }
-  }
-  if (typeof window.Mirador === 'undefined') return;
+  if (typeof Mirador === 'undefined') return;
 
   pageViewer.setAttribute('data-lenis-prevent', 'true');
   let language = document.documentElement.lang || "en";
@@ -122,33 +83,54 @@ async function initMiradorViewer() {
     view: "catalogueView",
     selectedTheme: 'light',
     language,
-    theme: {
-      palette: {
-        type: 'light',
-        primary: {
-          main: '#0c5660',
-        },
-        secondary: {
-          main: '#0c5660',
-        },
-        shades: {
-          dark: '#0c5660',
-          main: '#ffffff',
-          light: '#f5f5f5',
-        },
+    window: {
+      imageToolsOpen: false,
+      allowClose: false,
+      allowFullscreen: true,
+      allowMaximize: false,
+      allowTopMenuButton: true,
+      allowWindowSideBar: false,
+      authNewWindowCenter: "parent",
+      sideBarPanel: "info",
+      defaultSidebarPanelHeight: 201,
+      defaultSidebarPanelWidth: 235,
+      defaultView: "single",
+      forceDrawAnnotations: true,
+      hideWindowTitle: true,
+      highlightAllAnnotations: false,
+      showLocalePicker: false,
+      sideBarOpen: false,
+      switchCanvasOnSearch: true,
+      panels: {
+        info: true,
+        attribution: false,
+        canvas: true,
+        annotations: false,
+        search: false,
+        layers: false
       },
+      views: [
+        { key: "single", behaviors: ["individuals"] },
+        { key: "book", behaviors: ["paged"] },
+        { key: "scroll", behaviors: ["continuous"] }
+      ],
+      elastic: {
+        height: 400,
+        width: 480
+      }
     },
-    translations: {
-      en: {
-        openWindows: 'Display Canvas',
-      },
-      fr: {
-        openWindows: 'Afficher le canevas',
-      },
+    osdConfig: {
+      prefixUrl: "/assets/",
+      showNavigationControl: 1
     },
     workspace: {
-      type: 'single',
-      layout: 'vertical',
+      draggingEnabled: false,
+      allowNewWindows: true,
+      isWorkspaceAddVisible: false,
+      exposeModeOn: false,
+      height: 5000,
+      showZoomControls: false,
+      type: "mosaic",
       viewportPosition: {
         x: 0,
         y: 0
@@ -157,10 +139,10 @@ async function initMiradorViewer() {
     },
     workspaceControlPanel: {
       enabled: false
-    },
+    }
   };
 
-  let miradorViewer = window.Mirador.viewer(mconfig);
+  let miradorViewer = Mirador.viewer(mconfig);
 
   demoteMiradorMainLandmark();
   const miradorLandmarkObserver = new MutationObserver(() => {

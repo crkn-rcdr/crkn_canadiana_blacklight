@@ -31,6 +31,9 @@
 
     <%= vite_client_tag %>
     <%= vite_javascript_tag 'application' %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
+    <script src="/assets/mirador.min.js"></script>
   </head>
   <body class="<%= render_body_class %>">
     <%= render blacklight_config.skip_link_component.new do %>

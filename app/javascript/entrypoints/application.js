@@ -56,11 +56,18 @@ async function initMiradorViewer() {
   const pageViewer = document.getElementById("my-mirador");
   if (!pageViewer) return;
 
-  if (typeof window.Mirador === 'undefined') {
+  if (typeof window.OpenSeadragon === 'undefined' || typeof window.Mirador === 'undefined') {
     try {
-      await loadScript('/assets/mirador.min.js');
+      if (typeof window.OpenSeadragon === 'undefined') {
+        await loadScript('/assets/openseadragon.min.js').catch(() =>
+          loadScript('https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js')
+        );
+      }
+      if (typeof window.Mirador === 'undefined') {
+        await loadScript('/assets/mirador.min.js');
+      }
     } catch (err) {
-      console.error('Failed to load Mirador viewer:', err);
+      console.error('Failed to load Mirador viewer or OpenSeadragon:', err);
       return;
     }
   }

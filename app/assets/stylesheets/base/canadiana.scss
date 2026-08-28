@@ -3483,6 +3483,16 @@ dialog#blacklight-modal,
   -webkit-mask-size: contain;
   mask-size: contain;
   opacity: 1;
+  text-decoration: none !important;
+  border-bottom: none !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    opacity: 0.8;
+  }
 }
 
 .topbar .bluesky {
@@ -3504,20 +3514,32 @@ dialog#blacklight-modal,
 }
 
 .topbar .sm-icon.instagram {
-  background-image: none;
-  background-color: transparent;
-  -webkit-mask-image: none;
-  mask-image: none;
+  background-image: none !important;
+  background-color: transparent !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
   color: #050607 !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none !important;
+  border-bottom: none !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    opacity: 0.8;
+  }
 }
 
 .topbar .sm-icon.instagram i {
   color: #050607 !important;
   font-size: 1.34rem;
   line-height: 1;
+  text-decoration: none !important;
+  display: inline-block;
 }
 
 .topbar-main {

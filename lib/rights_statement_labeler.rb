@@ -247,9 +247,25 @@ module RightsStatementLabeler
     found.compact.uniq
   end
 
-  def canonical_url_for_label(label)
+  def canonical_url_for_label(label, locale = I18n.locale)
     statement = statement_for_label(label) || statements_for_text(label).first
-    statement&.fetch(:canonical_url, nil)
+    return unless statement
+
+    is_fr = locale.to_s.start_with?('fr')
+    uri_code = statement[:uri_code]
+
+    if statement[:canonical_url]&.include?('rightsstatements.org')
+      lang_param = is_fr ? 'fr' : 'en'
+      "https://rightsstatements.org/page/#{uri_code}/1.0/?language=#{lang_param}"
+    elsif uri_code == 'OGL-Canada'
+      is_fr ? 'https://open.canada.ca/fr/licence-du-gouvernement-ouvert-canada' : 'https://open.canada.ca/en/open-government-licence-canada'
+    elsif uri_code == 'PDM'
+      is_fr ? 'https://creativecommons.org/publicdomain/mark/1.0/deed.fr' : 'https://creativecommons.org/publicdomain/mark/1.0/'
+    elsif uri_code == 'CC0'
+      is_fr ? 'https://creativecommons.org/publicdomain/zero/1.0/deed.fr' : 'https://creativecommons.org/publicdomain/zero/1.0/'
+    else
+      statement[:canonical_url]
+    end
   end
 
   def category_for_label(label)

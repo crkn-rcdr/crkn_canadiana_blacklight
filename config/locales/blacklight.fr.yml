@@ -143,6 +143,7 @@ fr:
           limit_search: Limiter votre recherche
           search_results: Résultats de recherche
         counter: "%{counter}. "
+        full_text_available: Texte intégral disponible
       entry_pagination_info:
         one: "<b>1 sur 1</b>"
         other: "<b>%{current}</b> sur <b>%{total}</b>"

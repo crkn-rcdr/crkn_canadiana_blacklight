@@ -162,6 +162,7 @@ en:
           limit_search: limit your search
           search_results: search results
         counter: "%{counter}. "
+        full_text_available: Full text available
       entry_pagination_info:
         one: "<strong>1 of 1</strong>"
         other: "<strong>%{current}</strong> of <strong>%{total}</strong>"

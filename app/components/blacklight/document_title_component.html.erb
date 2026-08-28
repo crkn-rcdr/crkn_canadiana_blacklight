@@ -20,7 +20,7 @@
         <%= helpers.result_rights_statement_chips(@document) %>
       <% end %>
       <%= helpers.format_result_chips(@document) %>
-      <span class="result-chip result-chip--full-text" data-full-text-chip hidden>Full text available</span>
+      <span class="result-chip result-chip--full-text" data-full-text-chip hidden><%= t('blacklight.search.documents.full_text_available', default: 'Full text available') %></span>
     </div>
   <% end %>
 

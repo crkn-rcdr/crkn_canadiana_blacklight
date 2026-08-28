@@ -131,6 +131,7 @@ class CatalogController < ApplicationController
 
     config.add_facet_field 'rights_statement_ssim_str',
                            label: ->(_c) { I18n.t('blacklight.metadata.right_statements.label') },
+                           helper_method: :render_rights_statement_facet_label,
                            component: CheckboxFacetComponent,
                            tag: 'tag_rights_statement_ssim_str',
                            ex: 'tag_rights_statement_ssim_str',

@@ -159,7 +159,7 @@ module ApplicationHelper
         'journal-issue' => 'journal'
       }.fetch(format_key, format_key)
 
-      format_label = normalized_key.tr('-', ' ').titleize
+      format_label = I18n.t("blacklight.metadata.resource_type.values.#{normalized_key.underscore}", default: normalized_key.tr('-', ' ').titleize)
 
       tag.span(class: 'result-chip result-chip--format') do
         tag.span(format_label, class: 'result-chip__label')
@@ -172,6 +172,10 @@ module ApplicationHelper
     values = rights_statement_labels(document, 'rights_stat_tsim') if values.blank?
     values = rights_statement_labels(document, 'rights_statement_ssim') if values.blank?
     safe_join(values.map { |value| rights_statement_badge(value) }, ' ')
+  end
+
+  def render_rights_statement_facet_label(value)
+    RightsStatementLabeler.localized_label_for(value)
   end
 
   def rights_statement_present?(_field_config, document)
@@ -219,14 +223,15 @@ module ApplicationHelper
   end
 
   def rights_statement_badge(value)
-    label = RightsStatementLabeler.labels_for_text(value.to_s).first || value.to_s
-    category = RightsStatementLabeler.category_for_label(label)
-    url = RightsStatementLabeler.canonical_url_for_label(label)
+    raw_label = RightsStatementLabeler.labels_for_text(value.to_s).first || value.to_s
+    localized_label = RightsStatementLabeler.localized_label_for(raw_label)
+    category = RightsStatementLabeler.category_for_label(raw_label)
+    url = RightsStatementLabeler.canonical_url_for_label(raw_label)
     icon = rights_statement_icon(category)
     label_content = if url.present?
-                      link_to(label, url, target: '_blank', rel: 'noopener', class: 'rights-statement-badge__link')
+                      link_to(localized_label, url, target: '_blank', rel: 'noopener', class: 'rights-statement-badge__link')
                     else
-                      tag.span(label, class: 'rights-statement-badge__link')
+                      tag.span(localized_label, class: 'rights-statement-badge__link')
                     end
 
     tag.span(

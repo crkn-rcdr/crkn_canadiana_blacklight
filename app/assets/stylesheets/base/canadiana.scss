@@ -211,21 +211,26 @@ dialog#blacklight-modal,
 
     .btn-close,
     .close {
+      box-sizing: content-box;
+      width: 1rem;
+      height: 1rem;
+      padding: 0.45rem;
       margin: 0;
-      padding: 0.5rem;
-      font-size: 1.15rem;
-      opacity: 0.7;
-      background: transparent;
+      color: #0c5660;
+      background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230c5660'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/1rem auto no-repeat !important;
       border: 0;
+      border-radius: var(--site-radius, 6px);
+      opacity: 0.75;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: opacity 0.15s ease-in-out;
+      transition: opacity 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
       &:hover,
       &:focus-visible {
         opacity: 1;
+        background-color: rgba(12, 86, 96, 0.08) !important;
       }
     }
   }

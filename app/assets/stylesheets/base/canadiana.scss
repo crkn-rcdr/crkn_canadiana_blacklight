@@ -1798,6 +1798,35 @@ summary:focus-visible,
   font-size: 0.875rem;
 }
 
+.facet-toggle-all-container {
+  font-size: 0.85rem;
+  color: #556270;
+  padding: 0.15rem 0.2rem 0.4rem;
+
+  .btn-link {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--theme-primary, #0c5660);
+    text-decoration: underline;
+    line-height: 1.2;
+    padding: 0;
+    border: none;
+    background: none;
+
+    &:hover,
+    &:focus {
+      color: var(--theme-primary-hover, #083c44);
+      text-decoration: underline;
+    }
+  }
+
+  .facet-toggle-all-divider {
+    color: #bec7d2;
+    font-size: 0.8rem;
+    user-select: none;
+  }
+}
+
 .checkbox-facet-modal-pagination {
   padding-top: 0.25rem;
 }

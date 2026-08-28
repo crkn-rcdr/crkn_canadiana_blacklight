@@ -98,35 +98,6 @@ Seed a full portal cache into the dev Redis:
 docker compose -f docker-compose.dev.yml run --rm --no-deps web ruby script/seed_download_cache.rb --portal canadiana --full
 ```
 
-Seed another portal by passing the portal name and either setting its Solr env var or passing `--solr-urls`:
-
-```bash
-docker compose -f docker-compose.dev.yml run --rm --no-deps \
-  -e DOWNLOAD_CACHE_SOLR_URLS_HERITAGE=http://solr-host:8983/solr/blacklight_marc \
-  web ruby script/seed_download_cache.rb --portal heritage --sample --clear
-```
-
-```bash
-docker compose -f docker-compose.dev.yml run --rm --no-deps web ruby script/seed_download_cache.rb \
-  --portal gac \
-  --solr-urls http://solr-host:8983/solr/blacklight_marc \
-  --full
-```
-
-Supported portal names are `canadiana`, `heritage`, `gac`, `nrcan`, `pub`, `sve`, `parl`, and `mcgillarchives`. Run `docker compose -f docker-compose.dev.yml run --rm --no-deps web ruby script/seed_download_cache.rb --list-portals` to print the portal map and env var names.
-
-The seed script reads non-secret defaults from `.env.dev`. Set `COUCH_USERNAME` and `COUCH_PASSWORD` there if `copresentation2` requires authentication. The Redis keys are not portal-namespaced, matching production where each portal gets its own Redis, so use `--clear` when switching a single local Redis between portals.
-
-Legacy Swift-backed download variables:
-
-- `CAP_PASS` - HMAC key used to sign Swift URLs.
-- `SWIFT_AUTH_URL`
-- `SWIFT_USERNAME`
-- `SWIFT_PASSWORD`
-- `SWIFT_PREAUTH_URL`
-
-Do not commit `.env`.
-
 ## Solr
 
 Blacklight requires a Solr core for search. Configure the connection in `config/blacklight.yml`.
@@ -208,28 +179,9 @@ Prereqs:
 
 - Docker Desktop installed and running (Linux containers).
 - VPN connected (OpenVPN), if required for registry access.
-- Registry credentials from 1Password (item: `docker.c7a.ca`).
+- Registry credentials from 1Password.
 
-Deploy:
-
-```bash
-./deployImage.sh
-```
-
-Notes:
-
-- The script tags the image with a UTC timestamp and optional branch suffix.
-- The script prints a link to create a Systems-Administration issue. Create it and include the image tag.
-
-### Azure-Compatible Docker Build
-
-For Azure App Service / Azure Web App for Containers, build as Linux `amd64`.
-
-Build and push in one step:
-
-```bash
-docker buildx build --platform linux/amd64 -t brilap/crkn-demo:latest --push .
-```
+Deploy Guide: https://github.com/crkn-rcdr/systems-administration/blob/main/wiki/platform/how-to's/platform_2.0/platform_2.0-deploy_guide.md
 
 ## Docs
 

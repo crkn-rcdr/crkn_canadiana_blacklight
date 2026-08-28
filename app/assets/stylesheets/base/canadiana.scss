@@ -1995,10 +1995,28 @@ summary:focus-visible,
 
 .page-search-toggle {
   vertical-align: middle;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  text-decoration: none !important;
+
+  i,
+  .bi {
+    text-decoration: none !important;
+    display: inline-flex;
+  }
+
   span {
     margin-left: 0.5rem;
+    text-decoration: underline;
+  }
+
+  &:hover,
+  &:focus {
+    text-decoration: none !important;
+
+    span {
+      text-decoration: underline;
+    }
   }
 }
 .chip-nav {

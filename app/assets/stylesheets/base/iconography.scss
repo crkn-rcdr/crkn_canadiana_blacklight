@@ -101,7 +101,7 @@
     }
 }
 
-/* Bootstrap icons: ensure bounding box tightly wraps the icon */
+/* Bootstrap icons: ensure bounding box tightly wraps the icon and prevents underlines */
 i.bi,
 .bi,
 [class^="bi-"],
@@ -114,10 +114,12 @@ i.bi,
     width: 1em;
     vertical-align: -0.125em;
     box-sizing: content-box;
+    text-decoration: none !important;
 
     &::before {
         display: inline-block;
         line-height: 1;
         vertical-align: 0;
+        text-decoration: none !important;
     }
 }

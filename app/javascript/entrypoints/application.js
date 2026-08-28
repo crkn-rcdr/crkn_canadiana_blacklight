@@ -1465,152 +1465,12 @@ function observeModalDomChanges() {
   observer.observe(modal, { childList: true, subtree: true });
 }
 
-function setFacetCardExpanded(card, expand) {
-  const collapseEl = card.querySelector('.facet-content.collapse');
-  const btn = card.querySelector('.card-header button.collapse-toggle, button[data-bs-toggle="collapse"], button[data-toggle="collapse"]');
-  if (!collapseEl) return;
-
-  if (expand) {
-    collapseEl.classList.add('show');
-    if (btn) {
-      btn.classList.remove('collapsed');
-      btn.setAttribute('aria-expanded', 'true');
-    }
-  } else {
-    collapseEl.classList.remove('show');
-    if (btn) {
-      btn.classList.add('collapsed');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  }
-}
-
-function getFacetCardId(card) {
-  const collapseEl = card.querySelector('.facet-content.collapse');
-  if (collapseEl && collapseEl.id) return collapseEl.id;
-  const match = card.className.split(/\s+/).find((c) => c.startsWith('blacklight-'));
-  return match || '';
-}
-
-function saveFacetAccordionState() {
-  const container = document.querySelector('#facet-panel-collapse, #facets');
-  if (!container) return;
-
-  const cards = Array.from(container.querySelectorAll('.facet-limit'));
-  if (cards.length === 0) return;
-
-  const openIds = [];
-  cards.forEach((card) => {
-    const collapseEl = card.querySelector('.facet-content.collapse');
-    if (collapseEl && collapseEl.classList.contains('show')) {
-      const id = getFacetCardId(card);
-      if (id) openIds.push(id);
-    }
-  });
-
-  try {
-    localStorage.setItem('canadiana_open_facet_ids', JSON.stringify(openIds));
-    if (openIds.length === cards.length) {
-      localStorage.setItem('canadiana_facet_expand_state', 'expand_all');
-    } else if (openIds.length === 0) {
-      localStorage.setItem('canadiana_facet_expand_state', 'collapse_all');
-    } else {
-      localStorage.setItem('canadiana_facet_expand_state', 'custom');
-    }
-  } catch (_e) {}
-}
-
-function expandAllFacets(save = true) {
-  const container = document.querySelector('#facet-panel-collapse, #facets');
-  if (!container) return;
-
-  const cards = container.querySelectorAll('.facet-limit');
-  cards.forEach((card) => setFacetCardExpanded(card, true));
-
-  if (save) {
-    try {
-      localStorage.setItem('canadiana_facet_expand_state', 'expand_all');
-      const allIds = Array.from(cards).map(getFacetCardId).filter(Boolean);
-      localStorage.setItem('canadiana_open_facet_ids', JSON.stringify(allIds));
-    } catch (_e) {}
-  }
-}
-
-function collapseAllFacets(save = true) {
-  const container = document.querySelector('#facet-panel-collapse, #facets');
-  if (!container) return;
-
-  const cards = container.querySelectorAll('.facet-limit');
-  cards.forEach((card) => setFacetCardExpanded(card, false));
-
-  if (save) {
-    try {
-      localStorage.setItem('canadiana_facet_expand_state', 'collapse_all');
-      localStorage.setItem('canadiana_open_facet_ids', JSON.stringify([]));
-    } catch (_e) {}
-  }
-}
-
-function restoreFacetAccordionState() {
-  const container = document.querySelector('#facet-panel-collapse, #facets');
-  if (!container) return;
-
-  const cards = container.querySelectorAll('.facet-limit');
-  if (cards.length === 0) return;
-
-  let state = null;
-  let openIds = null;
-  try {
-    state = localStorage.getItem('canadiana_facet_expand_state');
-    const rawIds = localStorage.getItem('canadiana_open_facet_ids');
-    if (rawIds) openIds = JSON.parse(rawIds);
-  } catch (_e) {}
-
-  if (state === 'expand_all') {
-    expandAllFacets(false);
-  } else if (state === 'collapse_all') {
-    collapseAllFacets(false);
-  } else if (Array.isArray(openIds)) {
-    cards.forEach((card) => {
-      const id = getFacetCardId(card);
-      const shouldOpen = openIds.includes(id);
-      setFacetCardExpanded(card, shouldOpen);
-    });
-  }
-}
-
-function handleFacetExpandCollapseClick(event) {
-  const target = event.target.closest('#facet-expand-all-btn, #facet-collapse-all-btn, .facet-expand-all-btn, .facet-collapse-all-btn');
-  if (!target) return;
-
-  event.preventDefault();
-  if (target.matches('#facet-expand-all-btn, .facet-expand-all-btn')) {
-    expandAllFacets(true);
-  } else if (target.matches('#facet-collapse-all-btn, .facet-collapse-all-btn')) {
-    collapseAllFacets(true);
-  }
-}
-
 document.addEventListener('DOMContentLoaded', moveCatalogAppliedParams);
 document.addEventListener('turbo:load', moveCatalogAppliedParams);
 document.addEventListener('DOMContentLoaded', adjustCatalogShowBreadcrumbActions);
 document.addEventListener('turbo:load', adjustCatalogShowBreadcrumbActions);
 document.addEventListener('DOMContentLoaded', observeModalDomChanges);
 document.addEventListener('turbo:load', observeModalDomChanges);
-document.addEventListener('DOMContentLoaded', restoreFacetAccordionState);
-document.addEventListener('turbo:load', restoreFacetAccordionState);
-document.addEventListener('click', handleFacetExpandCollapseClick);
-document.addEventListener('click', (e) => {
-  if (e.target.closest('.facet-limit .collapse-toggle, .facet-limit button[data-bs-toggle="collapse"], .facet-limit button[data-toggle="collapse"]')) {
-    setTimeout(saveFacetAccordionState, 350);
-  }
-});
-document.addEventListener('shown.bs.collapse', (e) => {
-  if (e.target.closest('.facet-limit')) saveFacetAccordionState();
-});
-document.addEventListener('hidden.bs.collapse', (e) => {
-  if (e.target.closest('.facet-limit')) saveFacetAccordionState();
-});
 document.addEventListener('pointerdown', handleCheckboxFacetMoreActivation, true);
 document.addEventListener('mousedown', handleCheckboxFacetMoreActivation, true);
 document.addEventListener('click', handleCheckboxFacetMoreActivation, true);
@@ -1620,4 +1480,3 @@ document.addEventListener('shown.bs.modal', (e) => syncAllSidebarToCheckboxesInM
 document.addEventListener('loaded.blacklight.blacklight-modal', (e) => syncAllSidebarToCheckboxesInModal(e.target));
 document.addEventListener('hidden.bs.modal', (e) => syncAllModalToCheckboxesInSidebar(e.target));
 document.addEventListener('hide.bs.modal', (e) => syncAllModalToCheckboxesInSidebar(e.target));
-

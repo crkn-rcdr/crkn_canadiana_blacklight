@@ -47,6 +47,7 @@ class CheckboxFacetComponent < Blacklight::Component
 
   def more_path
     return if @facet_field.in_modal?
+    return if @facet_field.paginator.blank? || @facet_field.paginator.last_page?
 
     helpers.search_facet_path(modal_params.merge(id: facet_key))
   end

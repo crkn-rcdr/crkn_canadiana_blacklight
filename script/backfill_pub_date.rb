@@ -1,1 +1,0 @@
-backfill_publication_date.rb

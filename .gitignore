@@ -32,6 +32,7 @@
 /public/assets
 /public/vite
 /public/vite-dev
+/public/vite-test
 
 # Node / Yarn
 node_modules/

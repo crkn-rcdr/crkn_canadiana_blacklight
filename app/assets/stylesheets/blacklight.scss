@@ -519,6 +519,12 @@ button i {
 #toggle-menu #download-toolbar .download-icon-group i {
     color: #3b4450;
     font-size: 1.28rem !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    height: 1em;
+    width: 1em;
 }
 
 #toggle-menu #download-toolbar .download-kind {

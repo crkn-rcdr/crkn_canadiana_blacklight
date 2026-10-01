@@ -339,7 +339,7 @@ en:
       description:
         label: Description
       date_range:
-        label: Date of Creation
+        label: Publication Date
       all_fields:
         label: All Fields
       serial_title:

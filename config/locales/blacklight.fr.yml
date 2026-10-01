@@ -323,7 +323,7 @@ fr:
       description:
         label: Description
       date_range:
-        label: Date de création
+        label: Date de publication
       all_fields:
         label: Tous
       serial_title:

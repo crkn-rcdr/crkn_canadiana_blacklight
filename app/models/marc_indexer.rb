@@ -37,6 +37,32 @@ class MarcIndexer < Blacklight::Marc::Indexer
       end
     end
 
+    # --- issue_sort_s: zero-padded ID sort key for natural sorting in Solr ---
+    to_field "issue_sort_s" do |record, acc|
+      v901 = record["901"]&.value&.strip
+      is_iss = v901&.casecmp("Is issue")&.zero?
+      has_serial_key = record["902"]&.subfields&.any? { |sf| sf.code == 'b' && !sf.value.to_s.strip.empty? }
+      if is_iss || has_serial_key
+        rec_id = record["001"]&.value&.strip
+        if rec_id && !rec_id.empty?
+          acc.replace [rec_id.gsub(/\d+/) { |n| n.rjust(10, '0') }]
+        end
+      end
+    end
+
+    # --- issue_seq_i: integer sequence number extracted from ID (e.g. trailing _123) ---
+    to_field "issue_seq_i" do |record, acc|
+      v901 = record["901"]&.value&.strip
+      is_iss = v901&.casecmp("Is issue")&.zero?
+      has_serial_key = record["902"]&.subfields&.any? { |sf| sf.code == 'b' && !sf.value.to_s.strip.empty? }
+      if is_iss || has_serial_key
+        rec_id = record["001"]&.value&.strip
+        if rec_id && rec_id =~ /_(\d+)\z/
+          acc.replace [$1.to_i]
+        end
+      end
+    end
+
     # --- serial_title: only for series/serials and individual issues ---
     to_field "serial_title", extract_marc('245a'), first_only do |rec, acc|
       v901 = rec["901"]&.value&.strip
@@ -44,14 +70,22 @@ class MarcIndexer < Blacklight::Marc::Indexer
       is_iss = v901&.casecmp("Is issue")&.zero?
       has_serial_key = rec["902"]&.subfields&.any? { |sf| sf.code == 'b' && !sf.value.to_s.strip.empty? }
 
-      if is_ser || is_iss || has_serial_key
-        v = acc.first
-        if v && v.include?(' : ')
-          acc.replace([v.split(' : ', 2).first.strip])
-        elsif v && v.include?(':')
-          acc.replace([v.split(':', 2).first.strip])
+      # Determined serial title metadata: 902$c (e.g. =902 $aIs part of$boocihm.N_00123$cChignecto Post)
+      v902c = rec.fields('902').map { |f| f['c'] }.compact.map(&:strip).reject(&:empty?).first
+
+      if is_ser || is_iss || has_serial_key || v902c
+        if v902c
+          acc.replace([v902c])
         else
-          acc.replace(v ? [v.strip] : [])
+          # Fallback to 245$a (stripping text after first colon) if 902$c doesn't exist
+          v = acc.first
+          if v && v.include?(' : ')
+            acc.replace([v.split(' : ', 2).first.strip])
+          elsif v && v.include?(':')
+            acc.replace([v.split(':', 2).first.strip])
+          else
+            acc.replace(v ? [v.strip] : [])
+          end
         end
       else
         acc.clear

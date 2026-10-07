@@ -2,6 +2,15 @@
 <% html_attrs = html_tag_attributes.merge(lang: I18n.locale.to_s) %>
 <%= content_tag :html, class: 'no-js', **html_attrs do %>
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5K65B8SZRK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-5K65B8SZRK');
+    </script>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

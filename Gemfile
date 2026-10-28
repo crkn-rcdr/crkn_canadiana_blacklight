@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.4.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2.2'
+gem 'rails', '~> 7.2.4'
 
 gem 'rack', '>= 2.2.4', '< 3.0'
 
@@ -12,10 +12,10 @@ gem 'rack', '>= 2.2.4', '< 3.0'
 gem "sprockets-rails"
 
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
+gem "sqlite3", ">= 2.1"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 6.4'
+gem 'puma', '>= 7.2.1'
 
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
@@ -83,6 +83,6 @@ gem 'bootstrap', '~> 5.2.0'
 gem "sassc-rails"
 gem 'blacklight', '~> 8.8'
 gem 'blacklight-marc', '~>8.1'
-gem 'blacklight_range_limit', '~> 9.0.0'
+gem 'blacklight_range_limit', '~> 9.3'
 gem 'rsolr'
 gem 'blacklight-hierarchy'

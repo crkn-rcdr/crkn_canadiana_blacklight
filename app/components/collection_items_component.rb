@@ -1,6 +1,6 @@
 class CollectionItemsComponent < ViewComponent::Base
   attr_reader :documentId, :page, :per_page, :date_from, :date_to,
-              :total_items, :total_pages, :collection_items,
+              :total_items, :total_pages, :total_all_items, :collection_items,
               :available_years, :min_year, :max_year
 
   def initialize(documentId:, page: 1, per_page: 12, date_from: nil, date_to: nil)
@@ -85,6 +85,9 @@ class CollectionItemsComponent < ViewComponent::Base
     if stats_data
       @min_year = stats_data['min']&.to_i
       @max_year = stats_data['max']&.to_i
+      @total_all_items = stats_data['count']&.to_i || @total_items
+    else
+      @total_all_items = @total_items
     end
 
     # Extract available years from facet (sorted ascending by year)

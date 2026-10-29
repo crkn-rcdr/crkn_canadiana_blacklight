@@ -9,7 +9,8 @@ class SearchBuilder < Blacklight::SearchBuilder
     :tag_and_exclude_facets,
     :filter_individual_issues,
     :normalize_boolean_query_operators,
-    :boost_and_expand_id_queries
+    :boost_and_expand_id_queries,
+    :apply_fulltext_join
   ]
 
   def normalize_boolean_query_operators(solr_parameters)
@@ -250,4 +251,22 @@ class SearchBuilder < Blacklight::SearchBuilder
 
     candidates.uniq
   end
+  def apply_fulltext_join(solr_parameters)
+    return unless solr_parameters
+
+    search_field = (blacklight_params[:search_field] || blacklight_params['search_field'])&.to_s
+    if search_field == 'tx_gen'
+      q = (solr_parameters[:q] || blacklight_params[:q] || blacklight_params['q'])&.to_s&.strip
+      return if q.blank?
+
+      solr_parameters[:defType] = 'lucene'
+      if q == '*:*' || q == '*'
+        solr_parameters[:q] = '{!join from=manifestid to=manifestid_s fromIndex=content_search}*:*'
+      else
+        solr_parameters[:fulltext_q] = q
+        solr_parameters[:q] = '{!join from=manifestid to=manifestid_s fromIndex=content_search v=\'{!edismax qf="ocrtext ocrtext_general ocrtext_en ocrtext_fr" v=$fulltext_q}\'}'
+      end
+    end
+  end
+
 end

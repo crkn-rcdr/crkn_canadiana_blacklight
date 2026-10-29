@@ -220,11 +220,11 @@ class CatalogController < ApplicationController
                            query: {
                              available: {
                                label: 'Available',
-                               fq: 'tx_gen:[* TO *]'
+                               fq: '{!join from=manifestid to=manifestid_s fromIndex=content_search}*:*'
                              },
                              not_available: {
                                label: 'Not Available',
-                               fq: '(*:* -tx_gen:[* TO *])'
+                               fq: '(*:* -{!join from=manifestid to=manifestid_s fromIndex=content_search}*:*)'
                              }
                            }
 

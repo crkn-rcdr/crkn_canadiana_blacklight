@@ -401,6 +401,18 @@ class MarcIndexer < Blacklight::Marc::Indexer
       end
     end
 
+    # Extract manifestid_s for cross-core Solr full-text join to content_search
+    to_field 'manifestid_s' do |rec, acc|
+      rec.fields('856').each do |f|
+        f.find_all { |sf| sf.code == 'u' }.each do |url|
+          val = url.value.to_s
+          if val =~ %r{ark:/?/(\d+/[a-z0-9]+)}i
+            acc << $1
+          end
+        end
+      end
+    end
+
     # URL Fields
     notfulltext = /abstract|description|sample text|table of contents/i
     to_field('url_fulltext_ssm') do |rec, acc|

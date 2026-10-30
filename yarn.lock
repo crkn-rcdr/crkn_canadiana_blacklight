@@ -229,6 +229,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hotwired/stimulus@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "@hotwired/stimulus@npm:3.2.2"
+  checksum: 10c0/3793919e353d28424f57d07e6b634bf6e8821c227acfa2a608aaa8bdfe7e80479acef12705168ca866f3c231399f4a939fb0cd089aaae04c406b3d885a3b35ea
+  languageName: node
+  linkType: hard
+
 "@isaacs/fs-minipass@npm:^4.0.0":
   version: 4.0.1
   resolution: "@isaacs/fs-minipass@npm:4.0.1"
@@ -924,6 +931,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "crkn_canadiana_blacklight@workspace:."
   dependencies:
+    "@hotwired/stimulus": "npm:^3.2.2"
     "@rollup/plugin-commonjs": "npm:^28.0.2"
     "@vitejs/plugin-vue": "npm:^5.2.1"
     blacklight-range-limit: "npm:^9.0.0"
